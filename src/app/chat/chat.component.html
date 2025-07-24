@@ -1,0 +1,20 @@
+<!-- <div class="d-flex">
+  <app-chat-list></app-chat-list>
+  <app-chat-window></app-chat-window>
+</div> -->
+
+<div class="container">
+  <div id="header">
+    <h3 class="text-center" id="title">My chat application</h3>
+    <button id="logout-button" (click)="logout()">Logout</button>
+  </div>
+  <div class="messaging">
+    <div class="inbox_msg">
+      <app-chat-list></app-chat-list>
+      <!-- <app-chat-window></app-chat-window> -->
+      <router-outlet />
+    </div>
+  </div>
+</div>
+
+<!-- TODO: Tạo 1 module riêng của trang này để route với trang login -->

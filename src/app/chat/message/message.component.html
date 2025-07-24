@@ -1,0 +1,21 @@
+<div *ngIf="isOutgoingMessage; else outGoingMessage">
+  <div class="incoming_msg">
+    <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png"> </div>
+    <div class="received_msg">
+      <div class="received_width_msg">
+        <span class="time_date"> {{message.sender}}</span>
+        <p>{{message.content}}</p>
+        <span class="time_date"> {{message.createdAt}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #outGoingMessage>
+    <div class="outgoing_msg">
+      <div class="sent_msg">
+        <span class="time_date"> {{message.sender}}</span>
+        <p>{{message.content}}</p>
+        <span class="time_date"> {{message.createdAt}}</span>
+      </div>
+    </div>
+</ng-template>

@@ -1,0 +1,15 @@
+<div class="mesgs">
+    <div #messageContainer class="msg_history">
+      <div *ngFor="let message of messages">
+        <app-message [message]="message"></app-message>
+      </div>
+    </div>
+    <div class="type_msg">
+      <div class="input_msg_write">
+        <form (ngSubmit)="sendMessage()" [formGroup]="chatForm">
+          <input type="text" formControlName="contentMessage"/>
+          <button class="msg_send_btn" type="submit"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,14 @@
+.container {
+    max-width: 1170px;
+    margin: auto;
+}
+
+.inbox_msg {
+    border: 1px solid #c4c4c4;
+    clear: both;
+    overflow: hidden;
+}
+
+.messaging {
+    padding: 0 0 50px 0;
+}
