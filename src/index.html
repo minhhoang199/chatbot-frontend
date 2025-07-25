@@ -2,15 +2,246 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>ChatAppFe</title>
+  <title>Chat Application</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <script type="application/javascript">
-    var global = window;
-  </script>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <app-root></app-root>
+  <div class="chat-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Header -->
+      <div class="sidebar-header">
+        <div class="user-profile">
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="User" class="profile-avatar">
+          <div class="header-actions">
+            <button class="icon-btn">📅</button>
+            <button class="icon-btn">✏️</button>
+            <button class="icon-btn">⋯</button>
+          </div>
+        </div>
+        
+        <!-- Search -->
+        <div class="search-container">
+          <input type="text" placeholder="Search a conversation" class="search-input">
+          <span class="search-icon">🔍</span>
+        </div>
+      </div>
+
+      <!-- Archived Section -->
+      <div class="archived-section">
+        <span class="archived-label">📁 Archived</span>
+      </div>
+
+      <!-- Conversations List -->
+      <div class="conversations-list">
+        <div class="conversation-item">
+          <img src="https://images.unsplash.com/photo-1494790108755-2616b612b1a5?w=40&h=40&fit=crop&crop=face" alt="Emily Woods" class="conversation-avatar">
+          <div class="conversation-content">
+            <div class="conversation-header">
+              <span class="conversation-name">Emily Woods</span>
+              <span class="conversation-time">08:55</span>
+            </div>
+            <div class="conversation-preview">
+              <span class="status-icon">✓</span>
+              <span class="preview-text">I'm looking forward to it</span>
+              <span class="unread-badge">×</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="conversation-item active">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face" alt="Beate Lemoine" class="conversation-avatar">
+          <div class="conversation-content">
+            <div class="conversation-header">
+              <span class="conversation-name">Beate Lemoine</span>
+              <span class="conversation-time">08:21</span>
+            </div>
+            <div class="conversation-preview">
+              <span class="status-icon">✓</span>
+              <span class="preview-text">Hey Quan, If you are free...</span>
+              <span class="unread-count">2</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="conversation-item">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=40&h=40&fit=crop&crop=face" alt="Tessa Nau" class="conversation-avatar">
+          <div class="conversation-content">
+            <div class="conversation-header">
+              <span class="conversation-name">Tessa Nau</span>
+              <span class="conversation-time">04:21</span>
+            </div>
+            <div class="conversation-preview">
+              <span class="status-icon">✓</span>
+              <span class="preview-text">No that's everything, thanks...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="conversation-item">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face" alt="Eric Campos" class="conversation-avatar">
+          <div class="conversation-content">
+            <div class="conversation-header">
+              <span class="conversation-name">Eric Campos</span>
+              <span class="conversation-time">03:47</span>
+            </div>
+            <div class="conversation-preview">
+              <span class="status-icon">✓</span>
+              <span class="preview-text">So cool, I'll let you know if...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="conversation-item">
+          <img src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?w=40&h=40&fit=crop&crop=face" alt="Lone Rangers" class="conversation-avatar">
+          <div class="conversation-content">
+            <div class="conversation-header">
+              <span class="conversation-name">Lone Rangers</span>
+              <span class="conversation-time">01:15</span>
+            </div>
+            <div class="conversation-preview">
+              <span class="status-icon">✓</span>
+              <span class="preview-text">Diego: So cool, I'll let you...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="conversation-item">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face" alt="Luis Hamilton" class="conversation-avatar">
+          <div class="conversation-content">
+            <div class="conversation-header">
+              <span class="conversation-name">Luis Hamilton</span>
+              <span class="conversation-time">yesterday</span>
+            </div>
+            <div class="conversation-preview">
+              <span class="status-icon">✓</span>
+              <span class="preview-text">no problem</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="conversation-item">
+          <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=40&h=40&fit=crop&crop=face" alt="Joel Lehtinen" class="conversation-avatar">
+          <div class="conversation-content">
+            <div class="conversation-header">
+              <span class="conversation-name">Joel Lehtinen</span>
+              <span class="conversation-time">4.10.2021</span>
+            </div>
+            <div class="conversation-preview">
+              <span class="status-icon">✓</span>
+              <span class="preview-text">find it hard to believe yo...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="conversation-item">
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="James Tolonen" class="conversation-avatar">
+          <div class="conversation-content">
+            <div class="conversation-header">
+              <span class="conversation-name">James Tolonen</span>
+              <span class="conversation-time">6.10.2021</span>
+            </div>
+            <div class="conversation-preview">
+              <span class="status-icon">✓</span>
+              <span class="preview-text">All your life</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Chat Area -->
+    <div class="main-chat">
+      <!-- Chat Header -->
+      <div class="chat-header">
+        <div class="chat-user-info">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face" alt="Beate Lemoine" class="chat-avatar">
+          <div class="chat-user-details">
+            <h3 class="chat-user-name">Beate Lemoine</h3>
+            <p class="chat-user-status">🟢 last seen today at 09:15 PM</p>
+          </div>
+        </div>
+        <div class="chat-actions">
+          <button class="icon-btn">ℹ️</button>
+          <button class="icon-btn">📞</button>
+          <button class="icon-btn">🔍</button>
+          <button class="icon-btn">⋯</button>
+        </div>
+      </div>
+
+      <!-- Chat Messages -->
+      <div class="chat-messages">
+        <div class="message received">
+          <div class="message-content">I'm glad we had time to meet up.</div>
+          <div class="message-time">06:54</div>
+        </div>
+
+        <div class="message sent">
+          <div class="message-content">:)</div>
+          <div class="message-time">06:57 ✓</div>
+        </div>
+
+        <div class="message sent">
+          <div class="message-content">Me too. So, what's going on?</div>
+          <div class="message-time">06:57 ✓</div>
+        </div>
+
+        <div class="message received">
+          <div class="message-content">Oh, not much. You?</div>
+          <div class="message-time">07:05</div>
+        </div>
+
+        <div class="message sent">
+          <div class="message-content">Not much. Hey, how did your interview go? Wasn't that today?</div>
+          <div class="message-time">07:06 ✓</div>
+        </div>
+
+        <div class="message received">
+          <div class="message-content">Oh yeah, I think it went well. I don't know if I got the job yet, but they said they would call in a few days.</div>
+          <div class="message-time">07:09</div>
+        </div>
+
+        <div class="message sent">
+          <div class="message-content">Well, I'm sure you did great. Good luck.</div>
+          <div class="message-time">07:12 ✓</div>
+        </div>
+
+        <div class="message received">
+          <div class="message-content">Thanks. I'm just happy that it's over. I was really nervous about it.</div>
+          <div class="message-time">07:16</div>
+        </div>
+
+        <div class="message sent">
+          <div class="message-content">I can understand that. I get nervous before interviews, too</div>
+          <div class="message-time">07:21 ✓</div>
+        </div>
+
+        <div class="message received">
+          <div class="message-content">Well, thanks for being supportive. I appreciate it.</div>
+          <div class="message-time">07:24</div>
+        </div>
+
+        <div class="message received">
+          <div class="message-content">Hey Quan, If you are free now we can meet tonight ?</div>
+          <div class="message-time">08:21</div>
+        </div>
+      </div>
+
+      <!-- Message Input -->
+      <div class="message-input-container">
+        <input type="text" placeholder="Write a message" class="message-input">
+        <div class="input-actions">
+          <button class="icon-btn">📎</button>
+          <button class="icon-btn">😊</button>
+          <button class="icon-btn">🎤</button>
+          <button class="send-btn">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
