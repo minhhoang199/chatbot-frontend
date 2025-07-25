@@ -1,0 +1,48 @@
+<div class="chat-main" *ngIf="selectedRoom">
+  <!-- Chat Header -->
+  <div class="chat-header">
+    <div class="chat-user-info">
+      <img 
+        [src]="selectedRoom.avatar" 
+        [alt]="selectedRoom.name" 
+        class="chat-user-img">
+      <div class="chat-user-details">
+        <h3>{{ selectedRoom.name }}</h3>
+        <span class="last-seen">{{ selectedRoom.lastSeen }}</span>
+      </div>
+    </div>
+    <div class="chat-actions">
+      <i class="fas fa-info-circle"></i>
+      <i class="fas fa-video"></i>
+      <i class="fas fa-search"></i>
+      <i class="fas fa-ellipsis-v"></i>
+    </div>
+  </div>
+
+  <!-- Chat Messages -->
+  <div class="chat-messages">
+    <app-message
+      *ngFor="let message of messages; trackBy: trackByMessageId"
+      [message]="message"
+      [isFromCurrentUser]="isMessageFromCurrentUser(message)">
+    </app-message>
+  </div>
+
+  <!-- Chat Input -->
+  <div class="chat-input">
+    <div class="input-container">
+      <input 
+        type="text" 
+        placeholder="Write a message"
+        [(ngModel)]="newMessage"
+        (keypress)="onKeyPress($event)"
+        #messageInput>
+      <div class="input-actions">
+        <i class="fas fa-paperclip"></i>
+        <i class="fas fa-smile"></i>
+        <i class="fas fa-camera"></i>
+        <i class="fas fa-paper-plane" (click)="sendMessage()"></i>
+      </div>
+    </div>
+  </div>
+</div>

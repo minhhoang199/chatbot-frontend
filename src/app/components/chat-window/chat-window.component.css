@@ -1,0 +1,36 @@
+.chat-container {
+  display: flex;
+  height: 100vh;
+  background-color: #ffffff;
+}
+
+.no-chat-selected {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+}
+
+.no-chat-content {
+  text-align: center;
+  color: #65676b;
+}
+
+.no-chat-content i {
+  font-size: 64px;
+  margin-bottom: 16px;
+  color: #e4e6ea;
+}
+
+.no-chat-content h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1c1e21;
+}
+
+.no-chat-content p {
+  font-size: 14px;
+  color: #65676b;
+}

@@ -1,0 +1,9 @@
+<div class="message" [class.sent]="isFromCurrentUser" [class.received]="!isFromCurrentUser">
+  <div class="message-content">
+    {{ message.content }}
+  </div>
+  <div class="message-time">
+    {{ formatTime(message.timestamp) }}
+    <i class="fas fa-check" *ngIf="isFromCurrentUser && message.isRead"></i>
+  </div>
+</div>

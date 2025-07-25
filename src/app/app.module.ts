@@ -1,30 +1,26 @@
-import { NgModule, Component } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SignInComponent } from './component/sign-in/sign-in.component';
-import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { ChatWindowComponent } from './components/chat-window/chat-window.component';
+import { RoomListComponent } from './components/room-list/room-list.component';
+import { ChatRoomComponent } from './components/chat-room/chat-room.component';
+import { MessageComponent } from './components/message/message.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SignInComponent
+    ChatWindowComponent,
+    RoomListComponent,
+    ChatRoomComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,
-    NgbModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
+    FormsModule
   ],
-  providers: [
-    provideClientHydration(), provideHttpClient(withFetch()), { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

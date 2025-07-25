@@ -1,0 +1,18 @@
+<div class="chat-container">
+  <app-room-list 
+    (roomSelected)="onRoomSelected($event)">
+  </app-room-list>
+  
+  <app-chat-room 
+    [selectedRoom]="selectedRoom"
+    *ngIf="selectedRoom">
+  </app-chat-room>
+  
+  <div class="no-chat-selected" *ngIf="!selectedRoom">
+    <div class="no-chat-content">
+      <i class="fas fa-comments"></i>
+      <h3>Select a conversation</h3>
+      <p>Choose from your existing conversations or start a new one</p>
+    </div>
+  </div>
+</div>

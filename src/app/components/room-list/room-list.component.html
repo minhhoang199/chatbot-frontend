@@ -1,0 +1,64 @@
+<div class="sidebar">
+  <!-- Sidebar Header -->
+  <div class="sidebar-header">
+    <div class="user-profile">
+      <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" 
+           alt="User" 
+           class="profile-img">
+    </div>
+    <div class="header-actions">
+      <i class="fas fa-calendar-alt"></i>
+      <i class="fas fa-edit"></i>
+      <i class="fas fa-ellipsis-v"></i>
+    </div>
+  </div>
+
+  <!-- Search Container -->
+  <div class="search-container">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input 
+        type="text" 
+        placeholder="Search a conversation"
+        [(ngModel)]="searchQuery">
+    </div>
+  </div>
+
+  <!-- Archived Section -->
+  <div class="archived-section">
+    <i class="fas fa-archive"></i>
+    <span>Archived</span>
+  </div>
+
+  <!-- Conversations List -->
+  <div class="conversations">
+    <div 
+      class="conversation"
+      [class.active]="selectedRoomId === room.id"
+      *ngFor="let room of filteredRooms"
+      (click)="selectRoom(room)">
+      
+      <img 
+        [src]="room.avatar" 
+        [alt]="room.name" 
+        class="conversation-img">
+      
+      <div class="conversation-content">
+        <div class="conversation-header">
+          <span class="name">{{ room.name }}</span>
+          <span class="time">{{ formatTime(room.lastMessage?.timestamp || new Date()) }}</span>
+        </div>
+        
+        <div class="last-message">
+          <i class="fas fa-check" *ngIf="room.lastMessage?.isRead"></i>
+          <span>{{ room.lastMessage?.content }}</span>
+          <span 
+            class="unread-count" 
+            *ngIf="room.unreadCount > 0">
+            {{ room.unreadCount }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
