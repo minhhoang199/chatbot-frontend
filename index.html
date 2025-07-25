@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-profile">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="User" class="profile-img">
+                </div>
+                <div class="header-actions">
+                    <i class="fas fa-calendar-alt"></i>
+                    <i class="fas fa-edit"></i>
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search a conversation">
+                </div>
+            </div>
+
+            <div class="archived-section">
+                <i class="fas fa-archive"></i>
+                <span>Archived</span>
+            </div>
+
+            <div class="conversations">
+                <div class="conversation">
+                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face" alt="Emily Woods" class="conversation-img">
+                    <div class="conversation-content">
+                        <div class="conversation-header">
+                            <span class="name">Emily Woods</span>
+                            <span class="time">08:55</span>
+                        </div>
+                        <div class="last-message">
+                            <i class="fas fa-check"></i>
+                            <span>I'm looking forward to it</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conversation active">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face" alt="Beate Lemoine" class="conversation-img">
+                    <div class="conversation-content">
+                        <div class="conversation-header">
+                            <span class="name">Beate Lemoine</span>
+                            <span class="time">08:21</span>
+                        </div>
+                        <div class="last-message">
+                            <i class="fas fa-check"></i>
+                            <span>Hey Quan, if you are free...</span>
+                            <span class="unread-count">2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conversation">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=40&h=40&fit=crop&crop=face" alt="Tessa Nau" class="conversation-img">
+                    <div class="conversation-content">
+                        <div class="conversation-header">
+                            <span class="name">Tessa Nau</span>
+                            <span class="time">04:21</span>
+                        </div>
+                        <div class="last-message">
+                            <i class="fas fa-check"></i>
+                            <span>No that's everything, thanks...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conversation">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face" alt="Eric Campos" class="conversation-img">
+                    <div class="conversation-content">
+                        <div class="conversation-header">
+                            <span class="name">Eric Campos</span>
+                            <span class="time">03:47</span>
+                        </div>
+                        <div class="last-message">
+                            <i class="fas fa-check"></i>
+                            <span>So cool, I'll let you know if...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conversation">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=40&h=40&fit=crop&crop=face" alt="Lone Rangers" class="conversation-img">
+                    <div class="conversation-content">
+                        <div class="conversation-header">
+                            <span class="name">Lone Rangers</span>
+                            <span class="time">01:15</span>
+                        </div>
+                        <div class="last-message">
+                            <i class="fas fa-check"></i>
+                            <span>Diego: So cool, I'll let you...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conversation">
+                    <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=40&h=40&fit=crop&crop=face" alt="Luis Hamilton" class="conversation-img">
+                    <div class="conversation-content">
+                        <div class="conversation-header">
+                            <span class="name">Luis Hamilton</span>
+                            <span class="time">yesterday</span>
+                        </div>
+                        <div class="last-message">
+                            <i class="fas fa-check"></i>
+                            <span>no problem</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conversation">
+                    <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=40&h=40&fit=crop&crop=face" alt="Joel Lehtinen" class="conversation-img">
+                    <div class="conversation-content">
+                        <div class="conversation-header">
+                            <span class="name">Joel Lehtinen</span>
+                            <span class="time">4.10.2021</span>
+                        </div>
+                        <div class="last-message">
+                            <i class="fas fa-check"></i>
+                            <span>find it hard to believe yo...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conversation">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=40&h=40&fit=crop&crop=face" alt="James Tolonen" class="conversation-img">
+                    <div class="conversation-content">
+                        <div class="conversation-header">
+                            <span class="name">James Tolonen</span>
+                            <span class="time">6.10.2021</span>
+                        </div>
+                        <div class="last-message">
+                            <i class="fas fa-check"></i>
+                            <span>All your life</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="chat-main">
+            <div class="chat-header">
+                <div class="chat-user-info">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face" alt="Beate Lemoine" class="chat-user-img">
+                    <div class="chat-user-details">
+                        <h3>Beate Lemoine</h3>
+                        <span class="last-seen">last seen today at 09:15 PM</span>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <i class="fas fa-info-circle"></i>
+                    <i class="fas fa-video"></i>
+                    <i class="fas fa-search"></i>
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+
+            <div class="chat-messages">
+                <div class="message received">
+                    <div class="message-content">
+                        I'm glad we had time to meet up.
+                    </div>
+                    <div class="message-time">06:54</div>
+                </div>
+
+                <div class="message sent">
+                    <div class="message-content">
+                        :)
+                    </div>
+                    <div class="message-time">06:57 <i class="fas fa-check"></i></div>
+                </div>
+
+                <div class="message sent">
+                    <div class="message-content">
+                        Me too. So, what's going on?
+                    </div>
+                    <div class="message-time">06:57 <i class="fas fa-check"></i></div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-content">
+                        Oh, not much. You?
+                    </div>
+                    <div class="message-time">07:05</div>
+                </div>
+
+                <div class="message sent">
+                    <div class="message-content">
+                        Not much. Hey, how did your interview go? Wasn't that today?
+                    </div>
+                    <div class="message-time">07:06 <i class="fas fa-check"></i></div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-content">
+                        Oh, yeah. I think it went well. I don't know the job yet, but they said they would call in a few days.
+                    </div>
+                    <div class="message-time">07:09</div>
+                </div>
+
+                <div class="message sent">
+                    <div class="message-content">
+                        Well, I'm sure you did great. Good luck.
+                    </div>
+                    <div class="message-time">07:12 <i class="fas fa-check"></i></div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-content">
+                        Thanks. I'm just happy that it's over. I was really nervous about it.
+                    </div>
+                    <div class="message-time">07:16</div>
+                </div>
+
+                <div class="message sent">
+                    <div class="message-content">
+                        I can understand that. I get nervous before interviews, too
+                    </div>
+                    <div class="message-time">07:21 <i class="fas fa-check"></i></div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-content">
+                        Well, thanks for being supportive. I appreciate it.
+                    </div>
+                    <div class="message-time">07:24</div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-content">
+                        Hey Quan, if you are free now we can meet tonight ?
+                    </div>
+                    <div class="message-time">08:21</div>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <div class="input-container">
+                    <input type="text" placeholder="Write a message">
+                    <div class="input-actions">
+                        <i class="fas fa-paperclip"></i>
+                        <i class="fas fa-smile"></i>
+                        <i class="fas fa-camera"></i>
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
