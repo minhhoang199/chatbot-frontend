@@ -1,23 +1,67 @@
-img{ max-width:100%;}
-.chat_list {
-    border-bottom: 1px solid #c4c4c4;
-    margin: 0;
-    padding: 18px 16px 10px;
-  }
-.chat_people {
-    overflow: hidden;
-    clear: both;
-}
-.chat_ib h5{ font-size:15px; color:#464646; margin:0 0 8px 0;}
-.chat_ib h5 span{ font-size:13px; float:right;}
-.chat_ib p{ font-size:14px; color:#989898; margin:auto}
-.chat_img {
-    float: left;
-    width: 11%;
+.conversation {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    gap: 12px;
 }
 
-.chat_ib {
-    float: left;
-    padding: 0 0 0 15px;
-    width: 88%;
+.conversation:hover {
+    background-color: #f0f2f5;
+}
+
+.conversation.active {
+    background-color: #e7f3ff;
+}
+
+.conversation-img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.conversation-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.conversation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.conversation-header .name {
+    font-weight: 600;
+    color: #1c1e21;
+    font-size: 15px;
+}
+
+.conversation-header .time {
+    font-size: 12px;
+    color: #65676b;
+}
+
+.last-message {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #65676b;
+}
+
+.last-message i {
+    font-size: 12px;
+    color: #1877f2;
+}
+
+.last-message span {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

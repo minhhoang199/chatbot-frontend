@@ -1,4 +1,4 @@
-<div *ngIf="isOutgoingMessage; else outGoingMessage">
+<!-- <div *ngIf="isOutgoingMessage; else outGoingMessage">
   <div class="incoming_msg">
     <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png"> </div>
     <div class="received_msg">
@@ -17,5 +17,22 @@
         <p>{{message.content}}</p>
         <span class="time_date"> {{message.createdAt}}</span>
       </div>
+    </div>
+</ng-template> -->
+
+<div *ngIf="isOutgoingMessage; else outGoingMessage">
+    <div class="message received">
+      <div class="message-content">
+        {{message.content}}
+      </div>
+      <div class="message-time">{{message.createdAt}}</div>
+    </div>
+</div>
+<ng-template #outGoingMessage>
+    <div class="message sent">
+      <div class="message-content">
+        {{message.content}}
+      </div>
+      <div class="message-time">{{message.createdAt}} <i class="fas fa-check"></i></div>
     </div>
 </ng-template>

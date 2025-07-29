@@ -1,9 +1,25 @@
-<div class="chat_list">
-    <div class="chat_people">
-      <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"> </div>
-      <div class="chat_ib">
-        <h5> {{room.name}} <span  class="chat_date">{{lastMessageTime}}</span></h5>
-        <p>{{room.lastMessageContent}}</p>
-      </div>
+<!-- <div class="chat_list">
+  <div class="chat_people">
+    <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"> </div>
+    <div class="chat_ib">
+      <h5> {{room.name}} <span class="chat_date">{{lastMessageTime}}</span></h5>
+      <p>{{room.lastMessageContent}}</p>
     </div>
   </div>
+</div> -->
+
+<!-- new UI -->
+<div class="conversation">
+  <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face" alt="Emily Woods"
+    class="conversation-img">
+  <div class="conversation-content">
+    <div class="conversation-header">
+      <span class="name">{{room.name}}</span>
+      <span class="time">{{lastMessageTime}}</span>
+    </div>
+    <div class="last-message">
+      <i class="fas fa-check"></i>
+      <span>{{room.lastMessageContent}}</span>
+    </div>
+  </div>
+</div>

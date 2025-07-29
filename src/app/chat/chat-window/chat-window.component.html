@@ -1,15 +1,60 @@
-<div class="mesgs">
-    <div #messageContainer class="msg_history">
-      <div *ngFor="let message of messages">
-        <app-message [message]="message"></app-message>
+<!-- <div class="mesgs">
+  <div #messageContainer class="msg_history">
+    <div *ngFor="let message of messages">
+      <app-message [message]="message"></app-message>
+    </div>
+  </div>
+  <div class="type_msg">
+    <div class="input_msg_write">
+      <form (ngSubmit)="sendMessage()" [formGroup]="chatForm">
+        <input type="text" formControlName="contentMessage" />
+        <button class="msg_send_btn" type="submit"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+      </form>
+    </div>
+  </div>
+</div> -->
+
+<div class="chat-main">
+  <div class="chat-header">
+    <div class="chat-user-info">
+      <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face"
+        alt="Beate Lemoine" class="chat-user-img">
+      <div class="chat-user-details">
+        <h3>Beate Lemoine</h3>
+        <span class="last-seen">last seen today at 09:15 PM</span>
       </div>
     </div>
-    <div class="type_msg">
-      <div class="input_msg_write">
-        <form (ngSubmit)="sendMessage()" [formGroup]="chatForm">
-          <input type="text" formControlName="contentMessage"/>
-          <button class="msg_send_btn" type="submit"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
-        </form>
-      </div>
+    <div class="chat-actions">
+      <i class="fas fa-info-circle"></i>
+      <i class="fas fa-video"></i>
+      <i class="fas fa-search"></i>
+      <i class="fas fa-ellipsis-v"></i>
+    </div>
+  </div>
+
+  <div class="chat-messages">
+  <div *ngFor="let message of messages">
+    <app-message [message]="message"></app-message>
+  </div>
+
+  <div class="chat-input">
+    <div class="input-container">
+      <form (ngSubmit)="sendMessage()" [formGroup]="chatForm">
+        <input type="text" formControlName="contentMessage" placeholder="Write a message" />
+        <div class="input-actions">
+          <button type="submit" class="send-btn">
+            <i class="fas fa-paperclip"></i>
+          </button>
+          <button type="submit" class="send-btn">
+            <i class="fas fa-smile"></i>
+          </button>
+          <button type="submit" class="send-btn">
+            <i class="fas fa-camera"></i>
+          </button>
+          <button type="submit" class="send-btn">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </form>
     </div>
   </div>

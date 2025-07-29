@@ -16,7 +16,7 @@
 
 <div class="wrapper">
     <div class="title-text">
-        <div class="title login">Login Form</div>
+        <div class="title login" #loginText>Login Form</div>
         <div class="title signup">Signup Form</div>
     </div>
     <div class="form-container">
@@ -28,7 +28,7 @@
             <div class="slider-tab"></div>
         </div>
         <div class="form-inner">
-            <form action="#" class="login" [formGroup]="signInForm" (ngSubmit)="signIn()">
+            <form action="#" class="login" [formGroup]="signInForm" (ngSubmit)="signIn()" #loginForm>
                 <div class="field">
                     <input formControlName="email" type="text" class="form-control" id="inputEmail"
                         aria-describedby="emailHelp" placeholder="Email Address" required>
@@ -44,8 +44,6 @@
                 </div>
                 <div class="signup-link">Not a member? <a href="#">Signup now</a></div>
             </form>
-
-
             <form action="#" class="signup">
                 <div class="field">
                     <input type="text" placeholder="Email Address" required>

@@ -48,3 +48,34 @@
 .srch_bar .input-group-addon {
     margin: 0 0 0 -27px;
 }
+
+
+/* new UI */
+/* Sidebar Styles */
+.conversations {
+    flex: 1;
+    max-height: 100vh;
+    overflow-y: auto;
+}
+
+/* Scrollbar Styles */
+.conversations::-webkit-scrollbar,
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.conversations::-webkit-scrollbar-track,
+.chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.conversations::-webkit-scrollbar-thumb,
+.chat-messages::-webkit-scrollbar-thumb {
+    background: #c4c4c4;
+    border-radius: 3px;
+}
+
+.conversations::-webkit-scrollbar-thumb:hover,
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
