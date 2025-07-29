@@ -22,8 +22,21 @@
 }
 
 #logout-button {
-  padding: 8px 12px;
-  cursor: pointer;
+    background-color: #1877f2;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 20px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(24, 119, 242, 0.08);
+}
+
+#logout-button:hover {
+    background-color: #145db2;
+    box-shadow: 0 4px 16px rgba(24, 119, 242, 0.15);
 }
 
 #title {
