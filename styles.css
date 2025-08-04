@@ -1,0 +1,240 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f0f2f5;
+    padding: 20px;
+}
+
+.chat-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.chat-header {
+    background: #1877f2;
+    color: white;
+    padding: 16px 20px;
+    text-align: center;
+}
+
+.chat-header h3 {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.messages-container {
+    padding: 20px;
+    min-height: 400px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.message-wrapper {
+    margin-bottom: 16px;
+    display: flex;
+    position: relative;
+}
+
+.message-wrapper.sent {
+    justify-content: flex-end;
+}
+
+.message-wrapper.received {
+    justify-content: flex-start;
+}
+
+.message-content {
+    position: relative;
+    max-width: 70%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.message-bubble {
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+.sent .message-bubble {
+    background: #1877f2;
+    color: white;
+}
+
+.received .message-bubble {
+    background: #e4e6ea;
+    color: #050505;
+}
+
+.message-actions {
+    position: relative;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.message-wrapper:hover .message-actions {
+    opacity: 1;
+}
+
+.menu-trigger {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    color: #65676b;
+}
+
+.menu-trigger:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dots {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.context-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    min-width: 140px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px);
+    transition: all 0.2s ease;
+    border: 1px solid #e4e6ea;
+}
+
+.context-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.received .context-menu {
+    right: auto;
+    left: 0;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 14px;
+    color: #050505;
+}
+
+.menu-item:hover {
+    background-color: #f2f3f5;
+}
+
+.menu-item:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.menu-item:last-child {
+    border-radius: 0 0 8px 8px;
+}
+
+.menu-item:only-child {
+    border-radius: 8px;
+}
+
+.menu-icon {
+    font-size: 16px;
+    width: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .chat-container {
+        margin: 0;
+    }
+    
+    .message-content {
+        max-width: 85%;
+    }
+    
+    .messages-container {
+        padding: 15px;
+    }
+}
+
+/* Animation for menu appearance */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.context-menu.active {
+    animation: slideIn 0.15s ease-out;
+}
+
+/* Backdrop for closing menu when clicking outside */
+.menu-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    background: transparent;
+}
+
+/* Scroll styling for messages container */
+.messages-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.messages-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
