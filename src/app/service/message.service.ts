@@ -3,7 +3,8 @@ import { WebsocketService } from './websocket.service';
 import { Message } from './../model/message.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MessageResponse } from '../model/get-messages-response';
+import { MessageResponse } from '../model/message-response';
+import { GetMessagesResponse } from '../model/get-messages-response';
 import { Observable, map } from 'rxjs';
 import { MessageDto } from '../model/message-dto.model';
 
@@ -16,13 +17,20 @@ export class MessageService {
   constructor(private httpClient: HttpClient, private websocketService: WebsocketService, private authService: AuthService) { }
 
   public getAllMessagesInRoom(roomId: number): Observable<Message[]> {
-    return this.httpClient.get<MessageResponse>(messageAPIUrl + roomId).pipe(map(response => response.data));
+    return this.httpClient.get<GetMessagesResponse>(messageAPIUrl + roomId).pipe(map(response => response.data));
   }
 
-  public sendMessage(content: string, roomId: number){
+  public sendMessage(content: string, roomId: number, replyId: number | null): void {
     let senderId:number = this.authService.getId();
     let sender:string = this.authService.getEmail();
-    const message = new MessageDto(content, sender, senderId, roomId, 'ACTIVE', 'CHAT');
+    const message = new MessageDto(null, content, sender, senderId, roomId, 'ACTIVE', 'CHAT', replyId, null);
     this.websocketService.sendMessage(message);
+  }
+
+    public editMessage(message: Message): Observable<MessageResponse> {
+    let senderId:number = this.authService.getId();
+    let sender:string = this.authService.getEmail();
+    const editedMessage = new MessageDto(message.id, message.content, sender, senderId, message.roomId, message.messageStatus, message.type, null, message.emoji);
+    return this.httpClient.put<MessageResponse>(messageAPIUrl, editedMessage);
   }
 }

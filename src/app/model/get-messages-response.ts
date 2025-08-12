@@ -1,6 +1,6 @@
 import { Message } from "./message.model";
 
-export interface MessageResponse {
+export interface GetMessagesResponse {
     code: string;
     message: string;
     data: Message[];

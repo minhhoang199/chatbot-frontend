@@ -8,6 +8,9 @@ export class Message {
     public messageStatus: string,
     public type: string,
     public createdAt: string,
-    public updatedAt: string
+    public updatedAt: string,
+    public isReply: boolean,
+    public replyContent: string,
+    public emoji: string | null = null,
   ) {}
 }

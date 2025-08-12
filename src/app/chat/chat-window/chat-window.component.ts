@@ -13,13 +13,16 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Message } from '../../model/message.model';
 
 @Component({
   selector: 'app-chat-window',
   templateUrl: './chat-window.component.html',
   styleUrl: './chat-window.component.css',
 })
-export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked{
+export class ChatWindowComponent
+  implements OnInit, OnDestroy, AfterViewChecked
+{
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
   messages!: any[];
   chatForm!: FormGroup;
@@ -34,7 +37,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked{
   ) {}
 
   ngAfterViewChecked(): void {
-    if(this.messages && this.previousMessageCount != this.messages.length) {
+    if (this.messages && this.previousMessageCount != this.messages.length) {
       this.previousMessageCount = this.messages.length;
       this.scrollToBottom();
     }
@@ -48,6 +51,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked{
         this.websocketService
           .connect(this.roomId, false, '')
           .subscribe((message: any) => {
+            console.log('Received message:', message);
             this.messages.push(message);
           });
         this.messageService
@@ -61,16 +65,19 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked{
     if (this.messages) {
       this.previousMessageCount = this.messages.length;
     }
-    // this.scrollToBottom();
+    this.scrollToBottom();
   }
 
   sendMessage() {
     console.log('message:' + this.chatForm.get('contentMessage')?.value);
+    console.log('repId:' + (this.replyingMessage ? this.replyingMessage.id : null));
     this.messageService.sendMessage(
       this.chatForm.get('contentMessage')?.value,
-      this.roomId
+      this.roomId,
+      this.replyingMessage ? this.replyingMessage.id : null
     );
     this.chatForm.reset();
+    this.cancelReply();
   }
 
   ngOnDestroy(): void {
@@ -80,9 +87,27 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked{
 
   scrollToBottom(): void {
     try {
-      this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
+      this.messageContainer.nativeElement.scrollTop =
+        this.messageContainer.nativeElement.scrollHeight;
     } catch (error) {
       console.error('Scrolling to bottom failed', error);
     }
+  }
+
+  // reply
+  replyingMessage: Message | null = null;
+
+  onReplyMessage(message: Message) {
+    this.replyingMessage = message;
+    setTimeout(() => {
+      const input = document.querySelector(
+        'input[formControlName="contentMessage"]'
+      ) as HTMLInputElement;
+      if (input) input.focus();
+    }, 0);
+  }
+
+  cancelReply() {
+    this.replyingMessage = null;
   }
 }

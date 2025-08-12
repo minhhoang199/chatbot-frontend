@@ -1,6 +1,15 @@
+import { MessageService } from './../../service/message.service';
 import { AuthService } from './../../service/auth.service';
 import { Message } from '../../model/message.model';
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+  HostListener,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { parse } from 'date-fns';
 
 const dateFormat = 'yyyy-MM-dd';
@@ -11,18 +20,29 @@ const dateFormat = 'yyyy-MM-dd';
 })
 export class MessageComponent implements OnInit {
   @Input() message!: Message;
+  @Input() activeMenuId: number | null = null;
+  @Input() activeEmojiMenuId: number | null = null;
   isOutgoingMessage: boolean = false;
+  currentOpenMenu: string | null = null;
 
-  constructor(private cdr: ChangeDetectorRef, private authService: AuthService) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
-    console.log('Before: ' + this.message.createdAt);
+    console.log('Message:', this.message);
+    console.log('Message emoji:', this.message.emoji);
+    // console.log('Before: ' + this.message.createdAt);
     this.message.createdAt = this.convertCreateAt(this.message.createdAt);
-    console.log('After: ' + this.message.createdAt);
+    // console.log('After: ' + this.message.createdAt);
     this.cdr.detectChanges();
     // console.log("msgId:" + this.message.senderId);
     // console.log("storageId:" + this.authService.getId());
     this.isOutgoingMessage = this.authService.getId() != this.message.senderId;
+    this.activeEmojiMenuId = null; // Reset emoji menu when initializing
+    this.activeMenuId = null; // Reset main menu when initializing
   }
 
   convertCreateAt(createdAt: string): string {
@@ -64,5 +84,69 @@ export class MessageComponent implements OnInit {
     // Construct the final date-time string
     const convertedDate = `${time}    |    ${date}`;
     return convertedDate;
+  }
+
+  toggleMenu(id: number) {
+    console.log('Selected id:', id);
+    this.activeMenuId = this.activeMenuId === id ? null : id;
+    this.activeEmojiMenuId = null; // close emoji menu when toggling main menu
+  }
+
+  openEmojiMenu(id: number) {
+    this.activeMenuId = null;
+    this.activeEmojiMenuId = this.activeEmojiMenuId === id ? null : id;
+  }
+
+  selectEmoji(emoji: string | null) {
+    // handle emoji selection
+    this.activeEmojiMenuId = null;
+    this.message.emoji = emoji;
+    this.editMessage();
+
+  }
+
+  // Lắng nghe click ở bất kỳ đâu trên window
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.message-menu') && !target.closest('.message')) {
+      this.activeMenuId = null;
+      this.activeEmojiMenuId = null;
+    }
+  }
+
+  @Output() reply = new EventEmitter<Message>();
+
+  deleteMessage() {
+    this.activeMenuId = null;
+    throw new Error('Method not implemented.');
+  }
+
+  editMessage() {
+    this.activeMenuId = null;
+    this.messageService.editMessage(this.message).subscribe(
+      (response) => {
+        // If login successful, navigate to page2
+        if (
+          response &&
+          response.data &&
+          response.code &&
+          response.code === 'TD-000'
+        ) {
+          console.log(response.data);
+          this.message.content = response.data.content;
+          this.message.emoji = response.data.emoji;
+        } else {
+          // this.errorMessage = ""
+        }
+      },
+      (error) => {
+        console.error('Error occurred:', error);
+      }
+    );
+  }
+  replyMessage() {
+    this.activeMenuId = null;
+    this.reply.emit(this.message);
   }
 }

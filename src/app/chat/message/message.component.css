@@ -1,84 +1,13 @@
-/* img{ max-width:100%;}
-.incoming_msg_img {
-    display: inline-block;
-    width: 6%;
-    margin-top: 23px;
-}
-
-.chat_ib h5{ font-size:15px; color:#464646; margin:0 0 8px 0;}
-.chat_ib h5 span{ font-size:13px; float:right;}
-.chat_ib p{ font-size:14px; color:#989898; margin:auto}
-.chat_img {
-    float: left;
-    width: 11%;
-}
-
-.received_msg {
-    display: inline-block;
-    padding: 0 0 0 10px;
-    vertical-align: top;
-    width: 92%;
-}
-
-.received_width_msg p {
-    background: #ebebeb none repeat scroll 0 0;
-    border-radius: 3px;
-    color: #646464;
-    font-size: 14px;
-    margin: 0;
-    padding: 5px 10px 5px 12px;
-    width: 100%;
-}
-
-.time_date {
-    color: #747474;
-    display: block;
-    font-size: 12px;
-    margin: 8px 0 0;
-}
-
-.received_width_msg {
-    width: 57%;
-}
-
-.outgoing_msg{ overflow:hidden; margin:26px 0 26px;}
-.sent_msg {
-  float: right;
-  width: 46%;
-}
-
-.outgoing_msg{ overflow:hidden; margin:26px 0 26px;}
-.sent_msg {
-  float: right;
-  width: 46%;
-}
-.sent_msg p {
-    background: #05728f none repeat scroll 0 0;
-    border-radius: 3px;
-    font-size: 14px;
-    margin: 0; color:#fff;
-    padding: 5px 10px 5px 12px;
-    width:100%;
-  } */
-
-/* 
-.chat-messages {
-    flex: 1;
-    padding: 20px 24px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    background-color: #f8f9fa;
-} */
-
 .message {
-  max-width: 50%;
+  position: relative;
   width: fit-content;
+  max-width: 40vw;
   margin-bottom: 8px;
-  padding: 4px 8px;
   border-radius: 16px;
   word-break: break-word;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .message.sent {
@@ -91,40 +20,31 @@
   margin-right: auto;
 }
 
-/* .message {
-    display: flex;
-    flex-direction: column;
-    max-width: 60%;
-    margin-bottom: 4px;
-}
-
-.message.sent {
-    align-self: flex-end;
-    align-items: flex-end;
-}
-
-.message.received {
-    align-self: flex-start;
-    align-items: flex-start;
-} */
-
 .message-content {
-    background-color: #e4e6ea;
-    padding: 12px 16px;
-    border-radius: 18px;
-    font-size: 14px;
-    line-height: 0.8;
-    word-wrap: break-word;
+  background-color: #e4e6ea;
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.2;
+  word-wrap: break-word;
+  width: fit-content;
+  max-width: 40vw;
+  /* display: inline-block; */
 }
 
 .message.sent .message-content {
     background-color: #1877f2;
     color: white;
+
+    align-self: flex-end;
+    margin-left: 0;
+    margin-right: 10px;
 }
 
 .message.received .message-content {
     background-color: #e4e6ea;
     color: #1c1e21;
+    margin-left: 10px;
 }
 
 .message-time {
@@ -141,12 +61,115 @@
     color: #1877f2;
 }
 
+.message.sent .message-time {
+    align-self: flex-end;
+    margin-left: 0; 
+    margin-right: 10px;
+}
+
+.message.received .message-time {
+    margin-right: auto;
+    margin-left: 10px;
+}
+
 /* Additional hover effects */
 
 .message.sent .message-content {
-    position: relative;
+  align-self: flex-end;
+  /* margin-left: 0;  */
 }
 
 .message.received .message-content {
     position: relative;
 }
+
+
+/* message-action */
+.message-menu {
+  position: absolute;
+  /* right: -48px; */
+  top: 10px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  z-index: 10;
+  padding: 4px 0;
+  border: 1px solid #1877f2;
+}
+
+/* Tin nhắn nhận: menu bên phải */
+.message.received .message-menu {
+  right: -35px; /* hoặc right: 0 nếu muốn sát message */
+}
+
+/* Tin nhắn gửi: menu bên trái */
+.message.sent .message-menu {
+  left: -35px; /* hoặc left: 0 nếu muốn sát message */
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  font-size: 18px;
+  color: #1877f2;
+}
+
+.emoji-dropdown {
+  position: absolute;
+  right: 40px;
+  top: 10px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 8px;
+  display: flex;
+  gap: 8px;
+  cursor: pointer;
+}
+
+/* reply */
+.reply-bubble {
+  background: #f3e6ff;
+  color: #555;
+  margin-bottom: -4px;
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.2;
+  word-wrap: break-word;
+  width: fit-content;
+  max-width: 40vw;
+}
+
+
+.message.sent .reply-bubble {
+  background: #f3e6ff; /* tím nhạt hơn */
+  color: #555;
+  align-self: flex-end;
+  margin-left: 0; 
+  margin-right: 10px;
+}
+
+.message.received .reply-bubble {
+  background: #f3e6ff; /* tím nhạt hơn */
+  color: #555;
+  margin-right: auto; /* đẩy sang trái */
+  margin-left: 10px;
+}
+
+/* emoji */
+.message-emoji {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 16px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: 10px;
+  margin-top: -4px;
+}
+
