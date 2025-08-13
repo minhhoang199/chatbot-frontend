@@ -8,6 +8,14 @@ export class MessageDto {
       public messageStatus: string,
       public type: string,
       public replyId: number | null = null,
-      public emoji: string | null = null
+      public emoji: Emoji[] | null = null,
+  ) {}
+}
+
+  export class Emoji {
+    constructor(
+      public userId: number,
+      public username: string,
+      public emoji: string
     ) {}
   }

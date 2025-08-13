@@ -30,7 +30,7 @@
       {{message.content}}
     </div>
     <div *ngIf="message.emoji" class="message-emoji">
-    {{message.emoji}}
+    {{message.emojiString}}
     </div>
 
     </div>
@@ -70,7 +70,7 @@
       {{message.content}}
     </div>
      <div *ngIf="message.emoji" class="message-emoji">
-    {{message.emoji}}
+    {{message.emojiString}}
     </div>
     <div class="message-time">{{message.createdAt}} <i class="fas fa-check"></i></div>
     <div class="message-menu" *ngIf="activeMenuId === message.id">

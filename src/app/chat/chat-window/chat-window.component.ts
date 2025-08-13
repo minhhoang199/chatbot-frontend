@@ -52,7 +52,14 @@ export class ChatWindowComponent
           .connect(this.roomId, false, '')
           .subscribe((message: any) => {
             console.log('Received message:', message);
-            this.messages.push(message);
+            const index = this.messages.findIndex(
+              (msg) => msg.id === message.id
+            );
+            if (index !== -1) {
+              this.messages[index] = { ...this.messages[index], ...message };
+            } else {
+              this.messages.push(message);
+            }
           });
         this.messageService
           .getAllMessagesInRoom(this.roomId)
@@ -70,7 +77,9 @@ export class ChatWindowComponent
 
   sendMessage() {
     console.log('message:' + this.chatForm.get('contentMessage')?.value);
-    console.log('repId:' + (this.replyingMessage ? this.replyingMessage.id : null));
+    console.log(
+      'repId:' + (this.replyingMessage ? this.replyingMessage.id : null)
+    );
     this.messageService.sendMessage(
       this.chatForm.get('contentMessage')?.value,
       this.roomId,

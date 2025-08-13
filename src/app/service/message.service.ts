@@ -30,7 +30,8 @@ export class MessageService {
     public editMessage(message: Message): Observable<MessageResponse> {
     let senderId:number = this.authService.getId();
     let sender:string = this.authService.getEmail();
-    const editedMessage = new MessageDto(message.id, message.content, sender, senderId, message.roomId, message.messageStatus, message.type, null, message.emoji);
+    const editedMessage = new MessageDto(message.id, message.content, sender, senderId, message.roomId, 
+      message.messageStatus, message.type, null, message.emoji);
     return this.httpClient.put<MessageResponse>(messageAPIUrl, editedMessage);
   }
 }

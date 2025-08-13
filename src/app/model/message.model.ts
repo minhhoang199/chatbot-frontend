@@ -11,6 +11,15 @@ export class Message {
     public updatedAt: string,
     public isReply: boolean,
     public replyContent: string,
-    public emoji: string | null = null,
+    public emoji: Emoji[] | null = null,
+    public emojiString: string | null = null,
   ) {}
 }
+
+  export class Emoji {
+    constructor(
+      public userId: number,
+      public username: string,
+      public emoji: string
+    ) {}
+  }

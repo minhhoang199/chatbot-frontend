@@ -1,6 +1,6 @@
 import { MessageService } from './../../service/message.service';
 import { AuthService } from './../../service/auth.service';
-import { Message } from '../../model/message.model';
+import { Emoji, Message } from '../../model/message.model';
 import {
   ChangeDetectorRef,
   Component,
@@ -43,6 +43,7 @@ export class MessageComponent implements OnInit {
     this.isOutgoingMessage = this.authService.getId() != this.message.senderId;
     this.activeEmojiMenuId = null; // Reset emoji menu when initializing
     this.activeMenuId = null; // Reset main menu when initializing
+    this.setEmojiString();
   }
 
   convertCreateAt(createdAt: string): string {
@@ -100,9 +101,9 @@ export class MessageComponent implements OnInit {
   selectEmoji(emoji: string | null) {
     // handle emoji selection
     this.activeEmojiMenuId = null;
-    this.message.emoji = emoji;
+    this.changeEmoji(emoji)
+    this.setEmojiString();
     this.editMessage();
-
   }
 
   // Lắng nghe click ở bất kỳ đâu trên window
@@ -148,5 +149,45 @@ export class MessageComponent implements OnInit {
   replyMessage() {
     this.activeMenuId = null;
     this.reply.emit(this.message);
+  }
+
+  changeEmoji(emojiStr: string | null): void {
+    const id = this.authService.getId();
+    const email = this.authService.getEmail();
+    console.log('USER id:', id);
+    if (!emojiStr && !this.message.emoji) {
+      console.log('case:' + 1);
+      //do nothing
+      return;
+    }
+
+    if (!emojiStr && this.message.emoji) {
+      console.log('case:' + 2);
+      //remove current emoji of user before add new one
+      this.message.emoji = this.message.emoji.filter((e) => e.userId != id);
+      return;
+    } else if (emojiStr) {
+      if (!this.message.emoji) {
+         console.log('case:' + 3);
+        //create new list
+        this.message.emoji = [];
+      } else {
+         console.log('case:' + 4);
+        //remove current emoji of user before add new one
+        this.message.emoji = this.message.emoji.filter((e) => e.userId != id);
+        console.log('after remove' + this.message.emoji);
+      }
+      //add new one
+      const emoji = new Emoji(id, email, emojiStr);
+      this.message.emoji.push(emoji);
+    }
+  }
+
+  setEmojiString(): void {
+    if (this.message.emoji && this.message.emoji.length > 0) {
+      const uniqueEmojis = Array.from(new Set(this.message.emoji.map(e => e.emoji)));
+      this.message.emojiString = uniqueEmojis.join('');
+      this.message.emojiString = this.message.emojiString + this.message.emoji.length;
+    }
   }
 }
