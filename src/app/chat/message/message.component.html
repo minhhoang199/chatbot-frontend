@@ -23,14 +23,44 @@
 <div *ngIf="isOutgoingMessage; else outGoingMessage">
   <div class="message received" (click)="toggleMenu(message.id)">
     <div class="bubble-wrapper">
-<div *ngIf="message.isReply" class="reply-bubble">
-      {{message.replyContent}}
-    </div>
-    <div class="message-content">
-      {{message.content}}
-    </div>
-    <div *ngIf="message.emoji" class="message-emoji">
-    {{message.emojiString}}
+      <div *ngIf="message.isReply" class="reply-bubble">
+        {{message.replyContent}}
+      </div>
+      <div class="message-content">
+        {{message.content}}
+      </div>
+      <div *ngIf="message.emoji" class="message-emoji" (click)="toggleEmojiPopup(message.id, $event)">
+        {{message.emojiString}}
+      </div>
+      <div class="popup-emoji-container" *ngIf="activeEmojiPopupId === message.id">
+      <div class="popup-emoji-overlay">
+        <div class="popup-emoji">
+          <!-- Header -->
+          <div class="popup-emoji-header">
+            <h2>Message reactions</h2>
+            <button class="close-btn" (click)="closePopup()">✖</button>
+          </div>
+
+          <!-- Tabs -->
+          <div class="popup-emoji-tabs">
+            <button *ngFor="let emojiKey of reactionMap.keys()" class="tab" [class.active]="activeTab === emojiKey"
+              (click)="setActiveTab(emojiKey)">
+              {{ emojiKey }} ({{ reactionMap.get(emojiKey)?.length || 0 }})
+            </button>
+          </div>
+
+          <!-- List -->
+          <div class="popup-emoji-list" *ngFor="let item of reactionList">
+            <div class="user-row">
+              <div class="user-info">
+                <img src="https://i.pravatar.cc/40?img=1" class="avatar">
+                <span>{{item.username}}</span>
+              </div>
+              <span class="emoji">{{item.emoji}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     </div>
@@ -69,9 +99,40 @@
     <div class="message-content">
       {{message.content}}
     </div>
-     <div *ngIf="message.emoji" class="message-emoji">
-    {{message.emojiString}}
+    <div *ngIf="message.emoji" class="message-emoji" (click)="toggleEmojiPopup(message.id, $event)">
+      {{message.emojiString}}
     </div>
+    <div class="popup-emoji-container" *ngIf="activeEmojiPopupId === message.id">
+      <div class="popup-emoji-overlay">
+        <div class="popup-emoji">
+          <!-- Header -->
+          <div class="popup-emoji-header">
+            <h2>Message reactions</h2>
+            <button class="close-btn" (click)="closePopup()">✖</button>
+          </div>
+
+          <!-- Tabs -->
+          <div class="popup-emoji-tabs">
+            <button *ngFor="let emojiKey of reactionMap.keys()" class="tab" [class.active]="activeTab === emojiKey"
+              (click)="setActiveTab(emojiKey)">
+              {{ emojiKey }} ({{ reactionMap.get(emojiKey)?.length || 0 }})
+            </button>
+          </div>
+
+          <!-- List -->
+          <div class="popup-emoji-list" *ngFor="let item of reactionList">
+            <div class="user-row">
+              <div class="user-info">
+                <img src="https://i.pravatar.cc/40?img=1" class="avatar">
+                <span>{{item.username}}</span>
+              </div>
+              <span class="emoji">{{item.emoji}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="message-time">{{message.createdAt}} <i class="fas fa-check"></i></div>
     <div class="message-menu" *ngIf="activeMenuId === message.id">
       <button class="menu-btn" (click)="openEmojiMenu(message.id); $event.stopPropagation()">

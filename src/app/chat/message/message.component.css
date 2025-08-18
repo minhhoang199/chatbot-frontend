@@ -120,7 +120,7 @@
 
 .emoji-dropdown {
   position: absolute;
-  right: 40px;
+  right: 100%;
   top: 10px;
   background: #fff;
   border-radius: 8px;
@@ -129,6 +129,10 @@
   display: flex;
   gap: 8px;
   cursor: pointer;
+}
+
+.message.received .emoji-dropdown {
+  left: 100%;
 }
 
 /* reply */
@@ -171,5 +175,115 @@
   margin-left: auto;
   margin-right: 10px;
   margin-top: -4px;
+  cursor:pointer;
+}
+
+/* Overlay */
+.popup-emoji-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* Popup box */
+.popup-emoji {
+  background: #fff;
+  border-radius: 12px;
+  width: 380px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+.popup-emoji-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+.popup-emoji-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
+/* Tabs */
+.popup-emoji-tabs {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  overflow-x: auto; /* nếu tab emoji quá nhiều thì kéo ngang */
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+}
+
+.tab.active {
+  color: #1877f2;
+  border-bottom: 2px solid #1877f2;
+}
+
+/* List */
+.popup-emoji-list {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.user-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.user-row:hover {
+  background: #f5f5f5;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.emoji {
+  font-size: 18px;
 }
 

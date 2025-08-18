@@ -24,6 +24,10 @@ export class MessageComponent implements OnInit {
   @Input() activeEmojiMenuId: number | null = null;
   isOutgoingMessage: boolean = false;
   currentOpenMenu: string | null = null;
+  activeEmojiPopupId: number | null = null;
+  reactionMap: Map<string, Emoji[]> = new Map();
+  activeTab = 'All';
+  reactionList: Emoji[] = [];
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -32,8 +36,8 @@ export class MessageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('Message:', this.message);
-    console.log('Message emoji:', this.message.emoji);
+    // console.log('Message:', this.message);
+    // console.log('Message emoji:', this.message.emoji);
     // console.log('Before: ' + this.message.createdAt);
     this.message.createdAt = this.convertCreateAt(this.message.createdAt);
     // console.log('After: ' + this.message.createdAt);
@@ -44,6 +48,8 @@ export class MessageComponent implements OnInit {
     this.activeEmojiMenuId = null; // Reset emoji menu when initializing
     this.activeMenuId = null; // Reset main menu when initializing
     this.setEmojiString();
+    this.setReactionMap();
+    this.reactionList = this.reactionMap.get(this.activeTab) || [];
   }
 
   convertCreateAt(createdAt: string): string {
@@ -101,9 +107,10 @@ export class MessageComponent implements OnInit {
   selectEmoji(emoji: string | null) {
     // handle emoji selection
     this.activeEmojiMenuId = null;
-    this.changeEmoji(emoji)
+    this.changeEmoji(emoji);
     this.setEmojiString();
     this.editMessage();
+    this.setReactionMap();
   }
 
   // Lắng nghe click ở bất kỳ đâu trên window
@@ -146,6 +153,7 @@ export class MessageComponent implements OnInit {
       }
     );
   }
+
   replyMessage() {
     this.activeMenuId = null;
     this.reply.emit(this.message);
@@ -153,7 +161,7 @@ export class MessageComponent implements OnInit {
 
   changeEmoji(emojiStr: string | null): void {
     const id = this.authService.getId();
-    const email = this.authService.getEmail();
+    const username = this.authService.getUserName();
     console.log('USER id:', id);
     if (!emojiStr && !this.message.emoji) {
       console.log('case:' + 1);
@@ -168,26 +176,60 @@ export class MessageComponent implements OnInit {
       return;
     } else if (emojiStr) {
       if (!this.message.emoji) {
-         console.log('case:' + 3);
+        console.log('case:' + 3);
         //create new list
         this.message.emoji = [];
       } else {
-         console.log('case:' + 4);
+        console.log('case:' + 4);
         //remove current emoji of user before add new one
         this.message.emoji = this.message.emoji.filter((e) => e.userId != id);
         console.log('after remove' + this.message.emoji);
       }
       //add new one
-      const emoji = new Emoji(id, email, emojiStr);
+      const emoji = new Emoji(id, username, emojiStr);
       this.message.emoji.push(emoji);
     }
   }
 
   setEmojiString(): void {
     if (this.message.emoji && this.message.emoji.length > 0) {
-      const uniqueEmojis = Array.from(new Set(this.message.emoji.map(e => e.emoji)));
+      const uniqueEmojis = Array.from(
+        new Set(this.message.emoji.map((e) => e.emoji))
+      );
       this.message.emojiString = uniqueEmojis.join('');
-      this.message.emojiString = this.message.emojiString + this.message.emoji.length;
+      this.message.emojiString =
+        this.message.emojiString + this.message.emoji.length;
     }
+  }
+
+  // popup show emoji
+  setReactionMap() {
+    this.reactionMap.clear();
+    this.reactionMap.set('All', this.message.emoji || []);
+    if (this.message.emoji && this.message.emoji.length > 0) {
+      for (const r of this.message.emoji) {
+        if (!this.reactionMap.has(r.emoji)) {
+          this.reactionMap.set(r.emoji, []);
+        }
+        this.reactionMap.get(r.emoji)!.push(r);
+      }
+    }
+  }
+
+  toggleEmojiPopup(id: number, event: MouseEvent) {
+    console.log('Open popup');
+    event.stopPropagation();
+    this.activeEmojiPopupId = this.activeEmojiPopupId === id ? null : id;
+  }
+
+  closePopup() {
+    this.activeEmojiPopupId = null;
+    this.activeTab = "All";
+    this.reactionList = this.reactionMap.get(this.activeTab) || [];
+  }
+
+   setActiveTab(emoji: string) {
+    this.activeTab = emoji;
+    this.reactionList = this.reactionMap.get(this.activeTab) || [];
   }
 }
