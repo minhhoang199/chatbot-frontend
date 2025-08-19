@@ -267,3 +267,41 @@
 .close-reply:hover {
     color: #1877f2;
 }
+
+/* File preview list */
+.file-preview-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.file-preview {
+  display: flex;
+  align-items: center;
+  background: #f1f1f1;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  gap: 6px;
+}
+
+.file-preview i {
+  color: #555;
+}
+
+.file-name {
+  max-width: 120px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.remove-file {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red;
+  font-size: 14px;
+}

@@ -29,6 +29,7 @@ export class ChatWindowComponent
   roomId!: number;
   private routeSub!: Subscription;
   private previousMessageCount = 0;
+  attachedFiles: File[] = [];
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -118,5 +119,17 @@ export class ChatWindowComponent
 
   cancelReply() {
     this.replyingMessage = null;
+  }
+
+  // file upload
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      this.attachedFiles.push(...Array.from(input.files));
+    }
+  }
+
+  removeFile(index: number) {
+    this.attachedFiles.splice(index, 1);
   }
 }

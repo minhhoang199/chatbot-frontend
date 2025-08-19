@@ -34,29 +34,34 @@
 
   <div #messageContainer class="chat-messages">
     <div *ngFor="let message of messages">
-      <app-message
-        [message]="message"
-        [activeMenuId]=null
-        [activeEmojiMenuId]=null
-        (reply)="onReplyMessage($event)">
+      <app-message [message]="message" [activeMenuId]=null [activeEmojiMenuId]=null (reply)="onReplyMessage($event)">
       </app-message>
     </div>
   </div>
 
   <div class="chat-input">
     <div *ngIf="replyingMessage" class="reply-frame">
-        <strong>Replying to {{replyingMessage.sender}}</strong>
-        <span>{{replyingMessage.content}}</span>
-        <button type="button" class="close-reply" (click)="cancelReply()">×</button>
+      <strong>Replying to {{replyingMessage.sender}}</strong>
+      <span>{{replyingMessage.content}}</span>
+      <button type="button" class="close-reply" (click)="cancelReply()">×</button>
+    </div>
+    <!-- File preview list -->
+    <div class="file-preview-list" *ngIf="attachedFiles.length > 0">
+      <div class="file-preview" *ngFor="let file of attachedFiles; let i = index">
+        <i class="fas fa-file"></i>
+        <span class="file-name">{{ file.name }}</span>
+        <button class="remove-file" (click)="removeFile(i)">✖</button>
       </div>
+    </div>
     <div class="input-container">
       <!-- Reply frame -->
       <form (ngSubmit)="sendMessage()" [formGroup]="chatForm">
         <input type="text" formControlName="contentMessage" placeholder="Write a message" #chatInput />
         <div class="input-actions">
-          <button type="button" class="send-btn">
+          <button type="button" class="send-btn" (click)="fileInput.click()">
             <i class="fas fa-paperclip"></i>
           </button>
+          <input type="file" id="fileInput" multiple #fileInput (change)="onFileSelected($event)" hidden />
           <button type="button" class="send-btn">
             <i class="fas fa-smile"></i>
           </button>
