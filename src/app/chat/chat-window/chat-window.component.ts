@@ -14,6 +14,8 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Message } from '../../model/message.model';
+import { AttachedFileService } from '../../service/attached-file.service';
+import { AttachedFile } from '../../model/attached-file.model';
 
 @Component({
   selector: 'app-chat-window',
@@ -29,12 +31,14 @@ export class ChatWindowComponent
   roomId!: number;
   private routeSub!: Subscription;
   private previousMessageCount = 0;
-  attachedFiles: File[] = [];
+  attachedFiles: AttachedFile[] = [];
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private websocketService: WebsocketService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private attachedFileService: AttachedFileService
   ) {}
 
   ngAfterViewChecked(): void {
@@ -81,13 +85,32 @@ export class ChatWindowComponent
     console.log(
       'repId:' + (this.replyingMessage ? this.replyingMessage.id : null)
     );
-    this.messageService.sendMessage(
-      this.chatForm.get('contentMessage')?.value,
-      this.roomId,
-      this.replyingMessage ? this.replyingMessage.id : null
-    );
+    let valueContent = this.chatForm.get('contentMessage')?.value;
+    if (valueContent && valueContent.trim() !== '') {
+      this.messageService.sendMessage(
+        valueContent,
+        this.roomId,
+        this.replyingMessage ? this.replyingMessage.id : null
+      );
+    }
+    if (this.attachedFiles.length > 0) {
+      this.attachedFiles.forEach((attachedFile) => {
+        this.attachedFileService
+          .uploadFile(this.roomId, attachedFile.file)
+          .subscribe({
+            next: (response) => {
+              console.log('File uploaded successfully:', response);
+              // Handle the response if needed
+            },
+            error: (error) => {
+              console.error('Error uploading file:', error);
+            },
+          });
+      });
+    }
     this.chatForm.reset();
     this.cancelReply();
+    this.attachedFiles = [];
   }
 
   ngOnDestroy(): void {
@@ -125,11 +148,32 @@ export class ChatWindowComponent
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files) {
-      this.attachedFiles.push(...Array.from(input.files));
+      Array.from(input.files).forEach((file) => {
+        const previewUrl = URL.createObjectURL(file); // tạo URL tạm
+        this.attachedFiles.push({
+          id: null,
+          messageId: null,
+          linkFile: previewUrl,
+          fileName: file.name,
+          linkPreview: previewUrl,
+          extension: file.name.split('.').pop() || '',
+          roomId: this.roomId,
+          file: file,
+        } as AttachedFile);
+      });
     }
+    console.log('Selected files:', this.attachedFiles);
   }
 
   removeFile(index: number) {
     this.attachedFiles.splice(index, 1);
+  }
+
+  openPreview(url: string): void {
+    window.open(url, '_blank');
+  }
+
+  trackByMessageId(index: number, message: any): string {
+    return message.id;
   }
 }

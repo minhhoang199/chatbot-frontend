@@ -26,8 +26,42 @@
       <div *ngIf="message.isReply" class="reply-bubble">
         {{message.replyContent}}
       </div>
-      <div class="message-content">
+      <div class="message-content"  *ngIf="message.attachedFile === null">
         {{message.content}}
+      </div>
+      <div class="file-preview" *ngIf="message.attachedFile">
+        <!-- <i class="fas fa-file"></i> -->
+        <!-- Nếu là ảnh -->
+        <img *ngIf="message.attachedFile.type==='image'" [src]="message.attachedFile.linkPreview"
+          (click)="openPreview(message.attachedFile.linkPreview)" class="attachment-img" alt="preview" />
+
+        <!-- Nếu là video -->
+        <video *ngIf="message.attachedFile.type==='video'" [src]="message.attachedFile.linkPreview"
+          class="attachment-img" controls></video>
+
+        <!-- Nếu là file PDF -->
+        <div *ngIf="message.attachedFile.type==='pdf'"><a> <i class="fa-regular fa-file-pdf"></i> {{
+            message.attachedFile.fileName}}</a>
+        </div>
+
+        <!-- Nếu là file Word -->
+        <div *ngIf="message.attachedFile.type==='word'"><a> <i class="fa-regular fa-file-word"></i> {{
+            message.attachedFile.fileName}}</a>
+        </div>
+
+        <!-- Nếu là file Excel -->
+        <div *ngIf="message.attachedFile.type==='excel'"><a> <i class="fa-regular fa-file-excel"></i> {{
+            message.attachedFile.fileName }}</a>
+        </div>
+
+        <div *ngIf="message.attachedFile.type==='powerpoint'"><a> <i class="fa-regular fa-file-powerpoint"></i>{{
+            message.attachedFile.fileName }}</a>
+        </div>
+
+        <!-- Nếu là file khác -->
+        <div *ngIf="message.attachedFile.type==='other'" class="file-icon other"> 📎 <a>{{ message.attachedFile.fileName
+            }}</a>
+        </div>
       </div>
       <div *ngIf="message.emoji" class="message-emoji" (click)="toggleEmojiPopup(message.id, $event)">
         {{message.emojiString}}
@@ -96,9 +130,43 @@
     <div *ngIf="message.isReply" class="reply-bubble">
       {{message.replyContent}}
     </div>
-    <div class="message-content">
+    <div class="message-content" *ngIf="message.attachedFile === null">
       {{message.content}}
     </div>
+    <div class="file-preview" *ngIf="message.attachedFile">
+        <!-- <i class="fas fa-file"></i> -->
+                <!-- Nếu là ảnh -->
+        <img *ngIf="message.attachedFile.type==='image'" [src]="message.attachedFile.linkPreview"
+          (click)="openPreview(message.attachedFile.linkPreview)" class="attachment-img" alt="preview" />
+
+        <!-- Nếu là video -->
+        <video *ngIf="message.attachedFile.type==='video'" [src]="message.attachedFile.linkPreview"
+          class="attachment-img" controls></video>
+
+        <!-- Nếu là file PDF -->
+        <div *ngIf="message.attachedFile.type==='pdf'"><a> <i class="fa-regular fa-file-pdf"></i> {{
+            message.attachedFile.fileName}}</a>
+        </div>
+
+        <!-- Nếu là file Word -->
+        <div *ngIf="message.attachedFile.type==='word'"><a> <i class="fa-regular fa-file-word"></i> {{
+            message.attachedFile.fileName}}</a>
+        </div>
+
+        <!-- Nếu là file Excel -->
+        <div *ngIf="message.attachedFile.type==='excel'"><a> <i class="fa-regular fa-file-excel"></i> {{
+            message.attachedFile.fileName }}</a>
+        </div>
+
+        <div *ngIf="message.attachedFile.type==='powerpoint'"><a> <i class="fa-regular fa-file-powerpoint"></i>{{
+            message.attachedFile.fileName }}</a>
+        </div>
+
+        <!-- Nếu là file khác -->
+        <div *ngIf="message.attachedFile.type==='other'" class="file-icon other"> 📎 <a>{{ message.attachedFile.fileName
+            }}</a>
+        </div>
+      </div>
     <div *ngIf="message.emoji" class="message-emoji" (click)="toggleEmojiPopup(message.id, $event)">
       {{message.emojiString}}
     </div>

@@ -1,3 +1,5 @@
+import { AttachedFile } from "./attached-file.model";
+
 export class Message {
   constructor(
     public id: number,
@@ -13,6 +15,7 @@ export class Message {
     public replyContent: string,
     public emoji: Emoji[] | null = null,
     public emojiString: string | null = null,
+    public attachedFile: AttachedFile | null = null
   ) {}
 }
 

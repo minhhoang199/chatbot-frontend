@@ -33,7 +33,7 @@
   </div>
 
   <div #messageContainer class="chat-messages">
-    <div *ngFor="let message of messages">
+    <div *ngFor="let message of messages,  trackBy: trackByMessageId">
       <app-message [message]="message" [activeMenuId]=null [activeEmojiMenuId]=null (reply)="onReplyMessage($event)">
       </app-message>
     </div>
@@ -48,9 +48,34 @@
     <!-- File preview list -->
     <div class="file-preview-list" *ngIf="attachedFiles.length > 0">
       <div class="file-preview" *ngFor="let file of attachedFiles; let i = index">
-        <i class="fas fa-file"></i>
-        <span class="file-name">{{ file.name }}</span>
-        <button class="remove-file" (click)="removeFile(i)">✖</button>
+        <ng-container *ngIf="file.file | fileType as type">
+          <!-- Nếu là ảnh -->
+          <img *ngIf="type === 'image'" [src]="file.linkPreview" (click)="openPreview(file.linkPreview)"
+            class="attachment-img" alt="preview" />
+
+          <!-- Nếu là video -->
+          <video *ngIf="type === 'video'" [src]="file.linkPreview" class="attachment-img" controls></video>
+
+          <!-- Nếu là file PDF -->
+          <div *ngIf="type === 'pdf'"><a> <i class="fa-regular fa-file-pdf"></i> {{ file.fileName}}</a>
+          </div>
+
+          <!-- Nếu là file Word -->
+          <div *ngIf="type === 'word'"><a> <i class="fa-regular fa-file-word"></i> {{ file.fileName}}</a>
+          </div>
+
+          <!-- Nếu là file Excel -->
+          <div *ngIf="type === 'excel'"><a> <i class="fa-regular fa-file-excel"></i> {{ file.fileName }}</a>
+          </div>
+
+          <div *ngIf="type === 'powerpoint'"><a> <i class="fa-regular fa-file-powerpoint"></i>{{ file.fileName }}</a>
+          </div>
+
+          <!-- Nếu là file khác -->
+          <div *ngIf="type === 'other'" class="file-icon other"> 📎 <a>{{ file.fileName }}</a>
+          </div>
+          <button class="remove-file" (click)="removeFile(i)">✖</button>
+        </ng-container>
       </div>
     </div>
     <div class="input-container">

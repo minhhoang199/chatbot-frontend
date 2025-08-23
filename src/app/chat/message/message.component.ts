@@ -9,8 +9,11 @@ import {
   HostListener,
   Output,
   EventEmitter,
+  OnDestroy,
 } from '@angular/core';
 import { parse } from 'date-fns';
+import { AttachedFile } from '../../model/attached-file.model';
+import { AttachedFileService } from '../../service/attached-file.service';
 
 const dateFormat = 'yyyy-MM-dd';
 @Component({
@@ -18,7 +21,7 @@ const dateFormat = 'yyyy-MM-dd';
   templateUrl: './message.component.html',
   styleUrl: './message.component.css',
 })
-export class MessageComponent implements OnInit {
+export class MessageComponent implements OnInit, OnDestroy {
   @Input() message!: Message;
   @Input() activeMenuId: number | null = null;
   @Input() activeEmojiMenuId: number | null = null;
@@ -28,11 +31,13 @@ export class MessageComponent implements OnInit {
   reactionMap: Map<string, Emoji[]> = new Map();
   activeTab = 'All';
   reactionList: Emoji[] = [];
+  refreshTimer: any;
 
   constructor(
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private attachedFileService: AttachedFileService
   ) {}
 
   ngOnInit(): void {
@@ -47,9 +52,17 @@ export class MessageComponent implements OnInit {
     this.isOutgoingMessage = this.authService.getId() != this.message.senderId;
     this.activeEmojiMenuId = null; // Reset emoji menu when initializing
     this.activeMenuId = null; // Reset main menu when initializing
+    this.setTypeMessage();
+    this.setLinkPreview();
     this.setEmojiString();
     this.setReactionMap();
     this.reactionList = this.reactionMap.get(this.activeTab) || [];
+  }
+
+    ngOnDestroy() {
+    if (this.refreshTimer) {
+      clearTimeout(this.refreshTimer);
+    }
   }
 
   convertCreateAt(createdAt: string): string {
@@ -224,12 +237,77 @@ export class MessageComponent implements OnInit {
 
   closePopup() {
     this.activeEmojiPopupId = null;
-    this.activeTab = "All";
+    this.activeTab = 'All';
     this.reactionList = this.reactionMap.get(this.activeTab) || [];
   }
 
-   setActiveTab(emoji: string) {
+  setActiveTab(emoji: string) {
     this.activeTab = emoji;
     this.reactionList = this.reactionMap.get(this.activeTab) || [];
+  }
+
+  // attached file
+  openPreview(url: string): void {
+    console.log('Opening preview for:', url);
+    // Cách đơn giản mở modal / tab mới để xem ảnh
+    window.open(url, '_blank');
+  }
+
+  downloadFile(file: AttachedFile) {
+    // throw new Error('Method not implemented.');
+  }
+
+  setTypeMessage() {
+    if (!this.message.attachedFile) return;
+
+    const name = this.message.attachedFile.fileName.toLowerCase();
+    const type = this.message.attachedFile.extension.toLowerCase();
+    if (type.startsWith('image/')) {
+      this.message.attachedFile.type = 'image';
+    } else if (type.startsWith('video/')) {
+      this.message.attachedFile.type = 'video';
+    } else if (type.startsWith('application/pdf')) {
+      this.message.attachedFile.type = 'pdf';
+    } else if (type.startsWith('application/msword') ||
+      name.endsWith('.doc') ||
+      name.endsWith('.docx')) {
+      this.message.attachedFile.type = 'word';
+    } else if (type.startsWith('application/vnd.ms-excel') ||
+      type.startsWith('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') ||
+      name.endsWith('.xls') ||
+      name.endsWith('.xlsx')) {
+      this.message.attachedFile.type = 'excel';
+    } else if (type.startsWith('application/vnd.ms-powerpoint') ||
+      name.endsWith('.pptx')) {
+      this.message.attachedFile.type = 'powerpoint';
+    } else {
+      this.message.attachedFile.type = 'other';
+    }
+  }
+
+  setLinkPreview(): void {
+    if (this.message.attachedFile === null) return;
+    console.log('Setting link preview for message:', this.message.id);
+    this.attachedFileService.genPreviewLinkUpload(this.message.roomId, this.message.attachedFile.id).subscribe(
+      (response) => {
+        if (
+          response &&
+          response.data &&
+          response.code &&
+          response.code === 'TD-000'
+        ) {
+          console.log(response.data);
+          if (this.message.attachedFile) this.message.attachedFile.linkPreview = response.data;
+
+          // Refresh cố định mỗi 5 phút
+          this.refreshTimer = setTimeout(() => this.setLinkPreview(), 5 * 60 * 60 * 1000);
+        } else {
+          // this.errorMessage = ""
+        }
+      },
+      (error) => {
+        console.error('Error occurred:', error);
+      }
+    );
   }
 }

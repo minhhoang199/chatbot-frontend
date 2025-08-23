@@ -7,14 +7,22 @@ import { ChatListComponent } from "./chat-list/chat-list.component";
 import { ChatWindowComponent } from "./chat-window/chat-window.component";
 import { MessageComponent } from "./message/message.component";
 import { ChatComponent } from './chat.component';
+import { FileTypePipe } from "../pipe/file-type.pipe";
 
 @NgModule({
-    declarations: [ChatRoomComponent, ChatListComponent, ChatWindowComponent, MessageComponent, ChatComponent],
+    declarations: [
+      ChatRoomComponent, 
+      ChatListComponent, 
+      ChatWindowComponent, 
+      MessageComponent, 
+      ChatComponent,
+      FileTypePipe
+    ],
     imports: [
         CommonModule,
         FormsModule, 
         ReactiveFormsModule,
-        ChatRoutingModule
+        ChatRoutingModule,
       ],
 })
 export class ChatModule{}

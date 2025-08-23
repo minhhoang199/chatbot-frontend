@@ -8,11 +8,12 @@ import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch } fro
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignInComponent } from './component/sign-in/sign-in.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { FileTypePipe } from './pipe/file-type.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SignInComponent
+    SignInComponent,
   ],
   imports: [
     BrowserModule,
