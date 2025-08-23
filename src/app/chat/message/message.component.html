@@ -3,9 +3,9 @@
     <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png"> </div>
     <div class="received_msg">
       <div class="received_width_msg">
-        <span class="time_date"> {{message.sender}}</span>
-        <p>{{message.content}}</p>
-        <span class="time_date"> {{message.createdAt}}</span>
+        <span class="time_date"> {{_message.sender}}</span>
+        <p>{{_message.content}}</p>
+        <span class="time_date"> {{_message.createdAt}}</span>
       </div>
     </div>
   </div>
@@ -13,60 +13,60 @@
 <ng-template #outGoingMessage>
     <div class="outgoing_msg">
       <div class="sent_msg">
-        <span class="time_date"> {{message.sender}}</span>
-        <p>{{message.content}}</p>
-        <span class="time_date"> {{message.createdAt}}</span>
+        <span class="time_date"> {{_message.sender}}</span>
+        <p>{{_message.content}}</p>
+        <span class="time_date"> {{_message.createdAt}}</span>
       </div>
     </div>
 </ng-template> -->
 
 <div *ngIf="isOutgoingMessage; else outGoingMessage">
-  <div class="message received" (click)="toggleMenu(message.id)">
+  <div class="message received" (click)="toggleMenu(_message.id)">
     <div class="bubble-wrapper">
-      <div *ngIf="message.isReply" class="reply-bubble">
-        {{message.replyContent}}
+      <div *ngIf="_message.isReply" class="reply-bubble">
+        {{_message.replyContent}}
       </div>
-      <div class="message-content"  *ngIf="message.attachedFile === null">
-        {{message.content}}
+      <div class="message-content"  *ngIf="_message.attachedFile === null">
+        {{_message.content}}
       </div>
-      <div class="file-preview" *ngIf="message.attachedFile">
+      <div class="file-preview" *ngIf="_message.attachedFile">
         <!-- <i class="fas fa-file"></i> -->
         <!-- Nếu là ảnh -->
-        <img *ngIf="message.attachedFile.type==='image'" [src]="message.attachedFile.linkPreview"
-          (click)="openPreview(message.attachedFile.linkPreview)" class="attachment-img" alt="preview" />
+        <img *ngIf="_message.attachedFile.type==='image'" [src]="_message.attachedFile.linkPreview"
+          (click)="openPreview(_message.attachedFile.linkPreview)" class="attachment-img" alt="preview" />
 
         <!-- Nếu là video -->
-        <video *ngIf="message.attachedFile.type==='video'" [src]="message.attachedFile.linkPreview"
+        <video *ngIf="_message.attachedFile.type==='video'" [src]="_message.attachedFile.linkPreview"
           class="attachment-img" controls></video>
 
         <!-- Nếu là file PDF -->
-        <div *ngIf="message.attachedFile.type==='pdf'"><a> <i class="fa-regular fa-file-pdf"></i> {{
-            message.attachedFile.fileName}}</a>
+        <div *ngIf="_message.attachedFile.type==='pdf'"><a> <i class="fa-regular fa-file-pdf"></i> {{
+            _message.attachedFile.fileName}}</a>
         </div>
 
         <!-- Nếu là file Word -->
-        <div *ngIf="message.attachedFile.type==='word'"><a> <i class="fa-regular fa-file-word"></i> {{
-            message.attachedFile.fileName}}</a>
+        <div *ngIf="_message.attachedFile.type==='word'"><a> <i class="fa-regular fa-file-word"></i> {{
+            _message.attachedFile.fileName}}</a>
         </div>
 
         <!-- Nếu là file Excel -->
-        <div *ngIf="message.attachedFile.type==='excel'"><a> <i class="fa-regular fa-file-excel"></i> {{
-            message.attachedFile.fileName }}</a>
+        <div *ngIf="_message.attachedFile.type==='excel'"><a> <i class="fa-regular fa-file-excel"></i> {{
+            _message.attachedFile.fileName }}</a>
         </div>
 
-        <div *ngIf="message.attachedFile.type==='powerpoint'"><a> <i class="fa-regular fa-file-powerpoint"></i>{{
-            message.attachedFile.fileName }}</a>
+        <div *ngIf="_message.attachedFile.type==='powerpoint'"><a> <i class="fa-regular fa-file-powerpoint"></i>{{
+            _message.attachedFile.fileName }}</a>
         </div>
 
         <!-- Nếu là file khác -->
-        <div *ngIf="message.attachedFile.type==='other'" class="file-icon other"> 📎 <a>{{ message.attachedFile.fileName
+        <div *ngIf="_message.attachedFile.type==='other'" class="file-icon other"> 📎 <a>{{ _message.attachedFile.fileName
             }}</a>
         </div>
       </div>
-      <div *ngIf="message.emoji" class="message-emoji" (click)="toggleEmojiPopup(message.id, $event)">
-        {{message.emojiString}}
+      <div *ngIf="_message.emoji" class="message-emoji" (click)="toggleEmojiPopup(_message.id, $event)">
+        {{_message.emojiString}}
       </div>
-      <div class="popup-emoji-container" *ngIf="activeEmojiPopupId === message.id">
+      <div class="popup-emoji-container" *ngIf="activeEmojiPopupId === _message.id">
       <div class="popup-emoji-overlay">
         <div class="popup-emoji">
           <!-- Header -->
@@ -98,9 +98,9 @@
     </div>
 
     </div>
-    <div class="message-time">{{message.createdAt}}</div>
-    <div class="message-menu" *ngIf="activeMenuId === message.id">
-      <button class="menu-btn" (click)="openEmojiMenu(message.id); $event.stopPropagation()">
+    <div class="message-time">{{_message.createdAt}}</div>
+    <div class="message-menu" *ngIf="activeMenuId === _message.id">
+      <button class="menu-btn" (click)="openEmojiMenu(_message.id); $event.stopPropagation()">
         <i class="fas fa-smile"></i>
       </button>
       <button class="menu-btn" (click)="replyMessage(); $event.stopPropagation()">
@@ -112,8 +112,11 @@
       <button class="menu-btn" (click)="deleteMessage(); $event.stopPropagation()">
         <i class="fas fa-trash"></i>
       </button>
+      <button class="menu-btn" (click)="downloadFile(); $event.stopPropagation()">
+      <i class="fas fa-file-download"></i>
+      </button>
     </div>
-    <div class="emoji-dropdown" *ngIf="activeEmojiMenuId === message.id">
+    <div class="emoji-dropdown" *ngIf="activeEmojiMenuId === _message.id">
       <span (click)="selectEmoji('❤️'); $event.stopPropagation()">❤️</span>
       <span (click)="selectEmoji('😆'); $event.stopPropagation()">😆</span>
       <span (click)="selectEmoji('😮'); $event.stopPropagation()">😮</span>
@@ -126,51 +129,51 @@
   </div>
 </div>
 <ng-template #outGoingMessage>
-  <div class="message sent" (click)="toggleMenu(message.id)">
-    <div *ngIf="message.isReply" class="reply-bubble">
-      {{message.replyContent}}
+  <div class="message sent" (click)="toggleMenu(_message.id)">
+    <div *ngIf="_message.isReply" class="reply-bubble">
+      {{_message.replyContent}}
     </div>
-    <div class="message-content" *ngIf="message.attachedFile === null">
-      {{message.content}}
+    <div class="message-content" *ngIf="_message.attachedFile === null">
+      {{_message.content}}
     </div>
-    <div class="file-preview" *ngIf="message.attachedFile">
+    <div class="file-preview" *ngIf="_message.attachedFile">
         <!-- <i class="fas fa-file"></i> -->
                 <!-- Nếu là ảnh -->
-        <img *ngIf="message.attachedFile.type==='image'" [src]="message.attachedFile.linkPreview"
-          (click)="openPreview(message.attachedFile.linkPreview)" class="attachment-img" alt="preview" />
+        <img *ngIf="_message.attachedFile.type==='image'" [src]="_message.attachedFile.linkPreview"
+          (click)="openPreview(_message.attachedFile.linkPreview)" class="attachment-img" alt="preview" />
 
         <!-- Nếu là video -->
-        <video *ngIf="message.attachedFile.type==='video'" [src]="message.attachedFile.linkPreview"
+        <video *ngIf="_message.attachedFile.type==='video'" [src]="_message.attachedFile.linkPreview"
           class="attachment-img" controls></video>
 
         <!-- Nếu là file PDF -->
-        <div *ngIf="message.attachedFile.type==='pdf'"><a> <i class="fa-regular fa-file-pdf"></i> {{
-            message.attachedFile.fileName}}</a>
+        <div *ngIf="_message.attachedFile.type==='pdf'"><a> <i class="fa-regular fa-file-pdf"></i> {{
+            _message.attachedFile.fileName}}</a>
         </div>
 
         <!-- Nếu là file Word -->
-        <div *ngIf="message.attachedFile.type==='word'"><a> <i class="fa-regular fa-file-word"></i> {{
-            message.attachedFile.fileName}}</a>
+        <div *ngIf="_message.attachedFile.type==='word'"><a> <i class="fa-regular fa-file-word"></i> {{
+            _message.attachedFile.fileName}}</a>
         </div>
 
         <!-- Nếu là file Excel -->
-        <div *ngIf="message.attachedFile.type==='excel'"><a> <i class="fa-regular fa-file-excel"></i> {{
-            message.attachedFile.fileName }}</a>
+        <div *ngIf="_message.attachedFile.type==='excel'"><a> <i class="fa-regular fa-file-excel"></i> {{
+            _message.attachedFile.fileName }}</a>
         </div>
 
-        <div *ngIf="message.attachedFile.type==='powerpoint'"><a> <i class="fa-regular fa-file-powerpoint"></i>{{
-            message.attachedFile.fileName }}</a>
+        <div *ngIf="_message.attachedFile.type==='powerpoint'"><a> <i class="fa-regular fa-file-powerpoint"></i>{{
+            _message.attachedFile.fileName }}</a>
         </div>
 
         <!-- Nếu là file khác -->
-        <div *ngIf="message.attachedFile.type==='other'" class="file-icon other"> 📎 <a>{{ message.attachedFile.fileName
+        <div *ngIf="_message.attachedFile.type==='other'" class="file-icon other"> 📎 <a>{{ _message.attachedFile.fileName
             }}</a>
         </div>
       </div>
-    <div *ngIf="message.emoji" class="message-emoji" (click)="toggleEmojiPopup(message.id, $event)">
-      {{message.emojiString}}
+    <div *ngIf="_message.emoji" class="message-emoji" (click)="toggleEmojiPopup(_message.id, $event)">
+      {{_message.emojiString}}
     </div>
-    <div class="popup-emoji-container" *ngIf="activeEmojiPopupId === message.id">
+    <div class="popup-emoji-container" *ngIf="activeEmojiPopupId === _message.id">
       <div class="popup-emoji-overlay">
         <div class="popup-emoji">
           <!-- Header -->
@@ -201,9 +204,9 @@
       </div>
     </div>
 
-    <div class="message-time">{{message.createdAt}} <i class="fas fa-check"></i></div>
-    <div class="message-menu" *ngIf="activeMenuId === message.id">
-      <button class="menu-btn" (click)="openEmojiMenu(message.id); $event.stopPropagation()">
+    <div class="message-time">{{_message.createdAt}} <i class="fas fa-check"></i></div>
+    <div class="message-menu" *ngIf="activeMenuId === _message.id">
+      <button class="menu-btn" (click)="openEmojiMenu(_message.id); $event.stopPropagation()">
         <i class="fas fa-smile"></i>
       </button>
       <button class="menu-btn" (click)="replyMessage(); $event.stopPropagation()">
@@ -215,8 +218,11 @@
       <button class="menu-btn" (click)="deleteMessage(); $event.stopPropagation()">
         <i class="fas fa-trash"></i>
       </button>
+      <button class="menu-btn" (click)="downloadFile(); $event.stopPropagation()">
+        <i class="fas fa-file-download"></i>
+      </button>
     </div>
-    <div class="emoji-dropdown" *ngIf="activeEmojiMenuId === message.id">
+    <div class="emoji-dropdown" *ngIf="activeEmojiMenuId === _message.id">
       <span (click)="selectEmoji('❤️'); $event.stopPropagation()">❤️</span>
       <span (click)="selectEmoji('😆'); $event.stopPropagation()">😆</span>
       <span (click)="selectEmoji('😮'); $event.stopPropagation()">😮</span>

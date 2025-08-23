@@ -15,6 +15,7 @@ export class ChatListComponent implements OnInit {
   ngOnInit(): void {
     const id = this.authService.getId();
     this.roomService.getAllRooms(id).subscribe((rooms) => this.rooms = rooms);
+    console.log("rooms: " + this.rooms);
   }
 
   navigateToRoom(roomId: number): void {

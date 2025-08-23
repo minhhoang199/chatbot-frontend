@@ -10,6 +10,7 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
+  SimpleChanges,
 } from '@angular/core';
 import { parse } from 'date-fns';
 import { AttachedFile } from '../../model/attached-file.model';
@@ -22,7 +23,14 @@ const dateFormat = 'yyyy-MM-dd';
   styleUrl: './message.component.css',
 })
 export class MessageComponent implements OnInit, OnDestroy {
-  @Input() message!: Message;
+    _message!: Message;
+
+  @Input() set message(value: Message) {
+    console.log('Message input changed:', value);
+    this._message = value;
+    this.processMessage(); // 👉 chạy lại logic ở đây
+  }
+
   @Input() activeMenuId: number | null = null;
   @Input() activeEmojiMenuId: number | null = null;
   isOutgoingMessage: boolean = false;
@@ -41,31 +49,42 @@ export class MessageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // console.log('Message:', this.message);
-    // console.log('Message emoji:', this.message.emoji);
-    // console.log('Before: ' + this.message.createdAt);
-    this.message.createdAt = this.convertCreateAt(this.message.createdAt);
-    // console.log('After: ' + this.message.createdAt);
-    this.cdr.detectChanges();
-    // console.log("msgId:" + this.message.senderId);
+    // this._message.createdAt = this.convertCreateAt(this._message.createdAt);
+    // console.log('After: ' + this._message.createdAt);
+    // console.log("msgId:" + this._message.senderId);
     // console.log("storageId:" + this.authService.getId());
-    this.isOutgoingMessage = this.authService.getId() != this.message.senderId;
-    this.activeEmojiMenuId = null; // Reset emoji menu when initializing
-    this.activeMenuId = null; // Reset main menu when initializing
-    this.setTypeMessage();
-    this.setLinkPreview();
-    this.setEmojiString();
-    this.setReactionMap();
-    this.reactionList = this.reactionMap.get(this.activeTab) || [];
+    // this.isOutgoingMessage = this.authService.getId() != this._message.senderId;
+    // this.activeEmojiMenuId = null; // Reset emoji menu when initializing
+    // this.activeMenuId = null; // Reset main menu when initializing
+    // this.setTypeMessage();
+    // this.setLinkPreview();
+    // this.setEmojiString();
+    // this.setReactionMap();
+    // this.reactionList = this.reactionMap.get(this.activeTab) || [];
+    // this.cdr.detectChanges();
   }
 
-    ngOnDestroy() {
+  processMessage() {
+    console.log('Processing message:', this._message);
+      this._message.createdAt = this.convertCreateAt(this._message.createdAt);
+      this.isOutgoingMessage = this.authService.getId() != this._message.senderId;
+      this.activeEmojiMenuId = null; // Reset emoji menu when initializing
+      this.activeMenuId = null; // Reset main menu when initializing
+      this.setTypeMessage();
+      this.setLinkPreview();
+      this.setEmojiString();
+      this.setReactionMap();
+      this.reactionList = this.reactionMap.get(this.activeTab) || [];
+  }
+
+  ngOnDestroy() {
     if (this.refreshTimer) {
       clearTimeout(this.refreshTimer);
     }
   }
 
   convertCreateAt(createdAt: string): string {
+    console.log('Before: ' + createdAt);
     // Create a Date object from the createdAt string
     const dateObject = new Date(createdAt);
 
@@ -145,7 +164,7 @@ export class MessageComponent implements OnInit, OnDestroy {
 
   editMessage() {
     this.activeMenuId = null;
-    this.messageService.editMessage(this.message).subscribe(
+    this.messageService.editMessage(this._message).subscribe(
       (response) => {
         // If login successful, navigate to page2
         if (
@@ -155,8 +174,10 @@ export class MessageComponent implements OnInit, OnDestroy {
           response.code === 'TD-000'
         ) {
           console.log(response.data);
-          this.message.content = response.data.content;
-          this.message.emoji = response.data.emoji;
+          this._message.content = response.data.content;
+          this._message.emoji = response.data.emoji;
+          this.setTypeMessage();
+          this.setLinkPreview();
         } else {
           // this.errorMessage = ""
         }
@@ -169,58 +190,60 @@ export class MessageComponent implements OnInit, OnDestroy {
 
   replyMessage() {
     this.activeMenuId = null;
-    this.reply.emit(this.message);
+    this.reply.emit(this._message);
   }
 
   changeEmoji(emojiStr: string | null): void {
     const id = this.authService.getId();
     const username = this.authService.getUserName();
     console.log('USER id:', id);
-    if (!emojiStr && !this.message.emoji) {
+    if (!emojiStr && !this._message.emoji) {
       console.log('case:' + 1);
       //do nothing
       return;
     }
 
-    if (!emojiStr && this.message.emoji) {
+    if (!emojiStr && this._message.emoji) {
       console.log('case:' + 2);
       //remove current emoji of user before add new one
-      this.message.emoji = this.message.emoji.filter((e) => e.userId != id);
+      this._message.emoji = this._message.emoji.filter((e) => e.userId != id);
       return;
     } else if (emojiStr) {
-      if (!this.message.emoji) {
+      if (!this._message.emoji) {
         console.log('case:' + 3);
         //create new list
-        this.message.emoji = [];
+        this._message.emoji = [];
       } else {
         console.log('case:' + 4);
         //remove current emoji of user before add new one
-        this.message.emoji = this.message.emoji.filter((e) => e.userId != id);
-        console.log('after remove' + this.message.emoji);
+        this._message.emoji = this._message.emoji.filter((e) => e.userId != id);
+        console.log('after remove' + this._message.emoji);
       }
       //add new one
       const emoji = new Emoji(id, username, emojiStr);
-      this.message.emoji.push(emoji);
+      this._message.emoji.push(emoji);
     }
   }
 
   setEmojiString(): void {
-    if (this.message.emoji && this.message.emoji.length > 0) {
+    console.log('Set emoji string for message:', this._message);
+    if (this._message.emoji && this._message.emoji.length > 0) {
       const uniqueEmojis = Array.from(
-        new Set(this.message.emoji.map((e) => e.emoji))
+        new Set(this._message.emoji.map((e) => e.emoji))
       );
-      this.message.emojiString = uniqueEmojis.join('');
-      this.message.emojiString =
-        this.message.emojiString + this.message.emoji.length;
+      this._message.emojiString = uniqueEmojis.join('');
+      this._message.emojiString =
+        this._message.emojiString + this._message.emoji.length;
     }
   }
 
   // popup show emoji
   setReactionMap() {
+    console.log('Setting reaction map for message:', this._message);
     this.reactionMap.clear();
-    this.reactionMap.set('All', this.message.emoji || []);
-    if (this.message.emoji && this.message.emoji.length > 0) {
-      for (const r of this.message.emoji) {
+    this.reactionMap.set('All', this._message.emoji || []);
+    if (this._message.emoji && this._message.emoji.length > 0) {
+      for (const r of this._message.emoji) {
         if (!this.reactionMap.has(r.emoji)) {
           this.reactionMap.set(r.emoji, []);
         }
@@ -253,61 +276,82 @@ export class MessageComponent implements OnInit, OnDestroy {
     window.open(url, '_blank');
   }
 
-  downloadFile(file: AttachedFile) {
-    // throw new Error('Method not implemented.');
+  downloadFile() {
+    console.log('Downloading file for message:', this._message);
+    if (!this._message.attachedFile || !this._message.attachedFile.id) return;
+    this.attachedFileService.downloadFile(
+      this._message.roomId,
+      this._message.attachedFile.id,
+      this._message.attachedFile.fileName
+    );
   }
 
   setTypeMessage() {
-    if (!this.message.attachedFile) return;
+    if (!this._message.attachedFile) return;
 
-    const name = this.message.attachedFile.fileName.toLowerCase();
-    const type = this.message.attachedFile.extension.toLowerCase();
+    const name = this._message.attachedFile.fileName.toLowerCase();
+    const type = this._message.attachedFile.extension.toLowerCase();
+    console.log('setTypeMessage:', name);
     if (type.startsWith('image/')) {
-      this.message.attachedFile.type = 'image';
+      this._message.attachedFile.type = 'image';
     } else if (type.startsWith('video/')) {
-      this.message.attachedFile.type = 'video';
+      this._message.attachedFile.type = 'video';
     } else if (type.startsWith('application/pdf')) {
-      this.message.attachedFile.type = 'pdf';
-    } else if (type.startsWith('application/msword') ||
+      this._message.attachedFile.type = 'pdf';
+    } else if (
+      type.startsWith('application/msword') ||
       name.endsWith('.doc') ||
-      name.endsWith('.docx')) {
-      this.message.attachedFile.type = 'word';
-    } else if (type.startsWith('application/vnd.ms-excel') ||
-      type.startsWith('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') ||
+      name.endsWith('.docx')
+    ) {
+      this._message.attachedFile.type = 'word';
+    } else if (
+      type.startsWith('application/vnd.ms-excel') ||
+      type.startsWith(
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      ) ||
       name.endsWith('.xls') ||
-      name.endsWith('.xlsx')) {
-      this.message.attachedFile.type = 'excel';
-    } else if (type.startsWith('application/vnd.ms-powerpoint') ||
-      name.endsWith('.pptx')) {
-      this.message.attachedFile.type = 'powerpoint';
+      name.endsWith('.xlsx')
+    ) {
+      this._message.attachedFile.type = 'excel';
+    } else if (
+      type.startsWith('application/vnd.ms-powerpoint') ||
+      name.endsWith('.pptx')
+    ) {
+      this._message.attachedFile.type = 'powerpoint';
     } else {
-      this.message.attachedFile.type = 'other';
+      this._message.attachedFile.type = 'other';
     }
   }
 
   setLinkPreview(): void {
-    if (this.message.attachedFile === null) return;
-    console.log('Setting link preview for message:', this.message.id);
-    this.attachedFileService.genPreviewLinkUpload(this.message.roomId, this.message.attachedFile.id).subscribe(
-      (response) => {
-        if (
-          response &&
-          response.data &&
-          response.code &&
-          response.code === 'TD-000'
-        ) {
-          console.log(response.data);
-          if (this.message.attachedFile) this.message.attachedFile.linkPreview = response.data;
+    if (this._message.attachedFile === null) return;
+    console.log('Setting link preview for message:', this._message.id);
+    this.attachedFileService
+      .genPreviewLinkUpload(this._message.roomId, this._message.attachedFile.id)
+      .subscribe(
+        (response) => {
+          if (
+            response &&
+            response.data &&
+            response.code &&
+            response.code === 'TD-000'
+          ) {
+            console.log(response.data);
+            if (this._message.attachedFile)
+              this._message.attachedFile.linkPreview = response.data;
 
-          // Refresh cố định mỗi 5 phút
-          this.refreshTimer = setTimeout(() => this.setLinkPreview(), 5 * 60 * 60 * 1000);
-        } else {
-          // this.errorMessage = ""
+            // Refresh cố định mỗi 5 phút
+            this.refreshTimer = setTimeout(
+              () => this.setLinkPreview(),
+              5 * 60 * 60 * 1000
+            );
+          } else {
+            // this.errorMessage = ""
+          }
+        },
+        (error) => {
+          console.error('Error occurred:', error);
         }
-      },
-      (error) => {
-        console.error('Error occurred:', error);
-      }
-    );
+      );
   }
 }

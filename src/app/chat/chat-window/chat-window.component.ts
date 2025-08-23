@@ -26,7 +26,7 @@ export class ChatWindowComponent
   implements OnInit, OnDestroy, AfterViewChecked
 {
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
-  messages!: any[];
+  messages!: Message[];
   chatForm!: FormGroup;
   roomId!: number;
   private routeSub!: Subscription;
@@ -61,7 +61,16 @@ export class ChatWindowComponent
               (msg) => msg.id === message.id
             );
             if (index !== -1) {
+              // this.messages[index].attachedFile = message.attachedFile;
+              // this.messageService.setTypeMessage(this.messages[index]);
+              // this.messageService.setLinkPreview(this.messages[index]);
+              // this.messages[index].content = message.content;
+              // this.messages[index].emoji = message.emoji;
+
               this.messages[index] = { ...this.messages[index], ...message };
+              this.messages = this.messages.map((m) =>
+                m.id === message.id ? message : m
+              );
             } else {
               this.messages.push(message);
             }

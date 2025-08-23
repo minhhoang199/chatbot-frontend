@@ -1,3 +1,4 @@
+import { AttachedFileService } from './attached-file.service';
 import { AuthService } from './auth.service';
 import { WebsocketService } from './websocket.service';
 import { Message } from './../model/message.model';
@@ -14,7 +15,7 @@ const messageAPIUrl = 'http://localhost:8030/api/v1/messages/';
 })
 export class MessageService {
 
-  constructor(private httpClient: HttpClient, private websocketService: WebsocketService, private authService: AuthService) { }
+  constructor(private httpClient: HttpClient, private websocketService: WebsocketService, private authService: AuthService, private attachedFileService: AttachedFileService) { }
 
   public getAllMessagesInRoom(roomId: number): Observable<Message[]> {
     return this.httpClient.get<GetMessagesResponse>(messageAPIUrl + roomId).pipe(map(response => response.data));
@@ -33,5 +34,58 @@ export class MessageService {
     const editedMessage = new MessageDto(message.id, message.content, sender, senderId, message.roomId, 
       message.messageStatus, message.type, null, message.emoji);
     return this.httpClient.put<MessageResponse>(messageAPIUrl, editedMessage);
+  }
+
+    setTypeMessage(message: Message) {
+    if (!message.attachedFile) return;
+
+    const name = message.attachedFile.fileName.toLowerCase();
+    const type = message.attachedFile.extension.toLowerCase();
+    console.log('setTypeMessage:', name);
+    if (type.startsWith('image/')) {
+      message.attachedFile.type = 'image';
+    } else if (type.startsWith('video/')) {
+      message.attachedFile.type = 'video';
+    } else if (type.startsWith('application/pdf')) {
+      message.attachedFile.type = 'pdf';
+    } else if (type.startsWith('application/msword') ||
+      name.endsWith('.doc') ||
+      name.endsWith('.docx')) {
+      message.attachedFile.type = 'word';
+    } else if (type.startsWith('application/vnd.ms-excel') ||
+      type.startsWith('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') ||
+      name.endsWith('.xls') ||
+      name.endsWith('.xlsx')) {
+      message.attachedFile.type = 'excel';
+    } else if (type.startsWith('application/vnd.ms-powerpoint') ||
+      name.endsWith('.pptx')) {
+      message.attachedFile.type = 'powerpoint';
+    } else {
+      message.attachedFile.type = 'other';
+    }
+  }
+
+  setLinkPreview(message: Message): void {
+    if (message.attachedFile === null) return;
+    console.log('Setting link preview for message:', message.id);
+    this.attachedFileService.genPreviewLinkUpload(message.roomId, message.attachedFile.id).subscribe(
+      (response) => {
+        if (
+          response &&
+          response.data &&
+          response.code &&
+          response.code === 'TD-000'
+        ) {
+          console.log(response.data);
+          if (message.attachedFile) message.attachedFile.linkPreview = response.data;
+
+        } else {
+          // this.errorMessage = ""
+        }
+      },
+      (error) => {
+        console.error('Error occurred:', error);
+      }
+    );
   }
 }
