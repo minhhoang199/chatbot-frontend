@@ -8,6 +8,7 @@ import { MessageResponse } from '../model/message-response';
 import { GetMessagesResponse } from '../model/get-messages-response';
 import { Observable, map } from 'rxjs';
 import { MessageDto } from '../model/message-dto.model';
+import { BaseResponse } from '../model/base-response';
 
 const messageAPIUrl = 'http://localhost:8030/api/v1/messages/'; 
 @Injectable({
@@ -36,56 +37,7 @@ export class MessageService {
     return this.httpClient.put<MessageResponse>(messageAPIUrl, editedMessage);
   }
 
-    setTypeMessage(message: Message) {
-    if (!message.attachedFile) return;
-
-    const name = message.attachedFile.fileName.toLowerCase();
-    const type = message.attachedFile.extension.toLowerCase();
-    console.log('setTypeMessage:', name);
-    if (type.startsWith('image/')) {
-      message.attachedFile.type = 'image';
-    } else if (type.startsWith('video/')) {
-      message.attachedFile.type = 'video';
-    } else if (type.startsWith('application/pdf')) {
-      message.attachedFile.type = 'pdf';
-    } else if (type.startsWith('application/msword') ||
-      name.endsWith('.doc') ||
-      name.endsWith('.docx')) {
-      message.attachedFile.type = 'word';
-    } else if (type.startsWith('application/vnd.ms-excel') ||
-      type.startsWith('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') ||
-      name.endsWith('.xls') ||
-      name.endsWith('.xlsx')) {
-      message.attachedFile.type = 'excel';
-    } else if (type.startsWith('application/vnd.ms-powerpoint') ||
-      name.endsWith('.pptx')) {
-      message.attachedFile.type = 'powerpoint';
-    } else {
-      message.attachedFile.type = 'other';
-    }
-  }
-
-  setLinkPreview(message: Message): void {
-    if (message.attachedFile === null) return;
-    console.log('Setting link preview for message:', message.id);
-    this.attachedFileService.genPreviewLinkUpload(message.roomId, message.attachedFile.id).subscribe(
-      (response) => {
-        if (
-          response &&
-          response.data &&
-          response.code &&
-          response.code === 'TD-000'
-        ) {
-          console.log(response.data);
-          if (message.attachedFile) message.attachedFile.linkPreview = response.data;
-
-        } else {
-          // this.errorMessage = ""
-        }
-      },
-      (error) => {
-        console.error('Error occurred:', error);
-      }
-    );
+    public deleteMessage(messageId: number): Observable<BaseResponse> {
+    return this.httpClient.delete<BaseResponse>(messageAPIUrl + messageId);
   }
 }

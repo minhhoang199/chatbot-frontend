@@ -55,22 +55,22 @@ export class ChatWindowComponent
         this.websocketService.disconnect();
         this.websocketService
           .connect(this.roomId, false, '')
-          .subscribe((message: any) => {
+          .subscribe((message: Message) => {
             console.log('Received message:', message);
             const index = this.messages.findIndex(
               (msg) => msg.id === message.id
             );
             if (index !== -1) {
-              // this.messages[index].attachedFile = message.attachedFile;
-              // this.messageService.setTypeMessage(this.messages[index]);
-              // this.messageService.setLinkPreview(this.messages[index]);
-              // this.messages[index].content = message.content;
-              // this.messages[index].emoji = message.emoji;
-
+              // Delete message
+              if (message.delFlag) {
+                this.messages.splice(index, 1);
+              } else {
+              // Update the existing message
               this.messages[index] = { ...this.messages[index], ...message };
               this.messages = this.messages.map((m) =>
                 m.id === message.id ? message : m
               );
+              }
             } else {
               this.messages.push(message);
             }

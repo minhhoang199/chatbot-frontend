@@ -15,7 +15,8 @@ export class Message {
     public replyContent: string,
     public emoji: Emoji[] | null = null,
     public emojiString: string | null = null,
-    public attachedFile: AttachedFile | null = null
+    public attachedFile: AttachedFile | null = null,
+    public delFlag: boolean,
   ) {}
 }
 

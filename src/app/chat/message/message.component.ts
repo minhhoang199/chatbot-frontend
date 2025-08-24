@@ -15,6 +15,7 @@ import {
 import { parse } from 'date-fns';
 import { AttachedFile } from '../../model/attached-file.model';
 import { AttachedFileService } from '../../service/attached-file.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 const dateFormat = 'yyyy-MM-dd';
 @Component({
@@ -40,28 +41,19 @@ export class MessageComponent implements OnInit, OnDestroy {
   activeTab = 'All';
   reactionList: Emoji[] = [];
   refreshTimer: any;
+  activeEditPopupId: number | null = null;
+  editedMessage: string | null = null;
+  activeDeletePopupId: number | null = null;
 
   constructor(
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private messageService: MessageService,
-    private attachedFileService: AttachedFileService
+    private attachedFileService: AttachedFileService,
   ) {}
 
   ngOnInit(): void {
-    // this._message.createdAt = this.convertCreateAt(this._message.createdAt);
-    // console.log('After: ' + this._message.createdAt);
-    // console.log("msgId:" + this._message.senderId);
-    // console.log("storageId:" + this.authService.getId());
-    // this.isOutgoingMessage = this.authService.getId() != this._message.senderId;
-    // this.activeEmojiMenuId = null; // Reset emoji menu when initializing
-    // this.activeMenuId = null; // Reset main menu when initializing
-    // this.setTypeMessage();
-    // this.setLinkPreview();
-    // this.setEmojiString();
-    // this.setReactionMap();
-    // this.reactionList = this.reactionMap.get(this.activeTab) || [];
-    // this.cdr.detectChanges();
+    this.cdr.detectChanges();
   }
 
   processMessage() {
@@ -157,11 +149,6 @@ export class MessageComponent implements OnInit, OnDestroy {
 
   @Output() reply = new EventEmitter<Message>();
 
-  deleteMessage() {
-    this.activeMenuId = null;
-    throw new Error('Method not implemented.');
-  }
-
   editMessage() {
     this.activeMenuId = null;
     this.messageService.editMessage(this._message).subscribe(
@@ -217,7 +204,6 @@ export class MessageComponent implements OnInit, OnDestroy {
         console.log('case:' + 4);
         //remove current emoji of user before add new one
         this._message.emoji = this._message.emoji.filter((e) => e.userId != id);
-        console.log('after remove' + this._message.emoji);
       }
       //add new one
       const emoji = new Emoji(id, username, emojiStr);
@@ -226,7 +212,6 @@ export class MessageComponent implements OnInit, OnDestroy {
   }
 
   setEmojiString(): void {
-    console.log('Set emoji string for message:', this._message);
     if (this._message.emoji && this._message.emoji.length > 0) {
       const uniqueEmojis = Array.from(
         new Set(this._message.emoji.map((e) => e.emoji))
@@ -239,7 +224,6 @@ export class MessageComponent implements OnInit, OnDestroy {
 
   // popup show emoji
   setReactionMap() {
-    console.log('Setting reaction map for message:', this._message);
     this.reactionMap.clear();
     this.reactionMap.set('All', this._message.emoji || []);
     if (this._message.emoji && this._message.emoji.length > 0) {
@@ -260,7 +244,11 @@ export class MessageComponent implements OnInit, OnDestroy {
 
   closePopup() {
     this.activeEmojiPopupId = null;
+    this.activeMenuId = null;
+    this.activeEditPopupId = null;
     this.activeTab = 'All';
+    this.editedMessage = null;
+    this.activeDeletePopupId = null;
     this.reactionList = this.reactionMap.get(this.activeTab) || [];
   }
 
@@ -277,7 +265,6 @@ export class MessageComponent implements OnInit, OnDestroy {
   }
 
   downloadFile() {
-    console.log('Downloading file for message:', this._message);
     if (!this._message.attachedFile || !this._message.attachedFile.id) return;
     this.attachedFileService.downloadFile(
       this._message.roomId,
@@ -291,7 +278,6 @@ export class MessageComponent implements OnInit, OnDestroy {
 
     const name = this._message.attachedFile.fileName.toLowerCase();
     const type = this._message.attachedFile.extension.toLowerCase();
-    console.log('setTypeMessage:', name);
     if (type.startsWith('image/')) {
       this._message.attachedFile.type = 'image';
     } else if (type.startsWith('video/')) {
@@ -325,7 +311,6 @@ export class MessageComponent implements OnInit, OnDestroy {
 
   setLinkPreview(): void {
     if (this._message.attachedFile === null) return;
-    console.log('Setting link preview for message:', this._message.id);
     this.attachedFileService
       .genPreviewLinkUpload(this._message.roomId, this._message.attachedFile.id)
       .subscribe(
@@ -345,6 +330,51 @@ export class MessageComponent implements OnInit, OnDestroy {
               () => this.setLinkPreview(),
               5 * 60 * 60 * 1000
             );
+          } else {
+            // this.errorMessage = ""
+          }
+        },
+        (error) => {
+          console.error('Error occurred:', error);
+        }
+      );
+  }
+
+  //Edit message content
+  toggleEditPopup(id: number, event: MouseEvent) {
+    console.log('Open popup');
+    event.stopPropagation();
+    this.activeEditPopupId = this.activeEditPopupId === id ? null : id;
+    this.editedMessage = this._message.content;
+  }
+
+  editMessageConfirm() {
+    if (!this._message.id) return;
+    if (!this.editedMessage || this.editedMessage.trim() === '') return;
+    this._message.content = this.editedMessage;
+    this.editMessage();
+    this.activeEditPopupId = null;
+    this.editedMessage = null;
+  }
+
+  //Delete message
+  toggleDeletePopup(id: number, event: MouseEvent) {
+    console.log('Open popup');
+    event.stopPropagation();
+    this.activeDeletePopupId = this.activeDeletePopupId === id ? null : id;
+  }
+
+  deleteMessage() {
+    this.activeDeletePopupId = null;
+    this.messageService.deleteMessage(this._message.id).subscribe(
+      (response) => {
+          if (
+            response &&
+            response.data &&
+            response.code &&
+            response.code === 'TD-000'
+          ) {
+            console.log("Deleted message :" + this._message.id);
           } else {
             // this.errorMessage = ""
           }
