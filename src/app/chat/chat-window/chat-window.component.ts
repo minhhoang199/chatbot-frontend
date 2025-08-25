@@ -76,7 +76,7 @@ export class ChatWindowComponent
             }
           });
         this.messageService
-          .getAllMessagesInRoom(this.roomId)
+          .getAllMessagesInRoom(this.roomId, new Date(), 20)
           .subscribe((messages) => (this.messages = messages));
       }
       this.chatForm = this.fb.group({

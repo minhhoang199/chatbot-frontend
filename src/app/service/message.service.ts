@@ -18,8 +18,9 @@ export class MessageService {
 
   constructor(private httpClient: HttpClient, private websocketService: WebsocketService, private authService: AuthService, private attachedFileService: AttachedFileService) { }
 
-  public getAllMessagesInRoom(roomId: number): Observable<Message[]> {
-    return this.httpClient.get<GetMessagesResponse>(messageAPIUrl + roomId).pipe(map(response => response.data));
+  public getAllMessagesInRoom(roomId: number, before: Date, limit: number): Observable<Message[]> {
+    const params = { roomId: roomId.toString(), before: before.toISOString(), limit: limit.toString() };
+    return this.httpClient.get<GetMessagesResponse>(messageAPIUrl, { params }).pipe(map(response => response.data));
   }
 
   public sendMessage(content: string, roomId: number, replyId: number | null): void {
