@@ -44,6 +44,7 @@ export class MessageComponent implements OnInit, OnDestroy {
   activeEditPopupId: number | null = null;
   editedMessage: string | null = null;
   activeDeletePopupId: number | null = null;
+  createdAtFormatted: string = '';
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -58,7 +59,7 @@ export class MessageComponent implements OnInit, OnDestroy {
 
   processMessage() {
     console.log('Processing message:', this._message);
-      this._message.createdAt = this.convertCreateAt(this._message.createdAt);
+      this.createdAtFormatted = this.convertCreateAt();
       this.isOutgoingMessage = this.authService.getId() != this._message.senderId;
       this.activeEmojiMenuId = null; // Reset emoji menu when initializing
       this.activeMenuId = null; // Reset main menu when initializing
@@ -75,10 +76,10 @@ export class MessageComponent implements OnInit, OnDestroy {
     }
   }
 
-  convertCreateAt(createdAt: string): string {
-    console.log('Before: ' + createdAt);
+  convertCreateAt(): string {
+    console.log('Before: ' + this._message.createdAt);
     // Create a Date object from the createdAt string
-    const dateObject = new Date(createdAt);
+    const dateObject = new Date(this._message.createdAt);
 
     // Extract time in 'HH:mm' format
     const time = dateObject.toTimeString().substring(0, 5);

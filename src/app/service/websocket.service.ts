@@ -4,7 +4,7 @@ import * as Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
 import { MessageService } from './message.service';
 import { Observable, Subject } from 'rxjs';
-import { MessageDto } from '../model/message-dto.model';
+import { MessageRequest } from '../model/message-request.model';
 
 const serverUrl = 'http://localhost:8030/ws';
 @Injectable({
@@ -76,7 +76,7 @@ export class WebsocketService {
     return subject.asObservable();
   }
 
-  public sendMessage(message: MessageDto):void {
+  public sendMessage(message: MessageRequest):void {
     if(this.isConnected()){
       this.stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(message))
       console.log('message send to server')

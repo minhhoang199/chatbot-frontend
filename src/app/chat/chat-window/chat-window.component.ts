@@ -65,18 +65,18 @@ export class ChatWindowComponent
               if (message.delFlag) {
                 this.messages.splice(index, 1);
               } else {
-              // Update the existing message
-              this.messages[index] = { ...this.messages[index], ...message };
-              this.messages = this.messages.map((m) =>
-                m.id === message.id ? message : m
-              );
+                // Update the existing message
+                this.messages[index] = { ...this.messages[index], ...message };
+                this.messages = this.messages.map((m) =>
+                  m.id === message.id ? message : m
+                );
               }
             } else {
               this.messages.push(message);
             }
           });
         this.messageService
-          .getAllMessagesInRoom(this.roomId, new Date(), 20)
+          .getLimitMessagesInRoom(this.roomId, new Date(), 10)
           .subscribe((messages) => (this.messages = messages));
       }
       this.chatForm = this.fb.group({
@@ -184,5 +184,66 @@ export class ChatWindowComponent
 
   trackByMessageId(index: number, message: any): string {
     return message.id;
+  }
+
+  // load more messages
+  loadOlderMessages() {
+    const container = this.messageContainer.nativeElement;
+    const oldHeight = container.scrollHeight;
+
+    const oldest: Message = this.messages[0]; // lấy message cũ nhất
+    if (!oldest) {
+      return; // không có message nào
+    }
+    const before = new Date(oldest.createdAt);
+    this.messageService
+      .getLimitMessagesInRoom(this.roomId, before, 20)
+      .subscribe((res) => {
+        this.messages = [...res, ...this.messages];
+
+        // giữ vị trí scroll
+        setTimeout(() => {
+          const newHeight = container.scrollHeight;
+          container.scrollTop = newHeight - oldHeight;
+        });
+      });
+  }
+
+  onScroll(event: any) {
+    console.log('Scroll event:', event);
+    const element = event.target;
+    if (element.scrollTop === 0) {
+      this.loadOlderMessages();
+    }
+  }
+  // scroll to message
+
+  jumpToMessage(messageId: number, messageCreatedAt: string) {
+    const index = this.messages.findIndex(msg => msg.id === messageId);
+    if (index !== -1) {
+      // Message is already loaded
+      setTimeout(() => this.scrollToMessage(messageId), 0);
+      return;
+    }
+    // Message is not loaded yet, fetch it
+    const oldest: Message = this.messages[0]; // lấy message cũ nhất
+    if (!oldest) {
+      return; // không có message nào
+    }
+    const from = new Date(oldest.createdAt);
+    this.messageService
+      .getAllMessagesInRoomFromTo(this.roomId, from, new Date(messageCreatedAt))
+      .subscribe((res) => {
+        this.messages = [...res, ...this.messages];
+    this.messages = res; // BE trả về list có chứa message cần tìm
+    setTimeout(() => this.scrollToMessage(messageId), 0);
+  });
+}
+
+  scrollToMessage(messageId: number) {
+    const el = document.getElementById('msg-' + messageId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   }
 }

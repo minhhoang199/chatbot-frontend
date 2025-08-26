@@ -32,8 +32,8 @@
     </div>
   </div>
 
-  <div #messageContainer class="chat-messages">
-    <div *ngFor="let message of messages,  trackBy: trackByMessageId">
+  <div #messageContainer class="chat-messages" (scroll)="onScroll($event)">
+    <div *ngFor="let message of messages; trackBy: trackByMessageId" [attr.id]="'msg-' + message.id">
       <app-message [message]="message" [activeMenuId]=null [activeEmojiMenuId]=null (reply)="onReplyMessage($event)">
       </app-message>
     </div>
