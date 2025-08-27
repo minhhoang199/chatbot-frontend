@@ -149,6 +149,13 @@ export class ChatWindowComponent
     }, 0);
   }
 
+  scrollToReplyMessage(message: Message) {
+    console.log('Scroll to reply message:', message);
+    if (message.replyId && message.replyCreatedDate) {
+      this.jumpToMessage(message.replyId, message.replyCreatedDate);
+    }
+  }
+
   cancelReply() {
     this.replyingMessage = null;
   }
@@ -217,9 +224,8 @@ export class ChatWindowComponent
     }
   }
   // scroll to message
-
   jumpToMessage(messageId: number, messageCreatedAt: string) {
-    const index = this.messages.findIndex(msg => msg.id === messageId);
+    const index = this.messages.findIndex((msg) => msg.id === messageId);
     if (index !== -1) {
       // Message is already loaded
       setTimeout(() => this.scrollToMessage(messageId), 0);
@@ -235,15 +241,34 @@ export class ChatWindowComponent
       .getAllMessagesInRoomFromTo(this.roomId, from, new Date(messageCreatedAt))
       .subscribe((res) => {
         this.messages = [...res, ...this.messages];
-    this.messages = res; // BE trả về list có chứa message cần tìm
-    setTimeout(() => this.scrollToMessage(messageId), 0);
-  });
-}
+        this.messages = res; // BE trả về list có chứa message cần tìm
+        setTimeout(() => this.scrollToMessage(messageId), 0);
+      });
+  }
 
   scrollToMessage(messageId: number) {
     const el = document.getElementById('msg-' + messageId);
+    console.log('Scrolling to element:', el);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.classList.add('highlight');
+      setTimeout(() => el.classList.remove('highlight'), 5000);
     }
+  }
+
+  //search 
+  showPopup = false;
+
+  openPopup() {
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+  }
+
+  scrollToMessageFromSearchPopup(message: Message) {
+    this.closePopup();
+    this.jumpToMessage(message.id, message.createdAt);
   }
 }

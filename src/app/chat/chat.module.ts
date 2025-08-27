@@ -8,6 +8,7 @@ import { ChatWindowComponent } from "./chat-window/chat-window.component";
 import { MessageComponent } from "./message/message.component";
 import { ChatComponent } from './chat.component';
 import { FileTypePipe } from "../pipe/file-type.pipe";
+import { SearchPopupComponent } from "./search-popup/search-popup.component";
 
 @NgModule({
     declarations: [
@@ -16,7 +17,8 @@ import { FileTypePipe } from "../pipe/file-type.pipe";
       ChatWindowComponent, 
       MessageComponent, 
       ChatComponent,
-      FileTypePipe
+      FileTypePipe,
+      SearchPopupComponent
     ],
     imports: [
         CommonModule,

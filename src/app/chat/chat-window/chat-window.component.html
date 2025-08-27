@@ -27,14 +27,17 @@
     <div class="chat-actions">
       <i class="fas fa-info-circle"></i>
       <i class="fas fa-video"></i>
-      <i class="fas fa-search"></i>
+      <i class="fas fa-search" (click)="openPopup()"></i>
+      <app-search-popup *ngIf="showPopup" [roomId]="roomId" (close)="closePopup()" (clickMessage)="scrollToMessageFromSearchPopup($event)"></app-search-popup>
       <i class="fas fa-ellipsis-v"></i>
     </div>
   </div>
 
   <div #messageContainer class="chat-messages" (scroll)="onScroll($event)">
     <div *ngFor="let message of messages; trackBy: trackByMessageId" [attr.id]="'msg-' + message.id">
-      <app-message [message]="message" [activeMenuId]=null [activeEmojiMenuId]=null (reply)="onReplyMessage($event)">
+      <app-message [message]="message" [activeMenuId]=null [activeEmojiMenuId]=null 
+      (reply)="onReplyMessage($event)"
+      (replyClick)="scrollToReplyMessage($event)">
       </app-message>
     </div>
   </div>

@@ -1,13 +1,13 @@
 <div *ngIf="isOutgoingMessage; else outGoingMessage">
-  <div class="message received" (click)="toggleMenu(_message.id)">
+  <div class="message received">
     <div class="bubble-wrapper">
-      <div *ngIf="_message.isReply" class="reply-bubble">
+      <div *ngIf="_message.isReply" class="reply-bubble" (click)="scrollToReplyMessage()">
         {{_message.replyContent}}
       </div>
-      <div class="message-content" *ngIf="_message.attachedFile === null">
+      <div class="message-content" *ngIf="_message.attachedFile === null" (click)="toggleMenu(_message.id)">
         {{_message.content}}
       </div>
-      <div class="file-preview" *ngIf="_message.attachedFile">
+      <div class="file-preview" *ngIf="_message.attachedFile" (click)="toggleMenu(_message.id)">
         <!-- <i class="fas fa-file"></i> -->
         <!-- Nếu là ảnh -->
         <img *ngIf="_message.attachedFile.type==='image'" [src]="_message.attachedFile.linkPreview"
@@ -76,7 +76,7 @@
         </div>
       </div>
 
-      <div class="message-time">{{_message.createdAt}}</div>
+      <div class="message-time">{{createdAtFormatted}}</div>
       <div class="message-menu" *ngIf="activeMenuId === _message.id">
         <button class="menu-btn" (click)="openEmojiMenu(_message.id); $event.stopPropagation()">
           <i class="fas fa-smile"></i>
@@ -109,14 +109,14 @@
   </div>
 </div>
 <ng-template #outGoingMessage>
-  <div class="message sent" (click)="toggleMenu(_message.id)">
-    <div *ngIf="_message.isReply" class="reply-bubble">
+  <div class="message sent">
+    <div *ngIf="_message.isReply" class="reply-bubble" (click)="scrollToReplyMessage()">
       {{_message.replyContent}}
     </div>
-    <div class="message-content" *ngIf="_message.attachedFile === null">
+    <div class="message-content" *ngIf="_message.attachedFile === null" (click)="toggleMenu(_message.id)">
       {{_message.content}}
     </div>
-    <div class="file-preview" *ngIf="_message.attachedFile">
+    <div class="file-preview" *ngIf="_message.attachedFile" (click)="toggleMenu(_message.id)">
       <!-- <i class="fas fa-file"></i> -->
       <!-- Nếu là ảnh -->
       <img *ngIf="_message.attachedFile.type==='image'" [src]="_message.attachedFile.linkPreview"
@@ -222,7 +222,7 @@
       </div>
     </div>
 
-    <div class="message-time">{{_message.createdAt}} <i class="fas fa-check"></i></div>
+    <div class="message-time">{{createdAtFormatted}} <i class="fas fa-check"></i></div>
     <div class="message-menu" *ngIf="activeMenuId === _message.id">
       <button class="menu-btn" (click)="openEmojiMenu(_message.id); $event.stopPropagation()">
         <i class="fas fa-smile"></i>

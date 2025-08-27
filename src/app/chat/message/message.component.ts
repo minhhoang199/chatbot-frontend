@@ -77,7 +77,7 @@ export class MessageComponent implements OnInit, OnDestroy {
   }
 
   convertCreateAt(): string {
-    console.log('Before: ' + this._message.createdAt);
+    // console.log('Before: ' + this._message.createdAt);
     // Create a Date object from the createdAt string
     const dateObject = new Date(this._message.createdAt);
 
@@ -149,6 +149,7 @@ export class MessageComponent implements OnInit, OnDestroy {
   }
 
   @Output() reply = new EventEmitter<Message>();
+  @Output() replyClick = new EventEmitter<Message>();
 
   editMessage() {
     this.activeMenuId = null;
@@ -179,6 +180,10 @@ export class MessageComponent implements OnInit, OnDestroy {
   replyMessage() {
     this.activeMenuId = null;
     this.reply.emit(this._message);
+  }
+
+  scrollToReplyMessage() {
+    this.replyClick.emit(this._message);
   }
 
   changeEmoji(emojiStr: string | null): void {

@@ -306,3 +306,13 @@
   color: red;
   font-size: 14px;
 }
+
+.highlight {
+  background-color: yellow;
+  animation: fadeOut 5s forwards;
+}
+
+@keyframes fadeOut {
+  from { background-color: yellow; }
+  to { background-color: transparent; }
+}
