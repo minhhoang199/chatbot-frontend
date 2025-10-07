@@ -27,9 +27,8 @@ export class MessageComponent implements OnInit, OnDestroy {
     _message!: Message;
 
   @Input() set message(value: Message) {
-    console.log('Message input changed:', value);
     this._message = value;
-    this.processMessage(); // 👉 chạy lại logic ở đây
+    this.processMessage();
   }
 
   @Input() activeMenuId: number | null = null;

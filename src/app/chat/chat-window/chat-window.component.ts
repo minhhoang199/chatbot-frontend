@@ -7,6 +7,7 @@ import {
   Component,
   DoCheck,
   ElementRef,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -16,6 +17,8 @@ import { Subscription } from 'rxjs';
 import { Message } from '../../model/message.model';
 import { AttachedFileService } from '../../service/attached-file.service';
 import { AttachedFile } from '../../model/attached-file.model';
+import { Room } from '../../model/room.model';
+import { RoomService } from '../../service/room.service';
 
 @Component({
   selector: 'app-chat-window',
@@ -25,6 +28,7 @@ import { AttachedFile } from '../../model/attached-file.model';
 export class ChatWindowComponent
   implements OnInit, OnDestroy, AfterViewChecked
 {
+  room!: Room | null;
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
   messages!: Message[];
   chatForm!: FormGroup;
@@ -38,7 +42,8 @@ export class ChatWindowComponent
     private route: ActivatedRoute,
     private websocketService: WebsocketService,
     private messageService: MessageService,
-    private attachedFileService: AttachedFileService
+    private attachedFileService: AttachedFileService,
+    private roomService: RoomService
   ) {}
 
   ngAfterViewChecked(): void {
@@ -51,6 +56,15 @@ export class ChatWindowComponent
   ngOnInit(): void {
     this.routeSub = this.route.params.subscribe((params) => {
       this.roomId = Number(this.route.snapshot.paramMap.get('roomId'));
+      console.log('Room ID from route:', this.roomId);
+      if (this.roomId != null) {
+        this.roomService.getRoomDetail(this.roomId).subscribe((room) => {
+          if (room) {
+            this.room = room;
+          }
+          console.log('Fetched room details:', this.room);
+        });
+      }
       if (this.roomId != null) {
         this.websocketService.disconnect();
         this.websocketService
@@ -83,6 +97,7 @@ export class ChatWindowComponent
         contentMessage: [''],
       });
     });
+    console.log('Initial messages:', this.messages);
     if (this.messages) {
       this.previousMessageCount = this.messages.length;
     }
@@ -256,19 +271,19 @@ export class ChatWindowComponent
     }
   }
 
-  //search 
+  //search
   showPopup = false;
 
-  openPopup() {
+  openSearchPopup() {
     this.showPopup = true;
   }
 
-  closePopup() {
+  closeSearchPopup() {
     this.showPopup = false;
   }
 
   scrollToMessageFromSearchPopup(message: Message) {
-    this.closePopup();
+    this.closeSearchPopup();
     this.jumpToMessage(message.id, message.createdAt);
   }
 }

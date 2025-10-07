@@ -8,6 +8,15 @@ import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch } fro
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignInComponent } from './component/sign-in/sign-in.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { PrivateRoomDialogComponent } from './chat/private-room-dialog/private-room-dialog.component';
+import { GroupRoomDialogComponent } from './chat/group-room-dialog/group-room-dialog.component';
+import { MatIcon } from "@angular/material/icon";
+import { MatDialogActions, MatDialogContent } from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -21,7 +30,15 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-  ],
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatIcon,
+    MatDialogActions,
+    MatDialogContent
+],
   providers: [
     provideClientHydration(), provideHttpClient(withFetch()), { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],

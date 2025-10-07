@@ -5,6 +5,7 @@ export class Room {
       public usernames: string,
       public roomType: string,
       public lastMessageContent: string,
-      public lastMessageTime: string
+      public lastMessageTime: string,
+      public status: string | null = null
     ) {}
   }
