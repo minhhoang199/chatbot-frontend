@@ -6,6 +6,6 @@
 
 <div class="chat-list">
     <div *ngFor="let room of rooms">
-        <app-chat-room [room]="room" (click)="navigateToRoom(room.id)"></app-chat-room>
+        <app-chat-room [room]="room" [class.active]="room.id === selectedRoomId" (click)="navigateToRoom(room.id)"></app-chat-room>
     </div>
 </div>

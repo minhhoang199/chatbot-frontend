@@ -359,6 +359,15 @@
     gap: 12px;
 }
 
+.chat-header-actions button {
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #1877f2;
+    transition: background-color 0.2s;
+}
+
 .chat-header-actions i {
     width: 36px;
     height: 36px;

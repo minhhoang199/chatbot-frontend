@@ -13,7 +13,9 @@
       </div>
       <div class="chat-header-actions">
         <i class="fas fa-phone"></i>
-        <i class="fas fa-video"></i>
+        <button (click)="startVideoCall()" class="video-btn">
+          <i class="fas fa-video"></i>
+        </button>
         <i class="fas fa-info-circle"></i>
       </div>
     </div>
@@ -134,6 +136,13 @@
         <i class="fas fa-thumbs-up"></i>
       </div>
     </div>
+    <div *ngIf="isVideoCallActive" class="video-overlay">
+    <!-- <app-video-call
+      [videoCallName]="room ? room.name : 'Video Call'"
+      [displayName]="currentUserName"
+      (ended)="endVideoCall()">
+    </app-video-call> -->
+  </div>
   </div>
 
   <div class="messenger-profile-sidebar">

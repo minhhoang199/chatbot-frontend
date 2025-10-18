@@ -19,6 +19,7 @@ import { AttachedFileService } from '../../service/attached-file.service';
 import { AttachedFile } from '../../model/attached-file.model';
 import { Room } from '../../model/room.model';
 import { RoomService } from '../../service/room.service';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-chat-window',
@@ -35,6 +36,8 @@ export class ChatWindowComponent
   roomId!: number;
   private routeSub!: Subscription;
   private previousMessageCount = 0;
+  isVideoCallActive = false;
+  currentUserName: string = '';
   attachedFiles: AttachedFile[] = [];
 
   constructor(
@@ -43,7 +46,8 @@ export class ChatWindowComponent
     private websocketService: WebsocketService,
     private messageService: MessageService,
     private attachedFileService: AttachedFileService,
-    private roomService: RoomService
+    private roomService: RoomService,
+    private authService: AuthService
   ) {}
 
   ngAfterViewChecked(): void {
@@ -56,7 +60,6 @@ export class ChatWindowComponent
   ngOnInit(): void {
     this.routeSub = this.route.params.subscribe((params) => {
       this.roomId = Number(this.route.snapshot.paramMap.get('roomId'));
-      console.log('Room ID from route:', this.roomId);
       if (this.roomId != null) {
         this.roomService.getRoomDetail(this.roomId).subscribe((room) => {
           if (room) {
@@ -102,6 +105,7 @@ export class ChatWindowComponent
       this.previousMessageCount = this.messages.length;
     }
     this.scrollToBottom();
+    this.currentUserName = this.authService.getUserName();
   }
 
   sendMessage() {
@@ -286,4 +290,55 @@ export class ChatWindowComponent
     this.closeSearchPopup();
     this.jumpToMessage(message.id, message.createdAt);
   }
+
+  // video call
+  startVideoCall(): void {
+    const callUrl = `${window.location.origin}/chat/call/${this.roomId}`;
+    this.openCenteredWindow(callUrl, 'Video Call', 1400, 800);
+  }
+
+  // end call
+  endVideoCall(): void {
+    this.isVideoCallActive = false;
+  }
+
+  openCenteredWindow(url: string, title: string, w: number, h: number) {
+  // Lấy kích thước màn hình
+  const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+  const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
+
+  const width = window.innerWidth
+    ? window.innerWidth
+    : document.documentElement.clientWidth
+      ? document.documentElement.clientWidth
+      : screen.width;
+
+  const height = window.innerHeight
+    ? window.innerHeight
+    : document.documentElement.clientHeight
+      ? document.documentElement.clientHeight
+      : screen.height;
+
+  // Tính vị trí giữa màn hình
+  const left = width / 2 - w / 2 + dualScreenLeft;
+  const top = height / 2 - h / 2 + dualScreenTop;
+
+  // Mở cửa sổ
+  const newWindow = window.open(
+    url,
+    title,
+    `
+      scrollbars=yes,
+      width=${w}, 
+      height=${h}, 
+      top=${top}, 
+      left=${left}
+    `
+  );
+
+  // Focus cửa sổ mới
+  if (newWindow && newWindow.focus) {
+    newWindow.focus();
+  }
+}
 }

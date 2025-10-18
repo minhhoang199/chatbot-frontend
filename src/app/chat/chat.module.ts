@@ -18,6 +18,7 @@ import { MatInputModule } from "@angular/material/input";
 import { PrivateRoomDialogComponent } from "./private-room-dialog/private-room-dialog.component";
 import { GroupRoomDialogComponent } from "./group-room-dialog/group-room-dialog.component";
 import { MatDialogActions, MatDialogContent } from "@angular/material/dialog";
+import { VideoCallComponent } from "./video-call/video-call.component";
 
 @NgModule({
     declarations: [
@@ -29,7 +30,8 @@ import { MatDialogActions, MatDialogContent } from "@angular/material/dialog";
       FileTypePipe,
       SearchPopupComponent,
       PrivateRoomDialogComponent,
-      GroupRoomDialogComponent
+      GroupRoomDialogComponent,
+      VideoCallComponent
     ],
     imports: [
     CommonModule,
