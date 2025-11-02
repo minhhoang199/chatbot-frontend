@@ -185,15 +185,15 @@
 .reply-frame {
     display: flex;
     align-items: center;
-    background: #f5f6fa;
-    border-left: 4px solid #1877f2;
-    border-radius: 10px;
+    background: #fff;
+    border-top: 1px solid #f0f2f5;
     padding: 8px 16px;
     margin-bottom: 8px;
-    font-size: 14px;
-    box-shadow: 0 2px 8px rgba(24, 119, 242, 0.06);
+    font-size: 15px;
+    /* box-shadow: 0 2px 8px rgba(24, 119, 242, 0.06); */
     position: relative;
     gap: 8px;
+    width: 100%;
 }
 
 .reply-frame strong {
@@ -214,7 +214,7 @@
     background: none;
     border: none;
     color: #888;
-    font-size: 18px;
+    font-size: 27px;
     cursor: pointer;
     margin-left: 8px;
     padding: 0 4px;
@@ -225,43 +225,103 @@
     color: #1877f2;
 }
 
-/* File preview list */
+/* ✅ file-preview-list */
 .file-preview-list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  max-height: 100px;
-  overflow-y: auto;
+  flex-wrap: wrap; /* Cho phép xuống dòng khi nhiều file */
+  gap: 6px;        /* Giảm khoảng cách giống Messenger */
+  align-items: flex-start;
+  padding: 6px 12px 0 12px;
+  max-width: 100%;
 }
 
+/* ✅ Khung preview từng file */
 .file-preview {
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+  border-radius: 12px; /* Bo góc giống Messenger */
+  overflow: hidden;
+  background: #f0f2f5; /* Màu nền sáng như Messenger */
   display: flex;
   align-items: center;
-  background: #f1f1f1;
-  padding: 5px 8px;
-  border-radius: 6px;
-  font-size: 14px;
-  gap: 6px;
-  cursor: pointer;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.15s ease-in-out;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.file-preview:hover {
+  transform: scale(1.03); /* Hiệu ứng zoom nhẹ khi hover */
+}
+
+/* ✅ Ảnh / video preview scale to fill box */
+.file-preview .attachment-img,
+.file-preview video.attachment-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+/* ✅ File không phải ảnh/video (PDF, Word, Excel...) */
+.file-preview div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 11px;
+  color: #555;
+  padding: 4px;
 }
 
 .file-preview i {
-  color: #555;
+  font-size: 20px;
+  margin-bottom: 4px;
 }
 
-.file-name {
-  max-width: 120px;
+/* ✅ Tên file thu gọn */
+.file-name,
+.file-preview div a {
+  max-width: 64px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  font-size: 11px;
+  color: #333;
+  text-decoration: none;
 }
 
+/* ✅ Nút xóa nhỏ (Messenger-style) */
 .remove-file {
-  background: none;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
   border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
   cursor: pointer;
-  color: red;
-  font-size: 14px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.remove-file:hover {
+  background: #fff;
+}
+
+/* ✅ Khi chỉ có ảnh/video → hiển thị dạng lưới giống Messenger */
+.file-preview-list:has(img),
+.file-preview-list:has(video) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 4px;
 }
 
 .highlight {
@@ -386,11 +446,10 @@
 
 .chat-messages {
     flex: 1;
-    padding: 16px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 1px;
 }
 
 .message-group {
@@ -447,6 +506,12 @@
 .chat-input {
     display: flex;
     padding: 10px 0px;
+    flex-direction: column;
+    background-color: #fff;
+}
+
+.chat-input-container {
+    display: flex;
 }
 
 .chat-input-icons {
@@ -471,7 +536,7 @@
     margin-bottom: 4px;
 }
 
-.input-container {
+.input-content {
     display: flex;
     align-items: center;
     background-color: #f0f2f5;
@@ -482,7 +547,7 @@
     max-height: 37px;
 }
 
-.input-container i {
+.input-content i {
     color: #1877f2;
     cursor: pointer;
     width: 20px;
@@ -492,7 +557,7 @@
     justify-content: center;
 }
 
-.input-container input {
+.input-content input {
     flex: 1;
     border: none;
     background: none;
@@ -710,7 +775,7 @@
 }
 
 .fas {
-    font-size: 20px; 
+    font-size: 20px;
 }
 /* Responsive Design */
 @media (max-width: 1200px) {
@@ -726,11 +791,11 @@
         z-index: 100;
         height: 100%;
     }
-    
+
     .nav-center {
         display: none;
     }
-    
+
     .search-box {
         max-width: 200px;
     }

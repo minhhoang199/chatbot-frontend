@@ -31,6 +31,7 @@ export class ChatWindowComponent
 {
   room!: Room | null;
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
+  @ViewChild('chatInput') chatInput!: ElementRef<HTMLInputElement>;
   messages!: Message[];
   chatForm!: FormGroup;
   roomId!: number;
@@ -181,6 +182,7 @@ export class ChatWindowComponent
 
   // file upload
   onFileSelected(event: Event) {
+    console.log('File selection event:', event);
     const input = event.target as HTMLInputElement;
     if (input.files) {
       Array.from(input.files).forEach((file) => {
@@ -197,7 +199,9 @@ export class ChatWindowComponent
         } as AttachedFile);
       });
     }
-    console.log('Selected files:', this.attachedFiles);
+    setTimeout(() => {
+      this.chatInput.nativeElement.focus();
+    }, 0);
   }
 
   removeFile(index: number) {
@@ -329,9 +333,9 @@ export class ChatWindowComponent
     title,
     `
       scrollbars=yes,
-      width=${w}, 
-      height=${h}, 
-      top=${top}, 
+      width=${w},
+      height=${h},
+      top=${top},
       left=${left}
     `
   );

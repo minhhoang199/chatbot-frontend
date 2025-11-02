@@ -117,11 +117,18 @@ export class MessageComponent implements OnInit, OnDestroy {
     return convertedDate;
   }
 
-  toggleMenu(id: number) {
-    console.log('Selected id:', id);
-    this.activeMenuId = this.activeMenuId === id ? null : id;
-    this.activeEmojiMenuId = null; // close emoji menu when toggling main menu
+  showMenu(id: number) {
+    this.activeMenuId = id;
+    this.activeEmojiMenuId = null;
   }
+
+  hideMenu() {
+    this.activeMenuId = null;
+  }
+  // toggleMenu(id: number) {
+  //   this.activeMenuId = this.activeMenuId === id ? null : id;
+  //   this.activeEmojiMenuId = null; // close emoji menu when toggling main menu
+  // }
 
   openEmojiMenu(id: number) {
     this.activeMenuId = null;
@@ -263,10 +270,10 @@ export class MessageComponent implements OnInit, OnDestroy {
   }
 
   // attached file
-  openPreview(url: string): void {
-    console.log('Opening preview for:', url);
+  openPreview(): void {
+    if (!this._message.attachedFile || !this._message.attachedFile.id) return;
     // Cách đơn giản mở modal / tab mới để xem ảnh
-    window.open(url, '_blank');
+    window.open(this._message.attachedFile.linkPreview, '_blank');
   }
 
   downloadFile() {
