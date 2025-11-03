@@ -13,16 +13,13 @@ export class ChatComponent {
     this.localStorageService.clear(); // Clear all data
     this.router.navigate(['/sign-in']); // Navigate to sign-in page
   }
-
-  isCreatingPrivateRoom: boolean = false;
   isCreatingGroupRoom: boolean = false;
 
-  openCreateRoom(type: 'PRIVATE' | 'GROUP'): void {
-    console.log('Opening create room dialog for type:', type);
-    if (type === 'PRIVATE') {
-      this.isCreatingPrivateRoom = true;
-    } else {
-      this.isCreatingGroupRoom = true;
-    }
+  openCreateGroupRoom(): void {
+    this.isCreatingGroupRoom = true;
+  }
+
+  closeCreateGroupRoom(): void {
+    this.isCreatingGroupRoom = false;
   }
 }

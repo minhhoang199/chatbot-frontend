@@ -249,7 +249,6 @@ export class MessageComponent implements OnInit, OnDestroy {
   }
 
   toggleEmojiPopup(id: number, event: MouseEvent) {
-    console.log('Open popup');
     event.stopPropagation();
     this.activeEmojiPopupId = this.activeEmojiPopupId === id ? null : id;
   }

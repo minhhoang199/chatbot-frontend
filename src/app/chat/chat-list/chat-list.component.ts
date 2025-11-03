@@ -15,7 +15,12 @@ export class ChatListComponent implements OnInit {
   constructor(private roomService: RoomService, private authService: AuthService, private router: Router){}
   ngOnInit(): void {
     const id = this.authService.getId();
-    this.roomService.getAllRooms(id).subscribe((rooms) => this.rooms = rooms);
+    this.roomService.getAllRooms(id).subscribe((rooms) => (this.rooms = rooms));
+    this.roomService.onRoomCreated().subscribe((newRoom) => {
+      if (newRoom) {
+        this.rooms = [newRoom, ...this.rooms];
+      }
+    });
   }
 
   navigateToRoom(roomId: number): void {
