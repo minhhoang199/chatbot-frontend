@@ -13,11 +13,19 @@
 .message.sent {
   align-self: flex-end;
   margin-left: auto;
+  margin-right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .message.received {
   align-self: flex-start;
   margin-right: auto;
+  margin-left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .message-content {
