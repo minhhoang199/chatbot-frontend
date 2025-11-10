@@ -9,8 +9,9 @@ import { GetMessagesResponse } from '../model/get-messages-response';
 import { Observable, map } from 'rxjs';
 import { MessageRequest } from '../model/message-request.model';
 import { BaseResponse } from '../model/base-response';
+import { environment } from '../../environments/environment';
 
-const messageAPIUrl = 'http://localhost:8030/api/v1/messages/';
+const messageAPIUrl = environment.apiBaseUrl + '/v1/messages/';
 @Injectable({
   providedIn: 'root',
 })

@@ -5,33 +5,19 @@ import SockJS from 'sockjs-client';
 import { MessageService } from './message.service';
 import { Observable, Subject } from 'rxjs';
 import { MessageRequest } from '../model/message-request.model';
+import { environment } from '../../environments/environment';
 
-const serverUrl = 'http://localhost:8030/ws';
+// const serverUrl = 'http://localhost:8030/ws';
+// const serverUrl = 'http://localhost:8030/ws';http://192.168.1.180:8030/ws
+const serverUrl = environment.websocketUrl;
 @Injectable({
   providedIn: 'root',
 })
 export class WebsocketService {
   private stompClient!: Stomp.Client;
   private messageService!: MessageService;
-
-  public connect1(
-    roomId: number,
-    isNewClient: boolean,
-    username: string
-  ): Observable<any> {
-    return new Observable<any>((observer) => {
-      const socket = new SockJS(serverUrl);
-      this.stompClient = Stomp.over(socket);
-      this.stompClient.connect({}, () => {
-        console.log('connect completed');
-        this.subscribe(roomId, isNewClient, username).subscribe({
-          next: (message) => observer.next(message),
-          error: (error) => observer.error(error),
-          complete: () => observer.complete()
-        });
-      });
-    });
-  }
+  private messageReceivedSource = new Subject<Message>();
+  messageReceived$ = this.messageReceivedSource.asObservable();
 
   public connect(
     roomId: number,
@@ -93,5 +79,9 @@ export class WebsocketService {
         console.log('Disconnected');
       });
     }
+  }
+
+  handleIncomingMessage(message: Message) {
+    this.messageReceivedSource.next(message);
   }
 }

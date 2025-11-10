@@ -129,9 +129,9 @@
   /* right: -48px; */
   display: flex;
   flex-direction: row;
-  background: #fff;
+  background: none;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); */
   z-index: 10;
   /* border: 1px solid #1877f2; */
   align-items: center;
@@ -142,6 +142,10 @@
 
   top: 50%;
   transform: translateY(-50%);
+
+  /* transition: show immediately; hide delayed */
+  /* transition: opacity 160ms ease; */
+  /* transition-delay: 1500ms; */
 }
 
 .file-preview.non-media {
@@ -154,21 +158,22 @@
 
 .message:hover .message-menu {
   opacity: 1;
-  pointer-events: auto;     /* Bật lại tương tác */
+  pointer-events: auto;
+  /* transition-delay: 0s;  */
 }
 
 /* Tin nhắn nhận: menu bên phải */
 .message.received .message-menu {
-  right: -100px;
-}
-
-.message.received.content-text .message-menu {
   right: -70px;
 }
 
+/* .message.received.content-text .message-menu {
+  right: -70px;
+} */
+
 /* Tin nhắn gửi: menu bên trái */
 .message.sent .message-menu {
-  left: -140px;
+  left: -130px;
 }
 
 .menu-btn {

@@ -91,10 +91,11 @@ export class ChatWindowComponent
               }
             } else {
               this.messages.push(message);
+              this.websocketService.handleIncomingMessage(message);
             }
           });
         this.messageService
-          .getLimitMessagesInRoom(this.roomId, new Date(), 10)
+          .getLimitMessagesInRoom(this.roomId, new Date(), 30)
           .subscribe((messages) => (this.messages = messages));
       }
       this.chatForm = this.fb.group({
@@ -297,7 +298,8 @@ export class ChatWindowComponent
 
   // video call
   startVideoCall(): void {
-    const callUrl = `${window.location.origin}/chat/call/${this.roomId}`;
+    // const callUrl = `${window.location.origin}/chat/call/${this.roomId}`;
+    const callUrl = `https://192.168.1.115:8443/${this.roomId}`;
     this.openCenteredWindow(callUrl, 'Video Call', 1400, 800);
   }
 

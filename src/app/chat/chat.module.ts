@@ -31,7 +31,7 @@ import { VideoCallComponent } from "./video-call/video-call.component";
       SearchPopupComponent,
       PrivateRoomDialogComponent,
       GroupRoomDialogComponent,
-      VideoCallComponent
+      VideoCallComponent,
     ],
     imports: [
     CommonModule,

@@ -5,8 +5,9 @@ import { GetRoomsResponse } from '../model/get-rooms-response';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { GetRoomDetailResponse } from '../model/get-room-detail-response';
 import { RoomRequest } from '../model/room-request.model';
+import { environment } from '../../environments/environment';
 
-const roomAPIUrl = 'http://localhost:8030/api/v1/rooms/';
+const roomAPIUrl = environment.apiBaseUrl + '/v1/rooms/';
 @Injectable({
   providedIn: 'root',
 })

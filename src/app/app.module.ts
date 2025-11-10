@@ -15,11 +15,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatIcon } from "@angular/material/icon";
 import { MatDialogActions, MatDialogContent } from "@angular/material/dialog";
+import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { ErrorPopupComponent } from './chat/error-popup/error-popup.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SignInComponent,
+    ErrorPopupComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +41,9 @@ import { MatDialogActions, MatDialogContent } from "@angular/material/dialog";
     MatDialogContent
 ],
   providers: [
-    provideClientHydration(), provideHttpClient(withFetch()), { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    provideClientHydration(), provideHttpClient(withFetch()), 
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

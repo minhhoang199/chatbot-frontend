@@ -1,3 +1,4 @@
+import { Message } from './../../model/message.model';
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -54,11 +55,9 @@ export class SignInComponent implements OnInit {
       this.authService.setToken(response);
       this.router.navigate(['/chat']);
     } else {
-      // this.errorMessage = 'Invalid email or password';
     }
   }, error => {
     console.error('Error occurred:', error);
-    // this.errorMessage = 'An error occurred while trying to login. Please try again later.';
   });
   }
 }
