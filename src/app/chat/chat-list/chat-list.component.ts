@@ -9,30 +9,53 @@ import { WebsocketService } from '../../service/websocket.service';
 @Component({
   selector: 'app-chat-list',
   templateUrl: './chat-list.component.html',
-  styleUrl: './chat-list.component.css'
+  styleUrl: './chat-list.component.css',
 })
 export class ChatListComponent implements OnInit {
   rooms!: Room[];
   filteredRooms!: Room[];
+  roomSubscriptions: any[] = [];
   selectedRoomId!: number | null;
   activeTab: string = 'All';
-  constructor(private roomService: RoomService, private authService: AuthService, private router: Router, private websocketService: WebsocketService) {}
+  constructor(
+    private roomService: RoomService,
+    private authService: AuthService,
+    private router: Router,
+    private websocketService: WebsocketService
+  ) {}
   ngOnInit(): void {
     const id = this.authService.getId();
     this.roomService.getAllRooms(id).subscribe((rooms) => {
       this.rooms = rooms;
       this.filteredRooms = rooms;
-    });
-    this.roomService.onRoomCreated().subscribe((newRoom) => {
-      if (newRoom) {
-        this.rooms = [newRoom, ...this.rooms];
-        this.filteredRooms = [newRoom, ...this.filteredRooms];
-        this.filteredRooms.sort((a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime());
+      console.log('rooms: ' + this.rooms);
+      if (this.rooms.length > 0) {
+        this.websocketService.connectWebSocket().subscribe(() => {
+          this.websocketService.subscribeAllRooms(this.rooms);
+        });
       }
     });
 
     this.websocketService.messageReceived$.subscribe((message: Message) => {
       this.onNewMessage(message);
+    });
+
+    this.roomService.onRoomCreated().subscribe((newRoom) => {
+      if (newRoom) {
+        this.rooms = [newRoom, ...this.rooms];
+        this.filteredRooms = [newRoom, ...this.filteredRooms];
+        this.filteredRooms.sort(
+          (a, b) =>
+            new Date(b.lastMessageTime).getTime() -
+            new Date(a.lastMessageTime).getTime()
+        );
+        const subscription = this.websocketService.connect(
+          newRoom.id,
+          false,
+          ''
+        );
+        this.roomSubscriptions.push(subscription);
+      }
     });
   }
 
@@ -42,11 +65,14 @@ export class ChatListComponent implements OnInit {
   }
 
   setActiveTab(emojiKey: string): void {
+    console.log('Setting active tab to:', emojiKey);
     this.activeTab = emojiKey;
     if (emojiKey === 'All') {
       this.filteredRooms = this.rooms;
     } else if (emojiKey === 'Groups') {
-      this.filteredRooms = this.rooms.filter(room => room.roomType === 'GROUP_CHAT');
+      this.filteredRooms = this.rooms.filter(
+        (room) => room.roomType === 'GROUP_CHAT'
+      );
     } else {
       this.filteredRooms = [];
     }

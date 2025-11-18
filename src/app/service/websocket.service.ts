@@ -1,9 +1,10 @@
+import { Room } from './../model/room.model';
 import { Message } from './../model/message.model';
 import { Injectable } from '@angular/core';
 import * as Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
 import { MessageService } from './message.service';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { MessageRequest } from '../model/message-request.model';
 import { environment } from '../../environments/environment';
 
@@ -23,20 +24,58 @@ export class WebsocketService {
     roomId: number,
     isNewClient: boolean,
     username: string
-  ):  Observable<any> {
+  ): Observable<any> {
     const socket = new SockJS(serverUrl);
     this.stompClient = Stomp.over(socket);
-    
+
     return new Observable<any>((observer) => {
       this.stompClient.connect({}, () => {
         console.log('connect completed');
         this.subscribe(roomId, isNewClient, username).subscribe({
           next: (message) => observer.next(message),
           error: (error) => observer.error(error),
-          complete: () => observer.complete()
+          complete: () => observer.complete(),
         });
       });
     });
+  }
+
+  connectWebSocket(): Observable<void> {
+    const socket = new SockJS(serverUrl);
+    this.stompClient = Stomp.over(socket);
+    console.log('Connecting to WebSocket...');
+    return new Observable((observer) => {
+      this.stompClient.connect({}, () => {
+        console.log('Connected');
+        observer.next();
+        observer.complete();
+      });
+    });
+  }
+
+  subscribeRoom(roomId: number): Observable<any> {
+    return new Observable((observer) => {
+      const sub = this.stompClient.subscribe(
+        `/topic/room/${roomId}`,
+        (message) => observer.next(JSON.parse(message.body))
+      );
+
+      return () => sub.unsubscribe();
+    });
+  }
+
+  subscribeAllRooms(rooms: Room[]): Subscription[] {
+    const subscriptions: Subscription[] = [];
+
+    rooms.forEach((room) => {
+      const sub = this.subscribeRoom(room.id).subscribe((msg) => {
+        console.log('Msg from room', room.id, msg);
+        this.handleIncomingMessage(msg);
+      });
+      subscriptions.push(sub);
+    });
+
+    return subscriptions;
   }
 
   public subscribe(
@@ -46,10 +85,9 @@ export class WebsocketService {
   ): Observable<any> {
     const subject = new Subject<any>();
     // Subscribe to the Public Topic
-    this.stompClient.subscribe(
-      '/topic/room/'+ roomId,
-      (payload: any) => {subject.next(JSON.parse(payload.body));}
-    );
+    this.stompClient.subscribe('/topic/room/' + roomId, (payload: any) => {
+      subject.next(JSON.parse(payload.body));
+    });
 
     // Tell your username to the server
     if (isNewClient && username.length > 0) {
@@ -59,13 +97,18 @@ export class WebsocketService {
         JSON.stringify({ sender: username, type: 'JOIN' })
       );
     }
+    console.log('subscribe room: ' + roomId);
     return subject.asObservable();
   }
 
-  public sendMessage(message: MessageRequest):void {
-    if(this.isConnected()){
-      this.stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(message))
-      console.log('message send to server')
+  public sendMessage(message: MessageRequest): void {
+    if (this.isConnected()) {
+      this.stompClient.send(
+        '/app/chat.sendMessage',
+        {},
+        JSON.stringify(message)
+      );
+      console.log('message send to server');
     }
   }
 
