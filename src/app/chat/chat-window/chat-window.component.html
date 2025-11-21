@@ -12,7 +12,10 @@
         </div>
       </div>
       <div class="chat-header-actions">
-        <i class="fas fa-phone"></i>
+        <button (click)="openSearchPopup()" class="video-btn">
+          <i class="fas fa-search"></i>
+        </button>
+        <app-search-popup *ngIf="showPopup" [roomId]="roomId" (close)="closeSearchPopup()" (clickMessage)="scrollToMessageFromSearchPopup($event)"></app-search-popup>
         <button (click)="startVideoCall()" class="video-btn">
           <i class="fas fa-video"></i>
         </button>
