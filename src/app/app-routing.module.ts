@@ -2,11 +2,16 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SignInComponent } from './component/sign-in/sign-in.component';
 import { AuthGuard } from './guard/auth-guard.guard';
+import { OtpVerificationComponent } from './component/otp-verification/otp-verification.component';
 
 const routes: Routes = [
   {
     path: "sign-in",
     component: SignInComponent
+  },
+  {
+    path: "verify-otp/:email",
+    component: OtpVerificationComponent
   },
   {
     path: "chat",

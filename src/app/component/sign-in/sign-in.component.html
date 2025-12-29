@@ -1,28 +1,12 @@
-<!-- <form style="max-width: 400px; margin: auto;" class="sign-in-form" [formGroup]="signInForm" (ngSubmit)="signIn()">
-    <div class="form-group">
-        <label for="inputEmail">Email</label>
-        <input formControlName="email" type="text" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter email">
-    </div>
-    <div class="form-group">
-        <label for="inputPassword">Password</label>
-        <input formControlName="password" type="password" class="form-control" id="inputPassword" placeholder="Password">
-    </div>
-    <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form> -->
-
 <div class="wrapper">
     <div class="title-text">
         <div class="title login" #loginText>Login Form</div>
-        <div class="title signup">Signup Form</div>
+        <div class="title signup" #signupText>Signup Form</div>
     </div>
     <div class="form-container">
         <div class="slide-controls">
-            <input type="radio" name="slide" id="login" checked>
-            <input type="radio" name="slide" id="signup">
+            <input type="radio" name="slide" id="login" [checked]="mode === 'login'">
+            <input type="radio" name="slide" id="signup" [checked]="mode === 'signup'">
             <label for="login" class="slide login">Login</label>
             <label for="signup" class="slide signup">Signup</label>
             <div class="slider-tab"></div>
@@ -32,10 +16,16 @@
                 <div class="field">
                     <input formControlName="email" type="text" class="form-control" id="inputEmail"
                         aria-describedby="emailHelp" placeholder="Email Address" required>
+                        <div class="error" *ngIf="signInForm.get('email')?.hasError('required') && (signInForm.get('email')?.touched || submitted)"> 
+                        Email is required
+                    </div>
                 </div>
                 <div class="field">
                     <input formControlName="password" type="password" class="form-control" id="inputPassword"
                         placeholder="Password" required>
+                        <div class="error" *ngIf="signInForm.get('password')?.hasError('required') && (signInForm.get('password')?.touched || submitted)"> 
+                        Password is required
+                    </div>
                 </div>
                 <div class="pass-link"><a href="#">Forgot password?</a></div>
                 <div class="field btn">
@@ -44,15 +34,27 @@
                 </div>
                 <div class="signup-link">Not a member? <a href="#">Signup now</a></div>
             </form>
-            <form action="#" class="signup">
+            <form action="#" class="signup" [formGroup]="signUpForm" (ngSubmit)="signUp()" #signupForm>
                 <div class="field">
-                    <input type="text" placeholder="Email Address" required>
+                    <input formControlName="email" type="text" class="form-control" id="inputEmail"
+                        aria-describedby="emailHelp" placeholder="Email Address" required>
+                        <div class="error" *ngIf="signUpForm.get('email')?.hasError('required') && (signUpForm.get('email')?.touched || submitted)"> 
+                        Email is required
+                    </div>
                 </div>
                 <div class="field">
-                    <input type="password" placeholder="Password" required>
+                    <input formControlName="password" type="password" class="form-control" id="inputPassword"
+                        placeholder="Password" required>
+                    <div class="error" *ngIf="signUpForm.get('password')?.hasError('required') && (signUpForm.get('password')?.touched || submitted)"> 
+                        Password is required
+                    </div>
                 </div>
                 <div class="field">
-                    <input type="password" placeholder="Confirm password" required>
+                    <input formControlName="confirmPassword" type="password" class="form-control" id="inputPassword"
+                        placeholder="Password" required>
+                        <div class="error" *ngIf="signUpForm.get('confirmPassword')?.hasError('required') && (signUpForm.get('confirmPassword')?.touched || submitted)"> 
+                        Confirm Password is required
+                    </div>
                 </div>
                 <div class="field btn">
                     <div class="btn-layer"></div>

@@ -17,12 +17,14 @@ import { MatIcon } from "@angular/material/icon";
 import { MatDialogActions, MatDialogContent } from "@angular/material/dialog";
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { ErrorPopupComponent } from './chat/error-popup/error-popup.component';
+import { OtpVerificationComponent } from './component/otp-verification/otp-verification.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SignInComponent,
-    ErrorPopupComponent
+    ErrorPopupComponent,
+    OtpVerificationComponent
   ],
   imports: [
     BrowserModule,

@@ -72,7 +72,7 @@ export class ChatWindowComponent
       if (this.roomId != null) {
         this.websocketService.disconnect();
         this.websocketService
-          .connect(this.roomId, false, '')
+          .connectAndSubscribeRoomIdTopic(this.roomId, false, '')
           .subscribe((message: Message) => {
             console.log('Received message:', message);
             const index = this.messages.findIndex(
@@ -299,7 +299,7 @@ export class ChatWindowComponent
   // video call
   startVideoCall(): void {
     // const callUrl = `${window.location.origin}/chat/call/${this.roomId}`;
-    const callUrl = `https://192.168.1.115:8443/${this.roomId}`;
+    const callUrl = `https://192.168.1.180:8443/${this.roomId}`;
     this.openCenteredWindow(callUrl, 'Video Call', 1400, 800);
   }
 

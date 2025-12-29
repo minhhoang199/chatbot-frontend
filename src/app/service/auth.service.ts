@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { SignInResponse } from '../model/sign-in-response';
 import { environment } from '../../environments/environment';
 
-const signInURL = environment.apiBaseUrl + '/security/auth/login';
+const authUrl = environment.apiBaseUrl + '/security/auth';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,7 +14,7 @@ export class AuthService {
   constructor(private httpClient: HttpClient, private localStorageService: LocalStorageService) {}
 
   signIn(email:string, password: string):Observable<SignInResponse>{
-    return this.httpClient.post<SignInResponse>(signInURL, { email: email, password: password});
+    return this.httpClient.post<SignInResponse>(authUrl + '/login', { email: email, password: password});
   }
 
   getToken(): string{
@@ -43,5 +43,16 @@ export class AuthService {
     this.localStorageService.set('username', userInfo.data.username);
     this.localStorageService.set('id', userInfo.data.id);
     this.localStorageService.set("email", userInfo.data.email)
+  }
+  signUp(email:string, password: string, roleId: number):Observable<SignInResponse>{
+    return this.httpClient.post<SignInResponse>(authUrl + '/signup', { email: email, password: password, roleId: roleId});
+  }
+
+  verifyOTP(email:string, code: string):Observable<SignInResponse>{
+    return this.httpClient.put<SignInResponse>(authUrl + '/verifyOTP', { email: email, code: code});
+  }
+
+  reSendOTP(email:string):Observable<SignInResponse>{
+    return this.httpClient.post<SignInResponse>(authUrl + '/re-send-OTP', { email: email});
   }
 }

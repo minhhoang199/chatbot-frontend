@@ -16,11 +16,12 @@ const serverUrl = environment.websocketUrl;
 })
 export class WebsocketService {
   private stompClient!: Stomp.Client;
-  private messageService!: MessageService;
   private messageReceivedSource = new Subject<Message>();
   messageReceived$ = this.messageReceivedSource.asObservable();
+  private roomReceivedSource = new Subject<Room>();
+  roomReceived$ = this.roomReceivedSource.asObservable();
 
-  public connect(
+  public connectAndSubscribeRoomIdTopic(
     roomId: number,
     isNewClient: boolean,
     username: string
@@ -31,7 +32,7 @@ export class WebsocketService {
     return new Observable<any>((observer) => {
       this.stompClient.connect({}, () => {
         console.log('connect completed');
-        this.subscribe(roomId, isNewClient, username).subscribe({
+        this.subscribeMessagesByRoomId(roomId, isNewClient, username).subscribe({
           next: (message) => observer.next(message),
           error: (error) => observer.error(error),
           complete: () => observer.complete(),
@@ -43,7 +44,6 @@ export class WebsocketService {
   connectWebSocket(): Observable<void> {
     const socket = new SockJS(serverUrl);
     this.stompClient = Stomp.over(socket);
-    console.log('Connecting to WebSocket...');
     return new Observable((observer) => {
       this.stompClient.connect({}, () => {
         console.log('Connected');
@@ -78,7 +78,7 @@ export class WebsocketService {
     return subscriptions;
   }
 
-  public subscribe(
+  public subscribeMessagesByRoomId(
     roomId: number, //lấy từ url
     isNewClient: boolean, //gọi API từ Backend check xem user hiện tại có phải là user mới ko, nếu có trả ra thêm username
     username: string //lấy từ API phía trên
@@ -126,5 +126,39 @@ export class WebsocketService {
 
   handleIncomingMessage(message: Message) {
     this.messageReceivedSource.next(message);
+  }
+
+  //connect and subscribe userId topic to receive new room invitations
+  public connectAndSubscribeUserIdTopic(
+    userId: number,
+  ): Observable<any> {
+    const socket = new SockJS(serverUrl);
+    this.stompClient = Stomp.over(socket);
+
+    return new Observable<any>((observer) => {
+      this.stompClient.connect({}, () => {
+        console.log('connect completed');
+        this.subscribeRoomsByUser(userId).subscribe({
+          next: (message) => observer.next(message),
+          error: (error) => observer.error(error),
+          complete: () => observer.complete(),
+        });
+      });
+    });
+  }
+
+  handleIncomingRoom(room: Room) {
+    this.roomReceivedSource.next(room);
+  }
+
+  subscribeRoomsByUser(userId: number): Observable<any> {
+    return new Observable((observer) => {
+      const sub = this.stompClient.subscribe(
+        `/topic/user/${userId}`,
+        (message) => observer.next(JSON.parse(message.body))
+      );
+
+      return () => sub.unsubscribe();
+    });
   }
 }

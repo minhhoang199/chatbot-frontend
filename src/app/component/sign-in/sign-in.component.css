@@ -133,7 +133,7 @@ form .field input:focus::placeholder {
   color: #1a75ff;
 }
 .form-inner form .pass-link {
-  margin-top: 5px;
+  margin-top: 20px;
 }
 .form-inner form .signup-link {
   text-align: center;
@@ -186,4 +186,10 @@ form .btn [type="submit"] {
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
+}
+
+.error {
+  color: #dc2626; /* red-600 */
+  font-size: 13px;
+  margin: 4px;
 }

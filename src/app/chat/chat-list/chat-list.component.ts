@@ -28,35 +28,48 @@ export class ChatListComponent implements OnInit {
     this.roomService.getAllRooms(id).subscribe((rooms) => {
       this.rooms = rooms;
       this.filteredRooms = rooms;
-      console.log('rooms: ' + this.rooms);
       if (this.rooms.length > 0) {
+        //connect websocket for each room
         this.websocketService.connectWebSocket().subscribe(() => {
           this.websocketService.subscribeAllRooms(this.rooms);
         });
+
+        //connect websocket for user to listen new room created
+        this.websocketService
+          .connectAndSubscribeUserIdTopic(id)
+          .subscribe((room: Room) => {
+            console.log('New room:', room);
+            room.lastMessageContent = room.name + ' was created';
+            this.rooms.push(room);
+            const index = this.rooms.findIndex((r) => r.id === room.id);
+            this.sortRoomsByLastMessageTime(index, room.lastMessageContent, room.lastMessageTime);
+          });
       }
     });
 
     this.websocketService.messageReceived$.subscribe((message: Message) => {
+      console.log('Received message:', message);
       this.onNewMessage(message);
     });
 
-    this.roomService.onRoomCreated().subscribe((newRoom) => {
-      if (newRoom) {
-        this.rooms = [newRoom, ...this.rooms];
-        this.filteredRooms = [newRoom, ...this.filteredRooms];
-        this.filteredRooms.sort(
-          (a, b) =>
-            new Date(b.lastMessageTime).getTime() -
-            new Date(a.lastMessageTime).getTime()
-        );
-        const subscription = this.websocketService.connect(
-          newRoom.id,
-          false,
-          ''
-        );
-        this.roomSubscriptions.push(subscription);
-      }
-    });
+    // this.roomService.onRoomCreated().subscribe((newRoom) => {
+    //   if (newRoom) {
+    //     this.rooms = [newRoom, ...this.rooms];
+    //     this.filteredRooms = [newRoom, ...this.filteredRooms];
+    //     this.filteredRooms.sort(
+    //       (a, b) =>
+    //         new Date(b.lastMessageTime).getTime() -
+    //         new Date(a.lastMessageTime).getTime()
+    //     );
+    //     const subscription =
+    //       this.websocketService.connectAndSubscribeRoomIdTopic(
+    //         newRoom.id,
+    //         false,
+    //         ''
+    //       );
+    //     this.roomSubscriptions.push(subscription);
+    //   }
+    // });
   }
 
   navigateToRoom(roomId: number): void {
@@ -65,7 +78,6 @@ export class ChatListComponent implements OnInit {
   }
 
   setActiveTab(emojiKey: string): void {
-    console.log('Setting active tab to:', emojiKey);
     this.activeTab = emojiKey;
     if (emojiKey === 'All') {
       this.filteredRooms = this.rooms;
@@ -79,18 +91,27 @@ export class ChatListComponent implements OnInit {
   }
 
   onNewMessage(message: Message): void {
-    const index = this.rooms.findIndex(r => r.id === message.roomId);
+    const index = this.rooms.findIndex((r) => r.id === message.roomId);
+    console.log('Room index for new message:', index);
     if (index === -1) return;
 
+    this.sortRoomsByLastMessageTime(
+      index,
+      message.content,
+      message.createdAt
+    );
+  }
+
+  sortRoomsByLastMessageTime(index: number, lastMessageContent: string, lastMessageTime: string): void {
     const updatedRoom = {
       ...this.rooms[index],
-      lastMessageContent: message.content,
-      lastMessageTime: message.createdAt
+      lastMessageContent: lastMessageContent,
+      lastMessageTime: lastMessageTime,
     };
 
     // Xóa room cũ và thêm lại lên đầu
-    this.rooms.splice(index, 1);         // xoá vị trí cũ
-    this.rooms.unshift(updatedRoom);     // thêm vào đầu danh sách
+    this.rooms.splice(index, 1); // xoá vị trí cũ
+    this.rooms.unshift(updatedRoom); // thêm vào đầu danh sách
     this.setActiveTab(this.activeTab); // Cập nhật filteredRooms dựa trên tab hiện tại
   }
 }
