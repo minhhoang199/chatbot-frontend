@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
 
@@ -26,11 +26,18 @@ export class SignInComponent implements OnInit {
       password: ''
     });
     this.signUpForm = this.fb.group({
+      username: '',
       email: '',
-      password: '',
-      confirmPassword: ''
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', Validators.required]
     });
   }
+
+//   passwordsMatchValidator(group: AbstractControl) {
+//   const p = group.get('password')?.value;
+//   const cp = group.get('confirmPassword')?.value;
+//   return p === cp ? null : { passwordMismatch: true };
+// }
 
   ngAfterViewInit() {
     const signupBtn = document.querySelector("label.signup");
@@ -77,13 +84,17 @@ export class SignInComponent implements OnInit {
   signUp(){
     this.submitted = true;
     if (this.signUpForm.invalid) {
+      // this.signUpForm.markAllAsTouched();
       return;
     }
     if (this.signUpForm.get('password')?.value !== this.signUpForm.get('confirmPassword')?.value) {
       console.error('Passwords do not match');
       return;
     }
-    this.authService.signUp(this.signUpForm.get('email')?.value, this.signUpForm.get('password')?.value, 1)
+    this.authService.signUp(
+      this.signUpForm.get('username')?.value,
+      this.signUpForm.get('email')?.value, 
+      this.signUpForm.get('password')?.value, 1)
   .subscribe(response => {
     // If login successful, navigate to page verify OTP
     if (response && response.code && response.code === "TD-000") {
@@ -94,5 +105,9 @@ export class SignInComponent implements OnInit {
   }, error => {
     console.error('Error occurred:', error);
   });
+  }
+
+  forgotPassword(){
+    this.router.navigate(['/forgot-password']);
   }
 }

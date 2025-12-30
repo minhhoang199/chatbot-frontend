@@ -18,13 +18,15 @@ import { MatDialogActions, MatDialogContent } from "@angular/material/dialog";
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { ErrorPopupComponent } from './chat/error-popup/error-popup.component';
 import { OtpVerificationComponent } from './component/otp-verification/otp-verification.component';
+import { ForgotPasswordComponent } from './component/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SignInComponent,
     ErrorPopupComponent,
-    OtpVerificationComponent
+    OtpVerificationComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,

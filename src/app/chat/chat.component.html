@@ -85,8 +85,28 @@
         </path>
       </svg>
     </div>
-    <div class="profile-icon">
-      <img src="assets/avatar.png" alt="Profile">
+    <div class="profile-container" (click)="toggleProfileMenu($event)">
+      <button class="profile-icon" type="button" aria-haspopup="true" [attr.aria-expanded]="profileMenuOpen">
+        <img src="assets/avatar.png" alt="Profile">
+      </button>
+      <div class="profile-menu" *ngIf="profileMenuOpen" (click)="$event.stopPropagation()">
+        <div class="profile-menu-inner">
+          <div class="profile-menu-header">
+            <img src="assets/avatar.png" class="profile-menu-avatar" alt="Profile">
+            <div class="profile-menu-info">
+              <div class="profile-menu-name">{{username}}</div>
+              <button class="profile-menu-see" type="button">See all profiles</button>
+            </div>
+          </div>
+          <ul class="profile-menu-list">
+            <li><button type="button" class="pm-btn">Settings &amp; privacy</button></li>
+            <li><button type="button" class="pm-btn">Help &amp; support</button></li>
+            <li><button type="button" class="pm-btn">Display &amp; accessibility</button></li>
+            <li><button type="button" class="pm-btn">Give feedback</button></li>
+            <li><button type="button" class="pm-btn" (click)="logout()">Log out</button></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </div>

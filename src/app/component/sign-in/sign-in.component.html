@@ -27,14 +27,20 @@
                         Password is required
                     </div>
                 </div>
-                <div class="pass-link"><a href="#">Forgot password?</a></div>
+                <div class="pass-link"><a (click)="forgotPassword()">Forgot password?</a></div>
                 <div class="field btn">
                     <div class="btn-layer"></div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
-                <div class="signup-link">Not a member? <a href="#">Signup now</a></div>
+                <div class="signup-link">Not a member? <a>Signup now</a></div>
             </form>
-            <form action="#" class="signup" [formGroup]="signUpForm" (ngSubmit)="signUp()" #signupForm>
+            <form action="#" class="signup" [formGroup]="signUpForm" (ngSubmit)="signUp()">
+                <div class="field">
+                    <input formControlName="username" type="text" class="form-control" id="inputUsername"placeholder="Username" required>
+                        <div class="error" *ngIf="signUpForm.get('username')?.hasError('required') && (signUpForm.get('username')?.touched || submitted)"> 
+                        Username is required
+                    </div>
+                </div>
                 <div class="field">
                     <input formControlName="email" type="text" class="form-control" id="inputEmail"
                         aria-describedby="emailHelp" placeholder="Email Address" required>

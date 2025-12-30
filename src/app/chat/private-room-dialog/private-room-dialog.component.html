@@ -1,0 +1,24 @@
+<div class="popup">
+  <div class="popup-header">
+    <h3>Thêm bạn</h3>
+    <button class="close-btn" (click)="closePopup()">×</button>
+  </div>
+
+  <div class="popup-body">
+    <input type="text" placeholder="Nhập email..." [(ngModel)]="email" />
+
+    <div class="friend-suggest">
+      <h4>Có thể bạn quen</h4>
+      <div class="friend" *ngFor="let friend of friendSuggestions">
+        <img [src]="friend.avatar" alt="avatar" />
+        <span>{{ friend.name }}</span>
+        <button class="add-btn" (click)="addFriend(friend)">Kết bạn</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup-footer">
+    <button class="cancel-btn" (click)="closePopup()">Hủy</button>
+    <button class="search-btn" (click)="searchFriend()">Tìm kiếm</button>
+  </div>
+</div>

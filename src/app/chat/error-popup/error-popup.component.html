@@ -1,0 +1,6 @@
+<div class="error-popup" *ngIf="errorService.errorMessage">
+    <div class="popup-content">
+        <p>{{ errorService.errorMessage }}</p>
+        <button (click)="closeError()">OK</button>
+    </div>
+</div>

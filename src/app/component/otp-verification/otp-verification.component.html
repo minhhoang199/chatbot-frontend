@@ -1,0 +1,43 @@
+<div class="wrapper">
+    <div class="title-text">
+        <div class="title" #loginText>Verify OTP</div>
+    </div>
+    <div class="form-container">
+        <div class="form-inner">
+            <form action="#" class="verify" [formGroup]="otpVerifyForm" (ngSubmit)="verify()">
+                <div>
+                    <p>Input OTP send to email {{email}}</p>
+                </div>
+                <div class="field">
+                    <input formControlName="otp" type="text" class="form-control" required>
+                    <div class="error" *ngIf="otpVerifyForm.get('otp')?.hasError('required') && (otpVerifyForm.get('otp')?.touched || submitted)"> 
+                        OTP is required
+                    </div>
+                </div>
+                <div class="field btn">
+                    <div class="btn-layer"></div>
+                    <input type="submit" value="Verify">
+                </div>
+            </form>
+        </div>
+    </div>
+      <p class="resend-otp">
+    <!-- Disabled state -->
+    <!-- <span *ngIf="countdown > 0" class="disabled">
+      Resend code in {{ countdown }}s
+    </span> -->
+
+    <!-- Active state -->
+     <!-- *ngIf="countdown === 0" -->
+    <a 
+       (click)="resendOtp()"
+       role="button"
+       tabindex="0">
+      Resend code
+    </a>
+  </p>
+
+  <p class="otp-sent" *ngIf="justSent">
+    A new code has been sent to your email
+  </p>
+</div>

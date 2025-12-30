@@ -1,0 +1,55 @@
+<!-- backdrop -->
+<div class="cg-backdrop">
+  <!-- modal -->
+  <div class="cg-modal" role="dialog" aria-modal="true" aria-label="Create group">
+    <header class="cg-header">
+      <h3>Create Group</h3>
+      <button class="btn-ghost" (click)="closePopup()" aria-label="Close">✕</button>
+    </header>
+
+    <div class="cg-body">
+      <!-- group name -->
+      <label class="field">
+        <input type="text" placeholder="Input group name..."
+        [(ngModel)]="groupName"/>
+      </label>
+
+      <!-- search -->
+      <label class="field">
+        <input type="search" placeholder="Search by email..."   
+        [(ngModel)]="searchEmail"
+        (ngModelChange)="onSearchChange()"/>
+      </label>
+
+      <!-- list header -->
+      <div class="list-header">
+        <div class="title">Current Chats</div>
+        <div class="selected-count">{{ selectedFriends.length }} selected</div>
+      </div>
+
+      <!-- contact list -->
+      <div class="contact-list" role="list">
+        <div *ngFor="let user of filteredFriends" class="contact-row" (click)="toggleSelect(user)" [class.selected]="isSelected(user)">
+          <label class="contact-inner" (click)="$event.stopPropagation()">
+            <input type="checkbox" (click)="toggleSelect(user); $event.stopPropagation()" [checked]="isSelected(user)"/>
+            <div class="avatar">
+              <img src="assets/avatar.png" alt="{{user.username}}" />
+            </div>
+            <div class="meta">
+              <div class="name">{{ user.username }}</div>
+              <div class="subtitle" *ngIf="user.email">{{ user.email }}</div>
+            </div>
+          </label>
+        </div>
+
+        <!-- no results -->
+        <div class="no-result" *ngIf="filteredFriends.length === 0">No matching results</div>
+      </div>
+    </div>
+
+    <footer class="cg-footer">
+      <button class="btn-outline" (click)="closePopup()">Cancel</button>
+      <button class="btn-primary" [disabled]="selectedFriends.length < 2" (click)="createGroup()">Create Group</button>
+    </footer>
+  </div>
+</div>

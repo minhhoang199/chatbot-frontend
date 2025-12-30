@@ -1,0 +1,26 @@
+<div class="overlay" (click)="closePopup()"></div>
+
+<div class="popup">
+  <div class="header">
+    <input
+      type="text"
+      placeholder="Tìm kiếm..."
+      [(ngModel)]="content"
+      (keypress)="onKeyPress($event)"
+    />
+    <button (click)="onSearch()">Search</button>
+    <button class="close-btn" (click)="closePopup()">✕</button>
+  </div>
+
+  <div class="results" *ngIf="results.length > 0">
+    <div class="item" *ngFor="let message of results">
+      <div (click)="scrollToMessage(message)">{{ message.content }}</div>
+    </div>
+  </div>
+
+  <div class="empty" *ngIf="!loading && results.length === 0">
+    Not found result
+  </div>
+
+  <div class="loading" *ngIf="loading">Searching...</div>
+</div>
