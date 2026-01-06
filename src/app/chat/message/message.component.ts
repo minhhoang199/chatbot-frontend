@@ -45,6 +45,9 @@ export class MessageComponent implements OnInit, OnDestroy {
   activeDeletePopupId: number | null = null;
   createdAtFormatted: string = '';
 
+  // Edit history UI state
+  activeEditHistoryId: number | null = null;
+
   constructor(
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
@@ -151,7 +154,45 @@ export class MessageComponent implements OnInit, OnDestroy {
     if (!target.closest('.message-menu') && !target.closest('.message')) {
       this.activeMenuId = null;
       this.activeEmojiMenuId = null;
+      this.activeEditHistoryId = null;
     }
+  }
+
+  toggleEditHistory(id: number, event: MouseEvent) {
+    event.stopPropagation();
+    // toggle popup
+    if (this.activeEditHistoryId === id) {
+      this.activeEditHistoryId = null;
+      return;
+    }
+    this.activeEditHistoryId = id;
+
+    // if history not loaded yet, fetch it from server
+    if (!this._message.editHistory || this._message.editHistory.length === 0) {
+      // Note: ensure backend provides an endpoint for histories; see MessageService.getEditHistory
+      this.messageService.getEditHistory(id).subscribe(
+        (response) => {
+          // If login successful, navigate to page2
+          if (
+            response &&
+            response.data &&
+            response.code &&
+            response.code === 'TD-000'
+          ) {
+            this._message.editHistory = response.data;
+          } else {
+            // this.errorMessage = ""
+          }
+        },
+        (error) => {
+          (this._message as any).editHistory = [];
+        }
+      );
+    }
+  }
+
+  closeEditHistory() {
+    this.activeEditHistoryId = null;
   }
 
   @Output() reply = new EventEmitter<Message>();
@@ -170,6 +211,7 @@ export class MessageComponent implements OnInit, OnDestroy {
         ) {
           console.log(response.data);
           this._message.content = response.data.content;
+          this._message.edited = response.data.edited;
           this._message.emoji = response.data.emoji;
           this.setTypeMessage();
           this.setLinkPreview();
@@ -260,6 +302,7 @@ export class MessageComponent implements OnInit, OnDestroy {
     this.activeTab = 'All';
     this.editedMessage = null;
     this.activeDeletePopupId = null;
+    this.activeEditHistoryId = null;
     this.reactionList = this.reactionMap.get(this.activeTab) || [];
   }
 

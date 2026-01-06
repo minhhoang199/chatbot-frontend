@@ -1,4 +1,5 @@
 import { AttachedFile } from "./attached-file.model";
+import { MessageEditHistory } from "./message-edit-history.model";
 
 export class Message {
   constructor(
@@ -19,7 +20,11 @@ export class Message {
     public emojiString: string | null = null,
     public attachedFile: AttachedFile | null = null,
     public delFlag: boolean,
+    public edited: boolean = false,
   ) {}
+
+  // optional history (array of {content, editedAt}) populated when requested
+  public editHistory?: MessageEditHistory[];
 }
 
   export class Emoji {

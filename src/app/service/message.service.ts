@@ -10,6 +10,7 @@ import { Observable, map } from 'rxjs';
 import { MessageRequest } from '../model/message-request.model';
 import { BaseResponse } from '../model/base-response';
 import { environment } from '../../environments/environment';
+import { MessageEditHistoryResponse } from '../model/message-edit-history-response';
 
 const messageAPIUrl = environment.apiBaseUrl + '/v1/messages/';
 @Injectable({
@@ -95,5 +96,14 @@ roomId: roomId.toString(),
 
   public deleteMessage(messageId: number): Observable<BaseResponse> {
     return this.httpClient.delete<BaseResponse>(messageAPIUrl + messageId);
+  }
+
+  /**
+   * Get edit history for a message (array of {content, editedAt})
+   * NOTE: confirm the backend endpoint and response structure: GET /v1/messages/{id}/histories
+   */
+  public getEditHistory(messageId: number): Observable<MessageEditHistoryResponse> {
+    return this.httpClient
+      .get<MessageEditHistoryResponse>(environment.apiBaseUrl + '/v1/message-edit-history/' + messageId);
   }
 }

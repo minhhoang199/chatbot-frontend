@@ -455,3 +455,121 @@
   gap: 8px;
 }
 
+/* Edit history button tooltip */
+.edit-history-btn {
+  position: relative;
+}
+
+.edit-history-btn .edit-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 14px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 30;
+}
+
+.edit-history-btn:hover .edit-tooltip {
+  display: block;
+}
+
+/* Edit history popup */
+.edit-history-popup-outgoing {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 0;
+  z-index: 60;
+}
+
+.edit-history-popup-incomming {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 0;
+  z-index: 60;
+}
+
+.edit-history-popup {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 0;
+  z-index: 60;
+}
+
+.edit-history-container {
+  width: 280px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  font-size: 13px;
+}
+
+.edit-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.edit-history-list {
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.history-item {
+  padding: 8px 12px;
+  border-bottom: 1px solid #fafafa;
+}
+
+.history-item:last-child { border-bottom: none; }
+
+.history-content {
+  color: #111;
+}
+
+.history-time {
+  color: #777;
+  font-size: 11px;
+  margin-top: 6px;
+}
+
+.no-edits {
+  padding: 12px;
+  color: #666;
+  text-align: center;
+}
+
+/* Edited label (displayed above message content) */
+.edited-label {
+  font-size: 12px;
+  color: #1877f2;
+  cursor: pointer;
+  margin-bottom: 6px;
+  user-select: none;
+}
+
+/* Align label for sent/received messages */
+.message.sent .edited-label {
+  align-self: flex-end;
+  margin-right: 6px;
+  text-align: right;
+}
+
+.message.received .edited-label {
+  align-self: flex-start;
+  margin-left: 6px;
+  text-align: left;
+}
+
+/* Optional hover underline effect */
+.edited-label:hover {
+  text-decoration: underline;
+}
+

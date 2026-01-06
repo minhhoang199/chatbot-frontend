@@ -7,6 +7,7 @@
         {{_message.replyContent}}
       </div>
       <div class="message-content-container">
+        <div class="edited-label" *ngIf="_message.edited" (click)="toggleEditHistory(_message.id, $event); $event.stopPropagation()" title="View edit history">Edited</div>
         <div class="message-content" *ngIf="_message.attachedFile === null">
           {{_message.content}}
         </div>
@@ -77,6 +78,25 @@
           <span (click)="selectEmoji(null); $event.stopPropagation()">🚫</span>
           <!-- ... -->
         </div>
+
+        <!-- Edit history popup -->
+        <div class="edit-history-popup-incomming" *ngIf="activeEditHistoryId === _message.id">
+          <div class="edit-history-container">
+            <div class="edit-history-header">
+              <span>Edit history</span>
+              <button class="close-btn" (click)="closeEditHistory()">✖</button>
+            </div>
+            <div class="edit-history-list" *ngIf="_message.editHistory && _message.editHistory.length; else noEdits">
+              <div class="history-item" *ngFor="let h of _message.editHistory">
+                <div class="history-content">{{h.content}}</div>
+                <div class="history-time">{{convertCreateAt2(h.createdAt)}}</div>
+              </div>
+            </div>
+            <ng-template #noEdits>
+              <div class="no-edits">Not found edit history</div>
+            </ng-template>
+          </div>
+        </div>
       </div>
       <div *ngIf="_message.emoji" class="message-emoji" (click)="toggleEmojiPopup(_message.id, $event)">
         {{_message.emojiString}}
@@ -120,6 +140,7 @@
       {{_message.replyContent}}
     </div>
     <div class="message-content-container">
+      <div class="edited-label" *ngIf="_message.edited" (click)="toggleEditHistory(_message.id, $event); $event.stopPropagation()" title="View edit history">Edited</div>
       <div class="message-content" *ngIf="_message.attachedFile === null">
         {{_message.content}}
       </div>
@@ -227,6 +248,25 @@
         <span (click)="selectEmoji('👍'); $event.stopPropagation()">👍</span>
         <span (click)="selectEmoji(null); $event.stopPropagation()">🚫</span>
         <!-- ... -->
+      </div>
+
+      <!-- Edit history popup -->
+      <div class="edit-history-popup-outgoing" *ngIf="activeEditHistoryId === _message.id">
+        <div class="edit-history-container">
+          <div class="edit-history-header">
+            <span>Edit history</span>
+            <button class="close-btn" (click)="closeEditHistory()">✖</button>
+          </div>
+          <div class="edit-history-list" *ngIf="_message.editHistory && _message.editHistory.length; else noEdits2">
+            <div class="history-item" *ngFor="let h of _message.editHistory">
+              <div class="history-content">{{h.content}}</div>
+              <div class="history-time">{{convertCreateAt2(h.createdAt)}}</div>
+            </div>
+          </div>
+          <ng-template #noEdits2>
+            <div class="no-edits">Not found edit history</div>
+          </ng-template>
+        </div>
       </div>
     </div>
     <div *ngIf="_message.emoji" class="message-emoji" (click)="toggleEmojiPopup(_message.id, $event)">
