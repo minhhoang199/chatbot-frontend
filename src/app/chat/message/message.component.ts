@@ -200,6 +200,10 @@ export class MessageComponent implements OnInit, OnDestroy {
 
   editMessage() {
     this.activeMenuId = null;
+    let currentContent = this._message.content;
+    if (this.editedMessage !== null && this.editedMessage.trim() !== '') {
+      this._message.content = this.editedMessage;
+    }
     this.messageService.editMessage(this._message).subscribe(
       (response) => {
         // If login successful, navigate to page2
@@ -216,11 +220,11 @@ export class MessageComponent implements OnInit, OnDestroy {
           this.setTypeMessage();
           this.setLinkPreview();
         } else {
-          // this.errorMessage = ""
+          this._message.content = currentContent;
         }
       },
       (error) => {
-        console.error('Error occurred:', error);
+        this._message.content = currentContent;
       }
     );
   }
@@ -405,7 +409,7 @@ export class MessageComponent implements OnInit, OnDestroy {
   editMessageConfirm() {
     if (!this._message.id) return;
     if (!this.editedMessage || this.editedMessage.trim() === '') return;
-    this._message.content = this.editedMessage;
+    // this._message.content = this.editedMessage;
     this.editMessage();
     this.activeEditPopupId = null;
     this.editedMessage = null;
@@ -434,7 +438,7 @@ export class MessageComponent implements OnInit, OnDestroy {
           }
         },
         (error) => {
-          console.error('Error occurred:', error);
+          // console.error('Error occurred:', error);
         }
       );
   }
