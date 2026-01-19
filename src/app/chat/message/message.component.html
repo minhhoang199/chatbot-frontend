@@ -1,7 +1,7 @@
 <div *ngIf="isOutgoingMessage; else outGoingMessage">
   <div class="message received" [ngClass]="{
         'content-text': _message.attachedFile === null
-      }">
+      }" [class.emoji-open]="activeEmojiMenuId === _message.id">
     <div class="bubble-wrapper">
       <div *ngIf="_message.isReply" class="reply-bubble" (click)="scrollToReplyMessage()">
         {{_message.replyContent}}
@@ -135,7 +135,7 @@
   </div>
 </div>
 <ng-template #outGoingMessage>
-  <div class="message sent">
+  <div class="message sent" [class.emoji-open]="activeEmojiMenuId === _message.id">
     <div *ngIf="_message.isReply" class="reply-bubble" (click)="scrollToReplyMessage()">
       {{_message.replyContent}}
     </div>

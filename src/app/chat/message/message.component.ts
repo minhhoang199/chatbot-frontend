@@ -60,7 +60,6 @@ export class MessageComponent implements OnInit, OnDestroy {
   }
 
   processMessage() {
-    console.log('Processing message:', this._message);
       this.createdAtFormatted = this.convertCreateAt();
       this.isOutgoingMessage = this.authService.getId() != this._message.senderId;
       this.activeEmojiMenuId = null; // Reset emoji menu when initializing
@@ -120,14 +119,14 @@ export class MessageComponent implements OnInit, OnDestroy {
     return convertedDate;
   }
 
-  showMenu(id: number) {
-    this.activeMenuId = id;
-    this.activeEmojiMenuId = null;
-  }
+  // showMenu(id: number) {
+  //   this.activeMenuId = id;
+  //   this.activeEmojiMenuId = null;
+  // }
 
-  hideMenu() {
-    this.activeMenuId = null;
-  }
+  // hideMenu() {
+  //   this.activeMenuId = null;
+  // }
   // toggleMenu(id: number) {
   //   this.activeMenuId = this.activeMenuId === id ? null : id;
   //   this.activeEmojiMenuId = null; // close emoji menu when toggling main menu
@@ -213,9 +212,9 @@ export class MessageComponent implements OnInit, OnDestroy {
           response.code &&
           response.code === 'TD-000'
         ) {
-          console.log(response.data);
           this._message.content = response.data.content;
           this._message.edited = response.data.edited;
+          console.log('Edited emoji:' + this._message.emoji);
           this._message.emoji = response.data.emoji;
           this.setTypeMessage();
           this.setLinkPreview();
@@ -277,6 +276,10 @@ export class MessageComponent implements OnInit, OnDestroy {
       this._message.emojiString = uniqueEmojis.join('');
       this._message.emojiString =
         this._message.emojiString + this._message.emoji.length;
+    } 
+    else {
+      this._message.emoji = null;
+      this._message.emojiString = null;
     }
   }
 

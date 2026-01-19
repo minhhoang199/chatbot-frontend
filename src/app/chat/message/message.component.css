@@ -162,6 +162,11 @@
   /* transition-delay: 0s;  */
 }
 
+.message.emoji-open:hover .message-menu {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* Tin nhắn nhận: menu bên phải */
 .message.received .message-menu {
   right: -70px;
@@ -187,7 +192,6 @@
 
 .emoji-dropdown {
   position: absolute;
-  right: 100%;
   top: 10px;
   background: #fff;
   border-radius: 8px;
@@ -200,6 +204,12 @@
 
 .message.received .emoji-dropdown {
   left: 100%;
+  margin-left: 6px;
+}
+
+.message.sent .emoji-dropdown {
+  right: 100%;
+  margin-right: 6px;
 }
 
 /* reply */

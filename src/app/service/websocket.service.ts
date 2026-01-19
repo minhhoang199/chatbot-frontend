@@ -56,7 +56,7 @@ export class WebsocketService {
   subscribeRoom(roomId: number): Observable<any> {
     return new Observable((observer) => {
       const sub = this.stompClient.subscribe(
-        `/topic/room/${roomId}`,
+        `/topic/rooms/${roomId}`,
         (message) => observer.next(JSON.parse(message.body))
       );
 

@@ -111,10 +111,6 @@ export class ChatWindowComponent
   }
 
   sendMessage() {
-    console.log('message:' + this.chatForm.get('contentMessage')?.value);
-    console.log(
-      'repId:' + (this.replyingMessage ? this.replyingMessage.id : null)
-    );
     let valueContent = this.chatForm.get('contentMessage')?.value;
     if (valueContent && valueContent.trim() !== '') {
       this.messageService.sendMessage(
