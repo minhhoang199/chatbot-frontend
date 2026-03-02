@@ -574,12 +574,24 @@
 
 .message.received .edited-label {
   align-self: flex-start;
-  margin-left: 6px;
+  margin-left: 42px;
   text-align: left;
 }
 
 /* Optional hover underline effect */
 .edited-label:hover {
   text-decoration: underline;
+}
+
+.message-content-div {
+  display: flex;
+  align-items: center;
+}
+
+.message-user-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    padding: 4px;
 }
 

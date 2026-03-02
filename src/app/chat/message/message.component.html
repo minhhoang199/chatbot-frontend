@@ -8,8 +8,11 @@
       </div>
       <div class="message-content-container">
         <div class="edited-label" *ngIf="_message.edited" (click)="toggleEditHistory(_message.id, $event); $event.stopPropagation()" title="View edit history">Edited</div>
-        <div class="message-content" *ngIf="_message.attachedFile === null">
+        <div class="message-content-div">
+          <img src="assets/avatar.png" class="message-user-avatar">
+          <div class="message-content" *ngIf="_message.attachedFile === null">
           {{_message.content}}
+        </div>
         </div>
         <div class="file-preview" [ngClass]="{
         'non-media': _message.attachedFile.type !== 'image' && _message.attachedFile.type !== 'video'
