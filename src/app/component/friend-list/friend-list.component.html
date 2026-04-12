@@ -1,0 +1,175 @@
+<div class="card">
+  <div class="bg-corner tl"></div>
+  <div class="bg-corner br"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">
+        <div class="app-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="85" height="85" viewBox="0 0 85 85">
+                <!-- Nền bong bóng chat -->
+                <path
+                    d="M42.5 2C20.3 2 2 18.5 2 38.2c0 8.5 3.8 16.3 10.2 22.4L8 82l17.8-8.1c5.3 2 10.8 3 16.7 3 22.2 0 40.5-16.5 40.5-36.7C83 18.5 64.7 2 42.5 2z"
+                    fill="#1877f2" />
+
+                <!-- Logo chữ M -->
+                <g transform="translate(0,85) scale(0.1,-0.1)" fill="#ffffff">
+                    <path d="M203 681 c-17 -11 -37 -29 -42 -40 -7 -12 -11 -101 -11 -230 0 -227
+        0 -228 51 -201 18 10 19 23 19 213 1 170 3 199 14 185 7 -10 44 -76 82 -148
+        67 -125 70 -130 101 -130 37 0 39 2 142 180 l61 105 0 -188 0 -188 26 -24 c15
+        -14 31 -25 35 -25 5 0 9 103 9 230 l0 230 -39 26 c-22 14 -48 24 -57 22 -11
+        -2 -49 -56 -94 -131 -87 -148 -69 -150 -163 18 -68 120 -80 129 -134 96z" />
+                </g>
+            </svg>
+        </div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="home">Home</a></li>
+      <li><a href="chat">Chat</a></li>
+      <li><a href="friends">Friends</a></li>
+      <li><a href="settings">Settings</a></li>
+    </ul>
+    <button class="btn-solid" (click)="logout()">Log out</button>
+  </nav>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- LEFT: heading + search -->
+    <div class="copy">
+      <h1>YOUR<span>FRIENDS LIST</span></h1>
+      <p>Stay connected with the people who matter most. Chat, share, and never miss a moment together.</p>
+
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search friends..." />
+      </div>
+
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-num">128</span>
+          <span class="stat-label">Friends</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">24</span>
+          <span class="stat-label">Online</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">5</span>
+          <span class="stat-label">Requests</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: friends panel -->
+    <div class="friends-panel">
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active">All Friends</button>
+        <button class="tab">Sent Requests</button>
+        <button class="tab">Received Requests <span class="tab-badge">5</span></button>
+      </div>
+
+      <!-- Friends list -->
+      <div class="friends-list">
+
+        <!-- Friend item 1 -->
+        <div class="friend-item">
+          <div class="avatar-wrap">
+            <div class="avatar" style="background: linear-gradient(135deg, #60a5fa, #1877f2);">
+              <span>JD</span>
+            </div>
+            <span class="status-dot online"></span>
+          </div>
+          <div class="friend-info">
+            <span class="friend-name">James Dawson</span>
+            <span class="friend-meta">Active now</span>
+          </div>
+          <div class="friend-actions">
+            <button class="action-btn msg">💬</button>
+            <button class="action-btn more">•••</button>
+          </div>
+        </div>
+
+        <!-- Friend item 2 -->
+        <div class="friend-item">
+          <div class="avatar-wrap">
+            <div class="avatar" style="background: linear-gradient(135deg, #f472b6, #db2777);">
+              <span>SL</span>
+            </div>
+            <span class="status-dot online"></span>
+          </div>
+          <div class="friend-info">
+            <span class="friend-name">Sophie Lee</span>
+            <span class="friend-meta">Active now</span>
+          </div>
+          <div class="friend-actions">
+            <button class="action-btn msg">💬</button>
+            <button class="action-btn more">•••</button>
+          </div>
+        </div>
+
+        <!-- Friend item 3 -->
+        <div class="friend-item">
+          <div class="avatar-wrap">
+            <div class="avatar" style="background: linear-gradient(135deg, #34d399, #059669);">
+              <span>MK</span>
+            </div>
+            <span class="status-dot online"></span>
+          </div>
+          <div class="friend-info">
+            <span class="friend-name">Mike Kim</span>
+            <span class="friend-meta">Active now</span>
+          </div>
+          <div class="friend-actions">
+            <button class="action-btn msg">💬</button>
+            <button class="action-btn more">•••</button>
+          </div>
+        </div>
+
+        <!-- Friend item 4 -->
+        <div class="friend-item">
+          <div class="avatar-wrap">
+            <div class="avatar" style="background: linear-gradient(135deg, #fbbf24, #d97706);">
+              <span>AR</span>
+            </div>
+            <span class="status-dot offline"></span>
+          </div>
+          <div class="friend-info">
+            <span class="friend-name">Ava Rodriguez</span>
+            <span class="friend-meta">Offline · 15m ago</span>
+          </div>
+          <div class="friend-actions">
+            <button class="action-btn msg">💬</button>
+            <button class="action-btn more">•••</button>
+          </div>
+        </div>
+
+        <!-- Friend item 5 -->
+        <div class="friend-item">
+          <div class="avatar-wrap">
+            <div class="avatar" style="background: linear-gradient(135deg, #a78bfa, #7c3aed);">
+              <span>TN</span>
+            </div>
+            <span class="status-dot offline"></span>
+          </div>
+          <div class="friend-info">
+            <span class="friend-name">Tom Nguyen</span>
+            <span class="friend-meta">Offline · 2h ago</span>
+          </div>
+          <div class="friend-actions">
+            <button class="action-btn msg">💬</button>
+            <button class="action-btn more">•••</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add friend CTA -->
+      <button class="btn-cta">Add New Friend <span class="arrow">→</span></button>
+    </div>
+
+  </div>
+</div>

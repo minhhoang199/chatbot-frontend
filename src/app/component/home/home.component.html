@@ -1,0 +1,121 @@
+<div class="card">
+  <div class="bg-corner tl"></div>
+  <div class="bg-corner br"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">
+        <div class="app-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="85" height="85" viewBox="0 0 85 85">
+                <!-- Nền bong bóng chat -->
+                <path
+                    d="M42.5 2C20.3 2 2 18.5 2 38.2c0 8.5 3.8 16.3 10.2 22.4L8 82l17.8-8.1c5.3 2 10.8 3 16.7 3 22.2 0 40.5-16.5 40.5-36.7C83 18.5 64.7 2 42.5 2z"
+                    fill="#1877f2" />
+
+                <!-- Logo chữ M -->
+                <g transform="translate(0,85) scale(0.1,-0.1)" fill="#ffffff">
+                    <path d="M203 681 c-17 -11 -37 -29 -42 -40 -7 -12 -11 -101 -11 -230 0 -227
+        0 -228 51 -201 18 10 19 23 19 213 1 170 3 199 14 185 7 -10 44 -76 82 -148
+        67 -125 70 -130 101 -130 37 0 39 2 142 180 l61 105 0 -188 0 -188 26 -24 c15
+        -14 31 -25 35 -25 5 0 9 103 9 230 l0 230 -39 26 c-22 14 -48 24 -57 22 -11
+        -2 -49 -56 -94 -131 -87 -148 -69 -150 -163 18 -68 120 -80 129 -134 96z" />
+                </g>
+            </svg>
+        </div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="home">Home</a></li>
+      <li><a href="chat">Chat</a></li>
+      <li><a href="friends">Friends</a></li>
+      <li><a href="settings">Settings</a></li>
+    </ul>
+    <button class="btn-solid" (click)="logout()">Log out</button>
+  </nav>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- LEFT -->
+    <div class="copy">
+      <h1>MY-MESS<span>WEBSITE</span></h1>
+      <p>A modern messaging platform designed for fast, seamless communication. Connect with friends, exchange messages in real time, and stay in touch anytime, anywhere.</p>
+      <button class="btn-cta" (click)="goToChat()">Get Started <span class="arrow">→</span></button>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="illustration">
+      <div class="blob"></div>
+
+      <!-- Leaf decorations -->
+      <div class="leaf leaf-1">🌿</div>
+      <div class="leaf leaf-2">🌿</div>
+      <div class="leaf leaf-3">🌿</div>
+
+      <!-- Floating icons -->
+      <div class="float-icon icon-bell">🔔</div>
+      <div class="float-icon icon-mail">
+        ✉️
+        <span class="badge">1</span>
+      </div>
+      <div class="float-icon icon-gear">⚙️</div>
+      <div class="float-icon icon-plus">＋</div>
+      <div class="float-icon icon-circle">○</div>
+
+      <!-- Chat bubbles -->
+      <div class="bubbles-area">
+        <div class="bubble bubble-hi">Hi</div>
+        <div class="bubble bubble-hello">Hello</div>
+      </div>
+
+      <!-- Phones + people -->
+      <div class="phones">
+
+        <!-- Phone Left -->
+        <div class="phone phone-left">
+          <div class="text-bubble tb-left">
+            <span></span><span></span><span></span>
+          </div>
+          <!-- Woman SVG -->
+          <svg class="person-svg person-woman" viewBox="0 0 90 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="45" cy="28" r="17" fill="#f5c5a3"/>
+            <ellipse cx="45" cy="18" rx="18" ry="13" fill="#2c1a0e"/>
+            <rect x="27" y="15" width="8" height="50" rx="4" fill="#2c1a0e"/>
+            <rect x="28" y="44" width="34" height="50" rx="10" fill="#5b87d4"/>
+            <path d="M28 55 Q10 45 18 75" stroke="#5b87d4" stroke-width="12" stroke-linecap="round" fill="none"/>
+            <path d="M62 55 Q80 65 72 80" stroke="#5b87d4" stroke-width="12" stroke-linecap="round" fill="none"/>
+            <rect x="30" y="90" width="14" height="55" rx="7" fill="#2a5c5a"/>
+            <rect x="46" y="90" width="14" height="55" rx="7" fill="#2a5c5a"/>
+            <circle cx="15" cy="75" r="7" fill="#f5c5a3"/>
+            <circle cx="74" cy="82" r="7" fill="#f5c5a3"/>
+          </svg>
+        </div>
+
+        <!-- Phone Right -->
+        <div class="phone phone-right">
+          <div class="text-bubble tb-right">
+            <span></span><span></span><span></span>
+          </div>
+          <!-- Man SVG -->
+          <svg class="person-svg person-man" viewBox="0 0 90 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="45" cy="28" r="17" fill="#c8956c"/>
+            <ellipse cx="45" cy="16" rx="17" ry="10" fill="#1a1a1a"/>
+            <rect x="28" y="44" width="34" height="50" rx="10" fill="#e8a020"/>
+            <path d="M28 55 Q12 65 20 80" stroke="#e8a020" stroke-width="12" stroke-linecap="round" fill="none"/>
+            <path d="M62 55 Q80 45 72 75" stroke="#e8a020" stroke-width="12" stroke-linecap="round" fill="none"/>
+            <rect x="30" y="90" width="14" height="55" rx="7" fill="#2a2a4a"/>
+            <rect x="46" y="90" width="14" height="55" rx="7" fill="#2a2a4a"/>
+            <circle cx="18" cy="80" r="7" fill="#c8956c"/>
+            <circle cx="74" cy="74" r="7" fill="#c8956c"/>
+          </svg>
+        </div>
+
+      </div>
+
+      <!-- Slide arrows -->
+      <div class="slide-arrows">
+        <button class="slide-btn prev">◀</button>
+        <button class="slide-btn next">▶</button>
+      </div>
+    </div>
+  </div>
+</div>
