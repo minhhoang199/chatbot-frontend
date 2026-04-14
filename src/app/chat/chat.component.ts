@@ -44,4 +44,8 @@ export class ChatComponent implements OnInit {
   closeCreateGroupRoom(): void {
     this.isCreatingGroupRoom = false;
   }
+
+  navigateTo(path: string): void {
+    this.router.navigate([path]);
+  }
 }

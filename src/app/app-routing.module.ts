@@ -4,6 +4,9 @@ import { SignInComponent } from './component/sign-in/sign-in.component';
 import { AuthGuard } from './guard/auth-guard.guard';
 import { OtpVerificationComponent } from './component/otp-verification/otp-verification.component';
 import { ForgotPasswordComponent } from './component/forgot-password/forgot-password.component';
+import { HomeComponent } from './component/home/home.component';
+import { ProfileSettingComponent } from './component/profile-setting/profile-setting.component';
+import { FriendListComponent } from './component/friend-list/friend-list.component';
 
 const routes: Routes = [
   {
@@ -17,6 +20,21 @@ const routes: Routes = [
   {
     path: "forgot-password",
     component: ForgotPasswordComponent
+  },
+  {
+    path: "home",
+    component: HomeComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "settings",
+    component: ProfileSettingComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "friends",
+    component: FriendListComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: "chat",

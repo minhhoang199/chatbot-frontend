@@ -44,6 +44,8 @@ export class ChatListComponent implements OnInit {
             const index = this.rooms.findIndex((r) => r.id === room.id);
             this.sortRoomsByLastMessageTime(index, room.lastMessageContent, room.lastMessageTime);
           });
+
+        this.navigateToRoom(this.rooms[0].id); // Mở phòng đầu tiên khi vào trang chat
       }
     });
 
