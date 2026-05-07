@@ -31,7 +31,7 @@ export class GroupRoomDialogComponent implements OnInit {
   ngOnInit(): void {
     this.currentEmail = this.authService.getEmail();
     this.filteredFriends = [];
-    this.userService.getFriends().subscribe((users) => {
+    this.userService.getRecentUserChat().subscribe((users) => {
       this.friends = users;
       this.filteredFriends = users;
     });

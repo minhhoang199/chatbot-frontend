@@ -47,7 +47,6 @@
 .bg-corner.br { bottom: -60px; right: -40px; }
 
 /* ── NAV ── */
-/* ── NAV ── */
 nav {
   display: flex;
   align-items: center;
@@ -94,7 +93,9 @@ nav {
 .nav-links a:hover {
   color: var(--blue-deep);
 }
-
+.nav-links a.active {
+  color: var(--blue-deep);
+}
 .btn-outline {
   border: 2.25px solid var(--text-dark);
   background: transparent;

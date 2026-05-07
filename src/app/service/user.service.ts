@@ -14,6 +14,14 @@ export class UserService {
   constructor(private httpClient: HttpClient) { }
 
   public getFriends(): Observable<User[]>{
-      return this.httpClient.get<GetUsersResponse>(userAPIUrl + "get-friends").pipe(map(response => response.data));
+      return this.httpClient.get<GetUsersResponse>(userAPIUrl + "friends").pipe(map(response => response.data));
+  }
+
+  public getRecentUserChat(): Observable<User[]>{
+      return this.httpClient.get<GetUsersResponse>(userAPIUrl + "recent-chat-user").pipe(map(response => response.data));
+  }
+
+  public searchUsers(email: string): Observable<User[]> {
+    return this.httpClient.get<GetUsersResponse>(userAPIUrl + 'search-by-email?email=' + email).pipe(map(response => response.data));
   }
 }

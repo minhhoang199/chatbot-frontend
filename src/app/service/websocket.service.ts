@@ -24,20 +24,64 @@ export class WebsocketService {
   public connectAndSubscribeRoomIdTopic(
     roomId: number,
     isNewClient: boolean,
-    username: string
+    username: string,
   ): Observable<any> {
-    const socket = new SockJS(serverUrl);
-    this.stompClient = Stomp.over(socket);
+    const maxRetries = 3;
+    const connectTimeoutMs = 100;
 
     return new Observable<any>((observer) => {
-      this.stompClient.connect({}, () => {
-        console.log('connect completed');
-        this.subscribeMessagesByRoomId(roomId, isNewClient, username).subscribe({
-          next: (message) => observer.next(message),
-          error: (error) => observer.error(error),
-          complete: () => observer.complete(),
-        });
-      });
+      const attemptConnect = (retriesLeft: number) => {
+        const socket = new SockJS(serverUrl);
+        this.stompClient = Stomp.over(socket);
+
+        this.stompClient.connect(
+          {},
+          () => {
+            const waitForConnected = (waitRetries: number) => {
+              if (this.stompClient.connected) {
+                this.subscribeMessagesByRoomId(
+                  roomId,
+                  isNewClient,
+                  username,
+                ).subscribe({
+                  next: (message) => observer.next(message),
+                  error: (error) => observer.error(error),
+                  complete: () => observer.complete(),
+                });
+                console.log('connect roomId topic completed: ' + roomId);
+              } else if (waitRetries > 0) {
+                console.log(
+                  'Still waiting for STOMP connected state, retrying...',
+                );
+                setTimeout(
+                  () => waitForConnected(waitRetries - 1),
+                  connectTimeoutMs,
+                );
+              } else {
+                observer.error(
+                  new Error(
+                    'STOMP connected state not reached after connect callback',
+                  ),
+                );
+              }
+            };
+
+            waitForConnected(5);
+          },
+          (error) => {
+            if (retriesLeft > 0) {
+              console.warn(
+                `connect failed, retrying ${retriesLeft} more time(s)`,
+              );
+              attemptConnect(retriesLeft - 1);
+            } else {
+              observer.error(error);
+            }
+          },
+        );
+      };
+
+      attemptConnect(maxRetries);
     });
   }
 
@@ -57,7 +101,7 @@ export class WebsocketService {
     return new Observable((observer) => {
       const sub = this.stompClient.subscribe(
         `/topic/rooms/${roomId}`,
-        (message) => observer.next(JSON.parse(message.body))
+        (message) => observer.next(JSON.parse(message.body)),
       );
 
       return () => sub.unsubscribe();
@@ -81,11 +125,11 @@ export class WebsocketService {
   public subscribeMessagesByRoomId(
     roomId: number, //lấy từ url
     isNewClient: boolean, //gọi API từ Backend check xem user hiện tại có phải là user mới ko, nếu có trả ra thêm username
-    username: string //lấy từ API phía trên
+    username: string, //lấy từ API phía trên
   ): Observable<any> {
     const subject = new Subject<any>();
     // Subscribe to the Public Topic
-    this.stompClient.subscribe('/topic/room/' + roomId, (payload: any) => {
+    this.stompClient.subscribe('/topic/rooms/' + roomId, (payload: any) => {
       subject.next(JSON.parse(payload.body));
     });
 
@@ -94,7 +138,7 @@ export class WebsocketService {
       this.stompClient.send(
         '/app/chat.addUser',
         {},
-        JSON.stringify({ sender: username, type: 'JOIN' })
+        JSON.stringify({ sender: username, type: 'JOIN' }),
       );
     }
     console.log('subscribe room: ' + roomId);
@@ -106,7 +150,7 @@ export class WebsocketService {
       this.stompClient.send(
         '/app/chat.sendMessage',
         {},
-        JSON.stringify(message)
+        JSON.stringify(message),
       );
       console.log('message send to server');
     }
@@ -129,21 +173,75 @@ export class WebsocketService {
   }
 
   //connect and subscribe userId topic to receive new room invitations
-  public connectAndSubscribeUserIdTopic(
-    userId: number,
-  ): Observable<any> {
+  public connectAndSubscribeUserIdTopic(userId: number): Observable<any> {
     const socket = new SockJS(serverUrl);
     this.stompClient = Stomp.over(socket);
 
     return new Observable<any>((observer) => {
       this.stompClient.connect({}, () => {
-        console.log('connect completed');
         this.subscribeRoomsByUser(userId).subscribe({
           next: (message) => observer.next(message),
           error: (error) => observer.error(error),
           complete: () => observer.complete(),
         });
+        console.log('connect userId topic completed: ' + userId);
       });
+    });
+
+    const maxRetries = 3;
+    const connectTimeoutMs = 100;
+
+    return new Observable<any>((observer) => {
+      const attemptConnect = (retriesLeft: number) => {
+        const socket = new SockJS(serverUrl);
+        this.stompClient = Stomp.over(socket);
+
+        this.stompClient.connect(
+          {},
+          () => {
+            const waitForConnected = (waitRetries: number) => {
+              if (this.stompClient.connected) {
+                this.stompClient.connect({}, () => {
+                  this.subscribeRoomsByUser(userId).subscribe({
+                    next: (message) => observer.next(message),
+                    error: (error) => observer.error(error),
+                    complete: () => observer.complete(),
+                  });
+                  console.log('connect userId topic completed: ' + userId);
+                });
+              } else if (waitRetries > 0) {
+                console.log(
+                  'Still waiting for STOMP connected state, retrying...',
+                );
+                setTimeout(
+                  () => waitForConnected(waitRetries - 1),
+                  connectTimeoutMs,
+                );
+              } else {
+                observer.error(
+                  new Error(
+                    'STOMP connected state not reached after connect callback',
+                  ),
+                );
+              }
+            };
+
+            waitForConnected(5);
+          },
+          (error) => {
+            if (retriesLeft > 0) {
+              console.warn(
+                `connect failed, retrying ${retriesLeft} more time(s)`,
+              );
+              attemptConnect(retriesLeft - 1);
+            } else {
+              observer.error(error);
+            }
+          },
+        );
+      };
+
+      attemptConnect(maxRetries);
     });
   }
 
@@ -155,7 +253,7 @@ export class WebsocketService {
     return new Observable((observer) => {
       const sub = this.stompClient.subscribe(
         `/topic/user/${userId}`,
-        (message) => observer.next(JSON.parse(message.body))
+        (message) => observer.next(JSON.parse(message.body)),
       );
 
       return () => sub.unsubscribe();

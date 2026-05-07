@@ -83,6 +83,9 @@ nav {
 .nav-links a:hover {
   color: var(--blue-deep);
 }
+.nav-links a.active {
+  color: var(--blue-deep);
+}
 
 .btn-outline {
   border: 2.25px solid var(--text-dark);
@@ -350,27 +353,6 @@ nav {
 
 .tb-left  { top: 18px; left: -12px; }
 .tb-right { top: 18px; right: -12px; }
-
-/* Pagination dots */
-.nav-dots {
-  position: absolute;
-  right: -27px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 10.5px;
-  z-index: 10;
-}
-.dot {
-  width: 10.5px;
-  height: 10.5px;
-  border-radius: 50%;
-  background: var(--blue-light);
-}
-.dot.active {
-  background: var(--blue-deep);
-}
 
 /* Slide arrows */
 .slide-arrows {

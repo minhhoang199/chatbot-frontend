@@ -45,6 +45,16 @@ export class ChatComponent implements OnInit {
     this.isCreatingGroupRoom = false;
   }
 
+  isSearchingEmail: boolean = false;
+
+  openSearchingEmail(): void {
+    this.isSearchingEmail = true;
+  }
+
+  closeSearchingEmail(): void {
+    this.isSearchingEmail = false;
+  }
+
   navigateTo(path: string): void {
     this.router.navigate([path]);
   }

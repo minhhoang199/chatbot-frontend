@@ -1,0 +1,38 @@
+<!-- backdrop -->
+<div class="cg-backdrop">
+  <!-- modal -->
+  <div class="cg-modal" role="dialog" aria-modal="true" aria-label="Search users">
+    <header class="cg-header">
+      <h3>Searching users</h3>
+      <button class="btn-ghost" (click)="closePopup()" aria-label="Close">✕</button>
+    </header>
+
+    <div class="cg-body">
+      <!-- search -->
+      <label class="field">
+        <input type="search" placeholder="Search by email..."   
+        [(ngModel)]="searchEmail"
+        (keypress)="onKeyPress($event)"/>
+      </label>
+
+      <!-- contact list -->
+      <div class="contact-list" role="list">
+        <div *ngFor="let user of searchResult" class="contact-row">
+          <label class="contact-inner" (click)="$event.stopPropagation()">
+            <div class="avatar">
+              <img src="assets/avatar.png" alt="{{user.username}}" />
+            </div>
+            <div class="meta">
+              <div class="name">{{ user.username }}</div>
+              <div class="subtitle" *ngIf="user.email">{{ user.email }}</div>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <footer class="cg-footer">
+      <button class="btn-outline" (click)="closePopup()">Cancel</button>
+    </footer>
+  </div>
+</div>

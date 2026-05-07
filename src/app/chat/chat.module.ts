@@ -19,6 +19,7 @@ import { PrivateRoomDialogComponent } from "./private-room-dialog/private-room-d
 import { GroupRoomDialogComponent } from "./group-room-dialog/group-room-dialog.component";
 import { MatDialogActions, MatDialogContent } from "@angular/material/dialog";
 import { VideoCallComponent } from "./video-call/video-call.component";
+import { FindUserDialogComponent } from './find-user-dialog/find-user-dialog.component';
 
 @NgModule({
     declarations: [
@@ -32,6 +33,7 @@ import { VideoCallComponent } from "./video-call/video-call.component";
       PrivateRoomDialogComponent,
       GroupRoomDialogComponent,
       VideoCallComponent,
+      FindUserDialogComponent,
     ],
     imports: [
     CommonModule,

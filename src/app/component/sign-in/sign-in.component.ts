@@ -73,7 +73,7 @@ export class SignInComponent implements OnInit {
     if (response && response.data && response.code && response.code === "TD-000") {
       console.log(response.data);
       this.authService.setToken(response);
-      this.router.navigate(['/chat']);
+      this.router.navigate(['/home']);
     } else {
     }
   }, error => {
