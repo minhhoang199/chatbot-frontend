@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messenger Style Menu</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h3>Chat</h3>
+        </div>
+        
+        <div class="messages-container">
+            <!-- Message 1 - Received -->
+            <div class="message-wrapper received">
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <p>Hey, how are you doing?</p>
+                    </div>
+                    <div class="message-actions">
+                        <button class="menu-trigger" onclick="toggleMenu(event, 'menu1')">
+                            <span class="dots">⋯</span>
+                        </button>
+                        <div class="context-menu" id="menu1">
+                            <div class="menu-item" onclick="handleAction('reply')">
+                                <span class="menu-icon">↩️</span>
+                                <span>Reply</span>
+                            </div>
+                            <div class="menu-item" onclick="handleAction('forward')">
+                                <span class="menu-icon">➡️</span>
+                                <span>Forward</span>
+                            </div>
+                            <div class="menu-item" onclick="handleAction('pin')">
+                                <span class="menu-icon">📌</span>
+                                <span>Pin</span>
+                            </div>
+                            <div class="menu-item" onclick="handleAction('report')">
+                                <span class="menu-icon">🚩</span>
+                                <span>Report</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message 2 - Sent -->
+            <div class="message-wrapper sent">
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <p>I'm doing great! Thanks for asking. How about you?</p>
+                    </div>
+                    <div class="message-actions">
+                        <button class="menu-trigger" onclick="toggleMenu(event, 'menu2')">
+                            <span class="dots">⋯</span>
+                        </button>
+                        <div class="context-menu" id="menu2">
+                            <div class="menu-item" onclick="handleAction('unsend')">
+                                <span class="menu-icon">↶</span>
+                                <span>Unsend</span>
+                            </div>
+                            <div class="menu-item" onclick="handleAction('forward')">
+                                <span class="menu-icon">➡️</span>
+                                <span>Forward</span>
+                            </div>
+                            <div class="menu-item" onclick="handleAction('pin')">
+                                <span class="menu-icon">📌</span>
+                                <span>Pin</span>
+                            </div>
+                            <div class="menu-item" onclick="handleAction('report')">
+                                <span class="menu-icon">🚩</span>
+                                <span>Report</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message 3 - Received -->
+            <div class="message-wrapper received">
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <p>That's awesome! Want to hang out this weekend?</p>
+                    </div>
+                    <div class="message-actions">
+                        <button class="menu-trigger" onclick="toggleMenu(event, 'menu3')">
+                            <span class="dots">⋯</span>
+                        </button>
+                        <div class="context-menu" id="menu3">
+                            <div class="menu-item" onclick="handleAction('reply')">
+                                <span class="menu-icon">↩️</span>
+                                <span>Reply</span>
+                            </div>
+                            <div class="menu-item" onclick="handleAction('forward')">
+                                <span class="menu-icon">➡️</span>
+                                <span>Forward</span>
+                            </div>
+                            <div class="menu-item" onclick="handleAction('pin')">
+                                <span class="menu-icon">📌</span>
+                                <span>Pin</span>
+                            </div>
+                            <div class="menu-item" onclick="handleAction('report')">
+                                <span class="menu-icon">🚩</span>
+                                <span>Report</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
