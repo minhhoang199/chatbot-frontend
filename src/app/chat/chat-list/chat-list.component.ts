@@ -2,7 +2,7 @@ import { AuthService } from './../../service/auth.service';
 import { RoomService } from './../../service/room.service';
 import { Component, OnInit } from '@angular/core';
 import { Room } from '../../model/room.model';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Message } from '../../model/message.model';
 import { WebsocketService } from '../../service/websocket.service';
 
@@ -83,6 +83,10 @@ export class ChatListComponent implements OnInit {
     this.activeTab = emojiKey;
     if (emojiKey === 'All') {
       this.filteredRooms = this.rooms;
+    } else if (emojiKey === 'Private') {
+      this.filteredRooms = this.rooms.filter(
+        (room) => room.roomType === 'PRIVATE_CHAT'
+      );
     } else if (emojiKey === 'Groups') {
       this.filteredRooms = this.rooms.filter(
         (room) => room.roomType === 'GROUP_CHAT'

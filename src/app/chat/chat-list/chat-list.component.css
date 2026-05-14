@@ -44,7 +44,7 @@
 
 .chat-filters {
     display: flex;
-    gap: 8px;
+    justify-content: space-around;
     padding: 8px 18px;
     /* border-bottom: 1px solid #dadde1; */
 }

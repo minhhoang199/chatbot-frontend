@@ -3,6 +3,7 @@ import { RoomService } from './../../service/room.service';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { User } from '../../model/user.model';
 import { UserService } from '../../service/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-find-user-dialog',
@@ -23,38 +24,17 @@ export class FindUserDialogComponent implements OnInit {
   constructor(
     private userService: UserService,
     private roomService: RoomService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
   ) {}
-  
+
   ngOnInit(): void {
     this.currentEmail = this.authService.getEmail();
     this.searchResult = [];
   }
 
-  updateSelected() {
-    this.selectedUser = this.searchResult.filter((f) => f.selected)[0];
-  }
-
-  removeSelected(friend: User) {
-    friend.selected = false;
-    this.updateSelected();
-  }
-
   closePopup() {
     this.close.emit();
-  }
-
-  createGroup() {
-    this.roomService.createRoom(this.selectedUser.username + '-' + this.currentEmail, 'PRIVATE_CHAT', [this.selectedUser.email, this.currentEmail]).subscribe({
-      next: (room) => {
-        console.log('Room created:', room);
-        // this.roomService.notifyRoomCreated(room);
-        this.closePopup();
-      },
-      error: (error) => {
-        console.error('Error creating room:', error);
-      }
-    });
   }
 
   loading = false;
@@ -74,5 +54,18 @@ export class FindUserDialogComponent implements OnInit {
     if (event.key === 'Enter') {
       this.onSearch();
     }
+  }
+
+  openChat(selectedEmail: string) {
+    this.roomService.getRoomByEmail(selectedEmail).subscribe({
+      next: (room) => {
+        if (room) {
+          this.router.navigate(['/chat', room.id]);
+          this.closePopup();
+        } else {
+          console.warn('No existing room found for', selectedEmail);
+        }
+      }
+    });
   }
 }

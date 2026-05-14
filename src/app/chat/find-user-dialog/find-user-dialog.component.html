@@ -18,18 +18,23 @@
       <!-- contact list -->
       <div class="contact-list" role="list">
         <div *ngFor="let user of searchResult" class="contact-row">
-          <label class="contact-inner" (click)="$event.stopPropagation()">
-            <div class="avatar">
-              <img src="assets/avatar.png" alt="{{user.username}}" />
+          <div class="friend-item">
+            <label class="contact-inner" (click)="$event.stopPropagation()">
+              <div class="avatar">
+                <img src="assets/avatar.png" alt="{{user.username}}" />
+              </div>
+              <div class="meta">
+                <div class="name">{{ user.username }}</div>
+                <div class="subtitle" *ngIf="user.email">{{ user.email }}</div>
+              </div>
+            </label>
+            <div class="friend-actions">
+              <button class="action-btn msg" (click)="openChat(user.email)">💬</button>
             </div>
-            <div class="meta">
-              <div class="name">{{ user.username }}</div>
-              <div class="subtitle" *ngIf="user.email">{{ user.email }}</div>
-            </div>
-          </label>
+          </div>
         </div>
       </div>
-    </div>
+      </div>
 
     <footer class="cg-footer">
       <button class="btn-outline" (click)="closePopup()">Cancel</button>

@@ -1,8 +1,8 @@
 <div class="chat-filters">
     <span (click)="setActiveTab('All')" class="filter" [class.active]="activeTab === 'All'">All</span>
-    <span (click)="setActiveTab('Unread')" class="filter" [class.active]="activeTab === 'Unread'">Unread</span>
+    <span (click)="setActiveTab('Private')" class="filter" [class.active]="activeTab === 'Private'">Private</span>
     <span (click)="setActiveTab('Groups')" class="filter" [class.active]="activeTab === 'Groups'">Groups</span>
-    <span (click)="setActiveTab('Communities')" class="filter" [class.active]="activeTab === 'Communities'">Communities</span>
+    <!-- <span (click)="setActiveTab('Communities')" class="filter" [class.active]="activeTab === 'Communities'">Communities</span> -->
 </div>
 <div class="chat-list">
     <div *ngFor="let room of filteredRooms">

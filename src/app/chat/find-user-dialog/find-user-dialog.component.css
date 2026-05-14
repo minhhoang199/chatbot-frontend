@@ -168,3 +168,37 @@
   cursor: pointer;
   font-size: 18px;
 }
+/* Action buttons */
+.friend-actions {
+  display: flex;
+  gap: 9px;
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+.friend-item:hover .friend-actions { opacity: 1; }
+
+.action-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: background 0.15s;
+}
+.action-btn.msg  { background: var(--blue-pale);  color: var(--blue-deep); }
+.action-btn:hover { filter: brightness(0.94); }
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  /* gap: 14px;
+  padding: 10px 12px; */
+  border-radius: 14px;
+  transition: background 0.18s;
+  cursor: pointer;
+}
+.friend-item:hover { background: var(--blue-pale); }

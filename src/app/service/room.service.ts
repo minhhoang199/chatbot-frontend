@@ -38,4 +38,10 @@ export class RoomService {
   public onRoomCreated() {
     return this.roomsUpdated.asObservable();
   }
+
+  getRoomByEmail(selectedEmail: string): Observable<Room | null> {
+    return this.httpClient
+      .get<GetRoomDetailResponse>(roomAPIUrl + 'get-by-email?email=' + selectedEmail)
+      .pipe(map((response) => response.data || null));
+  }
 }
