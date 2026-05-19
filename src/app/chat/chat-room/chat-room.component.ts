@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Room } from '../../model/room.model';
+import { RoomService } from '../../service/room.service';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-chat-room',
@@ -9,11 +11,28 @@ import { Room } from '../../model/room.model';
 export class ChatRoomComponent implements OnInit{
   @Input() room!: Room;
   lastMessageTime!: string;
+  roomName!: string;
+
+  constructor(
+    private roomService: RoomService,
+    private authService: AuthService
+  ) {}
+
   ngOnInit(): void {
+    const email = this.authService.getEmail();
     this.lastMessageTime = this.room.lastMessageTime == null ? '' : this.convertLastMessageTime(this.room.lastMessageTime);
+    if(this.room.roomType === 'PRIVATE_CHAT') {
+      const objName = JSON.parse(this.room.name);
+      const mapName = new Map<string, string>(Object.entries(objName));
+      const otherUserEmail = this.room.privateKey ? this.room.privateKey.split("-").find(e => e !== email) : '';
+      if(otherUserEmail) this.roomName = mapName.get(otherUserEmail) || this.room.name;
+      else this.roomName = this.room.name;
+    } else {
+      this.roomName = this.room.name;
+    }
   }
 
-  //TODO: set lại lastMessageTime mỗi khi thêm mới message
+  //TODO: set lại lastMessageTime mỗi khi thêm mới message
   convertLastMessageTime(lastMessageTime: string): string {
     // Create a Date object from the createdAt string
     const dateObject = new Date(lastMessageTime);

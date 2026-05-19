@@ -40,6 +40,7 @@ export class ChatWindowComponent
   isVideoCallActive = false;
   currentUserName: string = '';
   attachedFiles: AttachedFile[] = [];
+  roomName!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -59,14 +60,26 @@ export class ChatWindowComponent
   }
 
   ngOnInit(): void {
+    const email = this.authService.getEmail();
     this.routeSub = this.route.params.subscribe((params) => {
       this.roomId = Number(this.route.snapshot.paramMap.get('roomId'));
       if (this.roomId != null) {
         this.roomService.getRoomDetail(this.roomId).subscribe((room) => {
           if (room) {
             this.room = room;
+            if (this.room.roomType === 'PRIVATE_CHAT') {
+              const objName = JSON.parse(this.room.name);
+              const mapName = new Map<string, string>(Object.entries(objName));
+              const otherUserEmail = this.room.privateKey
+                ? this.room.privateKey.split('-').find((e) => e !== email)
+                : '';
+              if (otherUserEmail)
+                this.roomName = mapName.get(otherUserEmail) || this.room.name;
+              else this.roomName = this.room.name;
+            } else {
+              this.roomName = this.room.name;
+            }
           }
-          console.log('Fetched room details:', this.room);
         });
       }
       if (this.roomId != null) {
