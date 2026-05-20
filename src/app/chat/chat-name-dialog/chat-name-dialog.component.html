@@ -1,0 +1,23 @@
+<div class="cg-backdrop">
+  <div class="cg-modal" role="dialog" aria-modal="true" aria-label="Change chat name">
+    <header class="cg-header">
+      <h3>Change chat name</h3>
+      <button class="btn-ghost" (click)="closePopup()" aria-label="Close">✕</button>
+    </header>
+
+    <div class="cg-body">
+      <label class="field">
+        <input
+          type="text"
+          placeholder="Enter new chat name..."
+          [(ngModel)]="chatName"
+        />
+      </label>
+    </div>
+
+    <footer class="cg-footer">
+      <button class="btn-outline" (click)="closePopup()">Cancel</button>
+      <button class="btn-primary" [disabled]="!chatName.trim()" (click)="saveName()">Save</button>
+    </footer>
+  </div>
+</div>

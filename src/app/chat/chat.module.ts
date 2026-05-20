@@ -17,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from "@angular/material/input";
 import { PrivateRoomDialogComponent } from "./private-room-dialog/private-room-dialog.component";
 import { GroupRoomDialogComponent } from "./group-room-dialog/group-room-dialog.component";
+import { ChatNameDialogComponent } from './chat-name-dialog/chat-name-dialog.component';
 import { MatDialogActions, MatDialogContent } from "@angular/material/dialog";
 import { VideoCallComponent } from "./video-call/video-call.component";
 import { FindUserDialogComponent } from './find-user-dialog/find-user-dialog.component';
@@ -32,6 +33,7 @@ import { FindUserDialogComponent } from './find-user-dialog/find-user-dialog.com
       SearchPopupComponent,
       PrivateRoomDialogComponent,
       GroupRoomDialogComponent,
+      ChatNameDialogComponent,
       VideoCallComponent,
       FindUserDialogComponent,
     ],

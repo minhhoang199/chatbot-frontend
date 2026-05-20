@@ -222,6 +222,27 @@ export class ChatWindowComponent
     window.open(url, '_blank');
   }
 
+  showChatNameDialog = false;
+
+  openChatNameDialog(): void {
+    if (this.room?.roomType === 'GROUP_CHAT') {
+      this.showChatNameDialog = true;
+    }
+  }
+
+  closeChatNameDialog(): void {
+    this.showChatNameDialog = false;
+  }
+
+  saveChatName(name: string): void {
+    this.roomName = name;
+    // notify other components (like chat list) about the name change
+    if (this.roomId != null) {
+      this.roomService.notifyRoomUpdated(this.roomId, name);
+    }
+    this.closeChatNameDialog();
+  }
+
   trackByMessageId(index: number, message: any): string {
     return message.id;
   }

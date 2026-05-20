@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, map } from 'rxjs';
 import { GetRoomDetailResponse } from '../model/get-room-detail-response';
 import { RoomRequest } from '../model/room-request.model';
 import { environment } from '../../environments/environment';
+import { BaseResponse } from '../model/base-response';
 
 const roomAPIUrl = environment.apiBaseUrl + '/v1/rooms/';
 @Injectable({
@@ -13,6 +14,7 @@ const roomAPIUrl = environment.apiBaseUrl + '/v1/rooms/';
 })
 export class RoomService {
   private roomsUpdated = new BehaviorSubject<Room | null>(null);
+  private roomUpdated = new BehaviorSubject<{ roomId: number; name: string } | null>(null);
   constructor(private httpClient: HttpClient) {}
 
   public getAllRooms(userId: number): Observable<Room[]> {
@@ -39,9 +41,21 @@ export class RoomService {
     return this.roomsUpdated.asObservable();
   }
 
+  public notifyRoomUpdated(roomId: number, name: string) {
+    this.roomUpdated.next({ roomId, name });
+  }
+
+  public onRoomUpdated() {
+    return this.roomUpdated.asObservable();
+  }
+
   getRoomByEmail(selectedEmail: string): Observable<Room | null> {
     return this.httpClient
       .get<GetRoomDetailResponse>(roomAPIUrl + 'get-by-email?email=' + selectedEmail)
       .pipe(map((response) => response.data || null));
+  }
+
+  public updateRoomName(roomId: number, newName: string): Observable<String> {
+    return this.httpClient.put<BaseResponse>(roomAPIUrl + roomId + '/change-name', { name: newName }).pipe(map((response) => response.code));
   }
 }

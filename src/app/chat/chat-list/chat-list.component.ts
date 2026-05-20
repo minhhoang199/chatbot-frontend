@@ -54,6 +54,16 @@ export class ChatListComponent implements OnInit {
       this.onNewMessage(message);
     });
 
+    // Listen for room updates (e.g., name changes)
+    this.roomService.onRoomUpdated().subscribe((update) => {
+      if (!update) return;
+      const idx = this.rooms.findIndex((r) => r.id === update.roomId);
+      if (idx !== -1) {
+        this.rooms[idx] = { ...this.rooms[idx], name: update.name } as Room;
+        this.setActiveTab(this.activeTab);
+      }
+    });
+
     // this.roomService.onRoomCreated().subscribe((newRoom) => {
     //   if (newRoom) {
     //     this.rooms = [newRoom, ...this.rooms];
@@ -98,8 +108,18 @@ export class ChatListComponent implements OnInit {
 
   onNewMessage(message: Message): void {
     const index = this.rooms.findIndex((r) => r.id === message.roomId);
-    console.log('Room index for new message:', index);
-    if (index === -1) return;
+    if (index === -1) {
+      this.roomService.getRoomDetail(message.roomId).subscribe({
+        next: (room) => {
+          if (room) {
+            room.lastMessageContent = message.content;
+            room.lastMessageTime = message.createdAt;
+            this.rooms.unshift(room);
+          }
+        }
+      });
+      return;
+    }
 
     this.sortRoomsByLastMessageTime(
       index,
