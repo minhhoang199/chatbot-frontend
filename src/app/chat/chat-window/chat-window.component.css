@@ -738,6 +738,14 @@
     background: #d8dadf;
 }
 
+/* Members overlay */
+.members-overlay{
+    position: absolute;
+    right: 520px; /* place to left of sidebar */
+    top: 80px;
+    z-index: 1200;
+}
+
 .section-item {
     padding: 8px;
     margin: -6px;

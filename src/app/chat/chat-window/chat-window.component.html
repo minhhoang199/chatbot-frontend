@@ -1,7 +1,7 @@
 <div class="chat-window-container">
   <div class="chat-main">
     <div class="chat-header">
-      <div class="chat-header-info">
+      <div class="chat-header-info" (click)="toggleMembersPanel()">
         <img src="assets/avatar.png" class="header-avatar">
         <div class="header-text">
           <div class="header-name">{{ roomName }}</div>
@@ -22,6 +22,8 @@
         <i class="fas fa-info-circle"></i>
       </div>
     </div>
+
+    <app-members-list *ngIf="showMembersPanel" [roomId]="roomId" (close)="closeMembersPanel()" class="members-overlay"></app-members-list>
 
     <div #messageContainer class="chat-messages" (scroll)="onScroll($event)">
       <div *ngFor="let message of messages; trackBy: trackByMessageId" [attr.id]="'msg-' + message.id">

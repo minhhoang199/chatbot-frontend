@@ -41,6 +41,7 @@ export class ChatWindowComponent
   currentUserName: string = '';
   attachedFiles: AttachedFile[] = [];
   roomName!: string;
+  showMembersPanel = false;
 
   constructor(
     private fb: FormBuilder,
@@ -228,6 +229,14 @@ export class ChatWindowComponent
     if (this.room?.roomType === 'GROUP_CHAT') {
       this.showChatNameDialog = true;
     }
+  }
+
+  toggleMembersPanel(): void {
+    this.showMembersPanel = !this.showMembersPanel;
+  }
+
+  closeMembersPanel(): void {
+    this.showMembersPanel = false;
   }
 
   closeChatNameDialog(): void {

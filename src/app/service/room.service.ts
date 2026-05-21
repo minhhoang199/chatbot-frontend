@@ -58,4 +58,23 @@ export class RoomService {
   public updateRoomName(roomId: number, newName: string): Observable<String> {
     return this.httpClient.put<BaseResponse>(roomAPIUrl + roomId + '/change-name', { name: newName }).pipe(map((response) => response.code));
   }
+
+  // Members management
+  public getMembers(roomId: number): Observable<any[]> {
+    return this.httpClient
+      .get<any>(roomAPIUrl + roomId + '/members')
+      .pipe(map((response) => response.data || []));
+  }
+
+  public addMembers(roomId: number, emails: string[]): Observable<string> {
+    return this.httpClient
+      .post<BaseResponse>(roomAPIUrl + roomId + '/members', { emails: emails })
+      .pipe(map((response) => response.code));
+  }
+
+  public removeMembers(roomId: number, emails: string[]): Observable<string> {
+    return this.httpClient
+      .put<BaseResponse>(roomAPIUrl + 'remove-users', { roomId: roomId, emails: emails })
+      .pipe(map((response) => response.code));
+  }
 }
