@@ -1,0 +1,49 @@
+<!-- backdrop -->
+<div class="ap-backdrop">
+  <!-- modal -->
+  <div class="ap-modal" role="dialog" aria-modal="true" aria-label="Add people">
+    <header class="ap-header">
+      <h3>Add People</h3>
+      <button class="btn-ghost" (click)="closePopup()" aria-label="Close">✕</button>
+    </header>
+
+    <div class="ap-body">
+      <!-- search -->
+      <label class="field">
+        <input type="search" placeholder="Search by email..."   
+        [(ngModel)]="searchEmail"
+        (ngModelChange)="onSearchChange()"/>
+      </label>
+
+      <!-- list header -->
+      <div class="list-header">
+        <div class="title">Current Chats</div>
+        <div class="selected-count">{{ selectedFriends.length }} selected</div>
+      </div>
+
+      <!-- contact list -->
+      <div class="contact-list" role="list">
+        <div *ngFor="let user of filteredFriends" class="contact-row" (click)="toggleSelect(user)" [class.selected]="isSelected(user)">
+          <label class="contact-inner" (click)="$event.stopPropagation()">
+            <input type="checkbox" (click)="toggleSelect(user); $event.stopPropagation()" [checked]="isSelected(user)"/>
+            <div class="avatar">
+              <img src="assets/avatar.png" alt="{{user.username}}" />
+            </div>
+            <div class="meta">
+              <div class="name">{{ user.username }}</div>
+              <div class="subtitle" *ngIf="user.email">{{ user.email }}</div>
+            </div>
+          </label>
+        </div>
+
+        <!-- no results -->
+        <div class="no-result" *ngIf="filteredFriends.length === 0">No matching results</div>
+      </div>
+    </div>
+
+    <footer class="ap-footer">
+      <button class="btn-outline" (click)="closePopup()">Cancel</button>
+      <button class="btn-primary" [disabled]="selectedFriends.length < 1" (click)="addPeople()">Add People</button>
+    </footer>
+  </div>
+</div>

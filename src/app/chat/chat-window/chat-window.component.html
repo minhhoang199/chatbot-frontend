@@ -15,7 +15,8 @@
         <button (click)="openSearchPopup()" class="video-btn">
           <i class="fas fa-search"></i>
         </button>
-        <app-search-popup *ngIf="showPopup" [roomId]="roomId" (close)="closeSearchPopup()" (clickMessage)="scrollToMessageFromSearchPopup($event)"></app-search-popup>
+        <app-search-popup *ngIf="showPopup" [roomId]="roomId" (close)="closeSearchPopup()"
+          (clickMessage)="scrollToMessageFromSearchPopup($event)"></app-search-popup>
         <button (click)="startVideoCall()" class="video-btn">
           <i class="fas fa-video"></i>
         </button>
@@ -23,7 +24,8 @@
       </div>
     </div>
 
-    <app-members-list *ngIf="showMembersPanel" [roomId]="roomId" (close)="closeMembersPanel()" class="members-overlay"></app-members-list>
+    <app-members-list *ngIf="showMembersPanel" [roomId]="roomId" (close)="closeMembersPanel()"
+      class="members-overlay"></app-members-list>
 
     <div #messageContainer class="chat-messages" (scroll)="onScroll($event)">
       <div *ngFor="let message of messages; trackBy: trackByMessageId" [attr.id]="'msg-' + message.id">
@@ -132,7 +134,7 @@
 
         <div class="input-content">
           <form (ngSubmit)="sendMessage()" [formGroup]="chatForm">
-            <input type="text" placeholder="Aa" formControlName="contentMessage" #chatInput/>
+            <input type="text" placeholder="Aa" formControlName="contentMessage" #chatInput />
             <input type="file" id="fileInput" multiple #fileInput (change)="onFileSelected($event)" hidden />
           </form>
         </div>
@@ -296,23 +298,40 @@
           <div class="section-item" (click)="openChatNameDialog()">
             <div class="section-item-svg">
               <svg viewBox="0 0 20 20" height="20" width="20">
-                <path d="M13.791 1.728a2.25 2.25 0 0 0-3.182 0l-9.206 9.206A1.55 1.55 0 0 0 .95 12.03v1.868c0 .635.515 1.15 1.15 1.15h1.869a1.548 1.548 0 0 0 1.097-.454l9.205-9.205a2.25 2.25 0 0 0 0-3.182l-.479-.479zM12.7 4.838 11.159 3.3l.51-.51a.75.75 0 0 1 1.061 0l.48.479a.75.75 0 0 1 0 1.06l-.511.51z"></path>
+                <path
+                  d="M13.791 1.728a2.25 2.25 0 0 0-3.182 0l-9.206 9.206A1.55 1.55 0 0 0 .95 12.03v1.868c0 .635.515 1.15 1.15 1.15h1.869a1.548 1.548 0 0 0 1.097-.454l9.205-9.205a2.25 2.25 0 0 0 0-3.182l-.479-.479zM12.7 4.838 11.159 3.3l.51-.51a.75.75 0 0 1 1.061 0l.48.479a.75.75 0 0 1 0 1.06l-.511.51z">
+                </path>
               </svg>
             </div>
             <div type="text" class="section-text">Change chat name</div>
           </div>
-          <app-chat-name-dialog *ngIf="showChatNameDialog" [chatName]="roomName" [roomId]="room!.id" (close)="closeChatNameDialog()" (save)="saveChatName($event)"></app-chat-name-dialog>
-          <div class="section-item">
+          <app-chat-name-dialog *ngIf="showChatNameDialog" [chatName]="roomName" [roomId]="room!.id"
+            (close)="closeChatNameDialog()" (save)="saveChatName($event)"></app-chat-name-dialog>
+          <div class="section-item" (click)="openAddPeopleDialog()">
             <div class="section-item-svg">
-              <i class="fas fa-thumbs-up"></i>
+              <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true"
+                class="x14rh7hd x1lliihq x1tzjh5l" style="--x-color: var(--primary-icon);">
+                <path
+                  d="M7.25 1a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5zm5.25 8.5a.75.75 0 0 1 .75.75v1.5h1.5a.75.75 0 0 1 0 1.5h-1.5v1.5a.75.75 0 0 1-1.5 0v-1.5h-1.5a.75.75 0 1 1 0-1.5h1.5v-1.5a.75.75 0 0 1 .75-.75zm-11 3.083A4.083 4.083 0 0 1 5.583 8.5h2.794a.75.75 0 0 1 .588 1.215A4.478 4.478 0 0 0 8 12.5c0 .527.09 1.032.256 1.5a.75.75 0 0 1-.707 1H3.917A2.417 2.417 0 0 1 1.5 12.583z">
+                </path>
+              </svg>
             </div>
-            <div type="text" class="section-text ">Change emoji</div>
+            <div type="text" class="section-text ">Add people</div>
           </div>
-          <div class="section-item">
+          <app-add-people-dialog *ngIf="showAddPeopleDialog" (close)="closeAddPeopleDialog()"></app-add-people-dialog>
+          <div class="section-item" (click)="openLeavePopup()">
             <div class="section-item-svg">
-              <i class="fas fa-font"></i>
+              <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true"
+                class="x14rh7hd x1lliihq x1tzjh5l" style="--x-color: var(--primary-icon);">
+                <path
+                  d="M5.934 15.5h.632c.886 0 1.65 0 2.262-.082.655-.088 1.284-.287 1.793-.797.406-.405.617-.889.73-1.408a1 1 0 0 0-1.954-.426c-.056.255-.126.356-.19.42-.076.076-.212.17-.646.229-.462.062-1.09.064-2.061.064H6c-.971 0-1.599-.002-2.061-.064-.434-.059-.57-.153-.646-.229-.076-.076-.17-.212-.229-.646C3.002 12.1 3 11.471 3 10.5v-5c0-.971.002-1.599.064-2.061.059-.434.153-.57.229-.646.076-.076.212-.17.646-.229C4.4 2.502 5.029 2.5 6 2.5h.5c.971 0 1.599.002 2.061.064.434.059.57.153.646.229.064.064.134.165.19.42a1 1 0 1 0 1.954-.426c-.113-.52-.324-1.003-.73-1.408-.51-.51-1.138-.709-1.793-.797C8.216.5 7.452.5 6.566.5h-.632c-.886 0-1.65 0-2.262.082C3.017.67 2.388.87 1.88 1.38c-.51.51-.709 1.138-.797 1.793C1 3.784 1 4.548 1 5.434v5.132c0 .886 0 1.65.082 2.262.088.655.287 1.284.797 1.793.51.51 1.138.709 1.793.797.612.082 1.376.082 2.262.082z">
+                </path>
+                <path
+                  d="M12.043 10.707a1 1 0 0 0 1.414 0l.665-.663c.329-.328.66-.657.986-.985a1.499 1.499 0 0 0-.002-2.118l-.979-.978-.67-.67a1 1 0 1 0-1.414 1.414l.293.293H9.5a1 1 0 1 0 0 2h2.837l-.293.293a1 1 0 0 0 0 1.414z">
+                </path>
+              </svg>
             </div>
-            <div type="text" class="section-text">Edit nicknames</div>
+            <div type="text" class="section-text">Leave groups</div>
           </div>
         </div>
       </div>
@@ -391,12 +410,6 @@
           </div>
           <div class="section-item">
             <div class="section-item-svg">
-              <i class="fas fa-user-slash"></i>
-            </div>
-            <div type="text" class="section-text">Restrict</div>
-          </div>
-          <div class="section-item">
-            <div class="section-item-svg">
               <i class="fas fa-ban"></i>
             </div>
             <div type="text" class="section-text">Block</div>
@@ -413,6 +426,21 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- popup-leave -->
+  <div class="popup-leave-overlay" *ngIf="activeLeaveId === room?.id">
+    <div class="popup-leave-container">
+      <!-- Header -->
+      <div class="popup-leave-header">
+        <h2>Confirm leave this group</h2>
+        <button class="close-btn" (click)="closePopupConfirm()">✖</button>
+      </div>
+      <div class="popup-leave-footer">
+        <button class="btn btn-danger" (click)="leaveGroup()">Leave Group</button>
+        <button class="btn btn-secondary" (click)="closePopupConfirm()">Cancel</button>
       </div>
     </div>
   </div>

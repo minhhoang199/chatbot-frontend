@@ -22,6 +22,7 @@ import { MembersListComponent } from './members-list/members-list.component';
 import { MatDialogActions, MatDialogContent } from "@angular/material/dialog";
 import { VideoCallComponent } from "./video-call/video-call.component";
 import { FindUserDialogComponent } from './find-user-dialog/find-user-dialog.component';
+import { AddPeopleDialogComponent } from "./add-people-dialog/add-people-dialog.component";
 
 @NgModule({
     declarations: [
@@ -38,6 +39,7 @@ import { FindUserDialogComponent } from './find-user-dialog/find-user-dialog.com
       MembersListComponent,
       VideoCallComponent,
       FindUserDialogComponent,
+      AddPeopleDialogComponent
     ],
     imports: [
     CommonModule,

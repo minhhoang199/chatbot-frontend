@@ -42,6 +42,8 @@ export class ChatWindowComponent
   attachedFiles: AttachedFile[] = [];
   roomName!: string;
   showMembersPanel = false;
+  showAddPeopleDialog = false;
+  activeLeaveId: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -50,7 +52,7 @@ export class ChatWindowComponent
     private messageService: MessageService,
     private attachedFileService: AttachedFileService,
     private roomService: RoomService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   ngAfterViewChecked(): void {
@@ -90,7 +92,7 @@ export class ChatWindowComponent
           .subscribe((message: Message) => {
             console.log('Received message:', message);
             const index = this.messages.findIndex(
-              (msg) => msg.id === message.id
+              (msg) => msg.id === message.id,
             );
             if (index !== -1) {
               // Delete message
@@ -100,7 +102,7 @@ export class ChatWindowComponent
                 // Update the existing message
                 this.messages[index] = { ...this.messages[index], ...message };
                 this.messages = this.messages.map((m) =>
-                  m.id === message.id ? message : m
+                  m.id === message.id ? message : m,
                 );
               }
             } else {
@@ -130,7 +132,7 @@ export class ChatWindowComponent
       this.messageService.sendMessage(
         valueContent,
         this.roomId,
-        this.replyingMessage ? this.replyingMessage.id : null
+        this.replyingMessage ? this.replyingMessage.id : null,
       );
     }
     if (this.attachedFiles.length > 0) {
@@ -174,7 +176,7 @@ export class ChatWindowComponent
     this.replyingMessage = message;
     setTimeout(() => {
       const input = document.querySelector(
-        'input[formControlName="contentMessage"]'
+        'input[formControlName="contentMessage"]',
       ) as HTMLInputElement;
       if (input) input.focus();
     }, 0);
@@ -241,6 +243,14 @@ export class ChatWindowComponent
 
   closeChatNameDialog(): void {
     this.showChatNameDialog = false;
+  }
+
+  openAddPeopleDialog(): void {
+    this.showAddPeopleDialog = true;
+  }
+
+  closeAddPeopleDialog(): void {
+    this.showAddPeopleDialog = false;
   }
 
   saveChatName(name: string): void {
@@ -348,42 +358,56 @@ export class ChatWindowComponent
   }
 
   openCenteredWindow(url: string, title: string, w: number, h: number) {
-  // Lấy kích thước màn hình
-  const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
-  const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
+    // Lấy kích thước màn hình
+    const dualScreenLeft =
+      window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+    const dualScreenTop =
+      window.screenTop !== undefined ? window.screenTop : window.screenY;
 
-  const width = window.innerWidth
-    ? window.innerWidth
-    : document.documentElement.clientWidth
-      ? document.documentElement.clientWidth
-      : screen.width;
+    const width = window.innerWidth
+      ? window.innerWidth
+      : document.documentElement.clientWidth
+        ? document.documentElement.clientWidth
+        : screen.width;
 
-  const height = window.innerHeight
-    ? window.innerHeight
-    : document.documentElement.clientHeight
-      ? document.documentElement.clientHeight
-      : screen.height;
+    const height = window.innerHeight
+      ? window.innerHeight
+      : document.documentElement.clientHeight
+        ? document.documentElement.clientHeight
+        : screen.height;
 
-  // Tính vị trí giữa màn hình
-  const left = width / 2 - w / 2 + dualScreenLeft;
-  const top = height / 2 - h / 2 + dualScreenTop;
+    // Tính vị trí giữa màn hình
+    const left = width / 2 - w / 2 + dualScreenLeft;
+    const top = height / 2 - h / 2 + dualScreenTop;
 
-  // Mở cửa sổ
-  const newWindow = window.open(
-    url,
-    title,
-    `
+    // Mở cửa sổ
+    const newWindow = window.open(
+      url,
+      title,
+      `
       scrollbars=yes,
       width=${w},
       height=${h},
       top=${top},
       left=${left}
-    `
-  );
+    `,
+    );
 
-  // Focus cửa sổ mới
-  if (newWindow && newWindow.focus) {
-    newWindow.focus();
+    // Focus cửa sổ mới
+    if (newWindow && newWindow.focus) {
+      newWindow.focus();
+    }
   }
-}
+
+  openLeavePopup() {
+    this.activeLeaveId = this.room?.id || 0;
+  }
+
+  closePopupConfirm() {
+    this.activeLeaveId = 0;
+  }
+  
+  leaveGroup() {
+    throw new Error('Method not implemented.');
+  }
 }
