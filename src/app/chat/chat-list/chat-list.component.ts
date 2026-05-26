@@ -21,7 +21,7 @@ export class ChatListComponent implements OnInit {
     private roomService: RoomService,
     private authService: AuthService,
     private router: Router,
-    private websocketService: WebsocketService
+    private websocketService: WebsocketService,
   ) {}
   ngOnInit(): void {
     const id = this.authService.getId();
@@ -42,7 +42,11 @@ export class ChatListComponent implements OnInit {
             room.lastMessageContent = room.name + ' was created';
             this.rooms.push(room);
             const index = this.rooms.findIndex((r) => r.id === room.id);
-            this.sortRoomsByLastMessageTime(index, room.lastMessageContent, room.lastMessageTime);
+            this.sortRoomsByLastMessageTime(
+              index,
+              room.lastMessageContent,
+              room.lastMessageTime,
+            );
           });
 
         this.navigateToRoom(this.rooms[0].id); // Mở phòng đầu tiên khi vào trang chat
@@ -95,11 +99,11 @@ export class ChatListComponent implements OnInit {
       this.filteredRooms = this.rooms;
     } else if (emojiKey === 'Private') {
       this.filteredRooms = this.rooms.filter(
-        (room) => room.roomType === 'PRIVATE_CHAT'
+        (room) => room.roomType === 'PRIVATE_CHAT',
       );
     } else if (emojiKey === 'Groups') {
       this.filteredRooms = this.rooms.filter(
-        (room) => room.roomType === 'GROUP_CHAT'
+        (room) => room.roomType === 'GROUP_CHAT',
       );
     } else {
       this.filteredRooms = [];
@@ -116,19 +120,26 @@ export class ChatListComponent implements OnInit {
             room.lastMessageTime = message.createdAt;
             this.rooms.unshift(room);
           }
-        }
+        },
       });
       return;
     }
 
-    this.sortRoomsByLastMessageTime(
-      index,
-      message.content,
-      message.createdAt
-    );
+    if (message.type === 'REMOVE' && message.removedEmails) {
+      const emailsToRemove = message.removedEmails.split('-');
+      if (emailsToRemove.includes(this.authService.getEmail())) {
+        this.rooms.splice(index, 1);
+      }
+      return;
+    }
+    this.sortRoomsByLastMessageTime(index, message.content, message.createdAt);
   }
 
-  sortRoomsByLastMessageTime(index: number, lastMessageContent: string, lastMessageTime: string): void {
+  sortRoomsByLastMessageTime(
+    index: number,
+    lastMessageContent: string,
+    lastMessageTime: string,
+  ): void {
     const updatedRoom = {
       ...this.rooms[index],
       lastMessageContent: lastMessageContent,
@@ -139,5 +150,10 @@ export class ChatListComponent implements OnInit {
     this.rooms.splice(index, 1); // xoá vị trí cũ
     this.rooms.unshift(updatedRoom); // thêm vào đầu danh sách
     this.setActiveTab(this.activeTab); // Cập nhật filteredRooms dựa trên tab hiện tại
+  }
+
+  onRoomLeave(leaveId: number) {
+    this.rooms = this.rooms.filter((r) => r.id !== leaveId);
+    this.filteredRooms = this.filteredRooms.filter((r) => r.id !== leaveId);
   }
 }

@@ -10,7 +10,9 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  Output,
   ViewChild,
+  EventEmitter, 
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -407,7 +409,15 @@ export class ChatWindowComponent
     this.activeLeaveId = 0;
   }
   
+  @Output() leave = new EventEmitter<void>();
   leaveGroup() {
-    throw new Error('Method not implemented.');
+    this.roomService.leaveRoom(this.roomId).subscribe({
+          next: (res) => {
+            if(res === 'TD-000') {
+              this.closePopupConfirm();
+              this.leave.emit();
+            }
+          }
+        });
   }
 }

@@ -21,6 +21,7 @@ export class Message {
     public attachedFile: AttachedFile | null = null,
     public delFlag: boolean,
     public edited: boolean = false,
+    public removedEmails: string | null = null
   ) {}
 
   // optional history (array of {content, editedAt}) populated when requested

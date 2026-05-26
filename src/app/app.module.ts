@@ -19,6 +19,7 @@ import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { ErrorPopupComponent } from './chat/error-popup/error-popup.component';
 import { OtpVerificationComponent } from './component/otp-verification/otp-verification.component';
 import { ForgotPasswordComponent } from './component/forgot-password/forgot-password.component';
+import { ProfileSettingComponent } from './component/profile-setting/profile-setting.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ForgotPasswordComponent } from './component/forgot-password/forgot-pass
     SignInComponent,
     ErrorPopupComponent,
     OtpVerificationComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ProfileSettingComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../service/auth.service';
-import { UserService } from '../../service/user.service';
-import { User } from '../../model/user.model';
 import { LocalStorageService } from '../../service/local-storage.service';
+import { NgbAccordionItem } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-profile-setting',
   templateUrl: './profile-setting.component.html',
-  styleUrl: './profile-setting.component.css'
+  styleUrls: ['./profile-setting.component.css'],
 })
 export class ProfileSettingComponent implements OnInit {
   loading = true;
   error: string | null = null;
+  selectedTab: 'personal' | 'privacy' = 'personal';
 
   constructor(
     private localStorageService: LocalStorageService,
@@ -20,6 +19,10 @@ export class ProfileSettingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
+
+  selectTab(tab: 'personal' | 'privacy'): void {
+    this.selectedTab = tab;
+  }
 
   logout(): void {
     this.localStorageService.clear(); // Clear all data

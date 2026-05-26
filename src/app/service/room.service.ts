@@ -68,13 +68,19 @@ export class RoomService {
 
   public addMembers(roomId: number, emails: string[]): Observable<string> {
     return this.httpClient
-      .post<BaseResponse>(roomAPIUrl + roomId + '/members', { emails: emails })
+      .put<BaseResponse>(roomAPIUrl + 'add-users', { roomId: roomId, emails: emails })
       .pipe(map((response) => response.code));
   }
 
   public removeMembers(roomId: number, emails: string[]): Observable<string> {
     return this.httpClient
       .put<BaseResponse>(roomAPIUrl + 'remove-users', { roomId: roomId, emails: emails })
+      .pipe(map((response) => response.code));
+  }
+
+  public leaveRoom(roomId: number): Observable<string> {
+    return this.httpClient
+      .put<BaseResponse>(roomAPIUrl+ roomId + '/outRoom', {})
       .pipe(map((response) => response.code));
   }
 }

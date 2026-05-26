@@ -1,6 +1,6 @@
 import { AuthService } from './../../service/auth.service';
 import { RoomService } from './../../service/room.service';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { User } from '../../model/user.model';
 import { UserService } from '../../service/user.service';
 
@@ -13,13 +13,14 @@ export class AddPeopleDialogComponent implements OnInit {
   searchEmail: string = '';
   activeTab: string = 'all';
   currentEmail: string = '';
+  @Input() roomId!: number;
 
   @Output() close = new EventEmitter<void>();
-  friends: User[] = [];
+  People: User[] = [];
 
-  filteredFriends!: User[];
+  filteredPeople!: User[];
 
-  selectedFriends: User[] = [];
+  selectedPeople: User[] = [];
 
   constructor(
     private userService: UserService,
@@ -29,31 +30,31 @@ export class AddPeopleDialogComponent implements OnInit {
   
   ngOnInit(): void {
     this.currentEmail = this.authService.getEmail();
-    this.filteredFriends = [];
+    this.filteredPeople = [];
     this.userService.getRecentUserChat().subscribe((users) => {
-      this.friends = users;
-      this.filteredFriends = users;
+      this.People = users;
+      this.filteredPeople = users;
     });
   }
 
   onSearchChange() {
     console.log('Search changed:', this.searchEmail);
-    this.filteredFriends = this.filterFriends();
+    this.filteredPeople = this.filterPeople();
   }
 
-  filterFriends() {
-    if (!this.searchEmail) return this.friends;
-    return this.friends.filter((f) =>
+  filterPeople() {
+    if (!this.searchEmail) return this.People;
+    return this.People.filter((f) =>
       f.email.toLowerCase().includes(this.searchEmail.toLowerCase())
     );
   }
 
   updateSelected() {
-    this.selectedFriends = this.friends.filter((f) => f.selected);
+    this.selectedPeople = this.People.filter((f) => f.selected);
   }
 
-  removeSelected(friend: User) {
-    friend.selected = false;
+  removeSelected(people: User) {
+    people.selected = false;
     this.updateSelected();
   }
 
@@ -62,20 +63,24 @@ export class AddPeopleDialogComponent implements OnInit {
   }
 
   addPeople() {
-    console.log('Adding people:', this.selectedFriends);
-    // Add people to existing room logic
-    this.closePopup();
+    this.roomService.addMembers(this.roomId, this.selectedPeople.map((m) => m.email)).subscribe({
+          next: (res) => {
+            if(res === 'TD-000') {
+              this.close.emit();
+            }
+          }
+        });
   }
 
   toggleSelect(user: User) {
-    if (this.selectedFriends.includes(user)) {
-      this.selectedFriends = this.selectedFriends.filter((f) => f !== user);
+    if (this.selectedPeople.includes(user)) {
+      this.selectedPeople = this.selectedPeople.filter((f) => f !== user);
     } else {
-      this.selectedFriends.push(user);
+      this.selectedPeople.push(user);
     }
   }
 
   isSelected(user: User) {
-    return this.selectedFriends.includes(user);
+    return this.selectedPeople.includes(user);
   }
 }
