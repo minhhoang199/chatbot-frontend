@@ -16,45 +16,55 @@ export class GroupRoomDialogComponent implements OnInit {
   currentEmail: string = '';
 
   @Output() close = new EventEmitter<void>();
-  friends: User[] = [];
+  searchResult: User[] = [];
 
-  filteredFriends!: User[];
-
-  selectedFriends: User[] = [];
+  selectedUsers: User[] = [];
 
   constructor(
     private userService: UserService,
     private roomService: RoomService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
-  
+
   ngOnInit(): void {
     this.currentEmail = this.authService.getEmail();
-    this.filteredFriends = [];
-    this.userService.getRecentUserChat().subscribe((users) => {
-      this.friends = users;
-      this.filteredFriends = users;
+    // this.userService.getRecentUserChat().subscribe((users) => {
+    //   this.searchResult = users;
+    // });
+  }
+
+  loading = false;
+  onSearch() {
+    if (!this.searchEmail.trim()) return;
+    this.loading = true;
+    this.userService.searchUsers(this.searchEmail).subscribe({
+      next: (res) => {
+        this.searchResult = res;
+        this.loading = false;
+      },
+      error: () => (this.loading = false),
     });
   }
 
-  onSearchChange() {
-    console.log('Search changed:', this.searchEmail);
-    this.filteredFriends = this.filterFriends();
+  onKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.onSearch();
+    }
   }
 
-  filterFriends() {
-    if (!this.searchEmail) return this.friends;
-    return this.friends.filter((f) =>
-      f.email.toLowerCase().includes(this.searchEmail.toLowerCase())
+  filterUsers() {
+    if (!this.searchEmail) return this.searchResult;
+    return this.searchResult.filter((f) =>
+      f.email.toLowerCase().includes(this.searchEmail.toLowerCase()),
     );
   }
 
   updateSelected() {
-    this.selectedFriends = this.friends.filter((f) => f.selected);
+    this.selectedUsers = this.searchResult.filter((f) => f.selected);
   }
 
-  removeSelected(friend: User) {
-    friend.selected = false;
+  removeSelected(User: User) {
+    User.selected = false;
     this.updateSelected();
   }
 
@@ -63,28 +73,32 @@ export class GroupRoomDialogComponent implements OnInit {
   }
 
   createGroup() {
-    this.roomService.createRoom(this.groupName, 'GROUP_CHAT', [...this.selectedFriends.map(f => f.email), this.currentEmail]).subscribe({
-      next: (room) => {
-        console.log('Room created:', room);
-        // this.roomService.notifyRoomCreated(room);
-        this.closePopup();
-      },
-      error: (error) => {
-        console.error('Error creating room:', error);
-      }
-    });
+    this.roomService
+      .createRoom(this.groupName, 'GROUP_CHAT', [
+        ...this.selectedUsers.map((f) => f.email),
+        this.currentEmail,
+      ])
+      .subscribe({
+        next: (room) => {
+          console.log('Room created:', room);
+          // this.roomService.notifyRoomCreated(room);
+          this.closePopup();
+        },
+        error: (error) => {
+          console.error('Error creating room:', error);
+        },
+      });
   }
 
   toggleSelect(user: User) {
-    if (this.selectedFriends.includes(user)) {
-      this.selectedFriends = this.selectedFriends.filter((f) => f !== user);
+    if (this.isSelected(user)) {
+      this.selectedUsers = this.selectedUsers.filter((u) => u.id !== user.id);
     } else {
-      this.selectedFriends.push(user);
+      this.selectedUsers.push(user);
     }
   }
 
   isSelected(user: User) {
-    return this.selectedFriends.includes(user);
+    return this.selectedUsers.filter((u) => u.id === user.id).length > 0;
   }
 }
-

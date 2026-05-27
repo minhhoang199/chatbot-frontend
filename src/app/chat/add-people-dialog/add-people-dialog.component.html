@@ -12,7 +12,8 @@
       <label class="field">
         <input type="search" placeholder="Search by email..."   
         [(ngModel)]="searchEmail"
-        (ngModelChange)="onSearchChange()"/>
+        (keyup)="onSearch()"
+        (keypress)="onKeyPress($event)"/>
       </label>
 
       <!-- list header -->
@@ -20,9 +21,30 @@
         <div class="selected-count">{{ selectedPeople.length }} selected</div>
       </div>
 
+      <!-- selected list -->
+      <div class="contact-list" role="list">
+        <div *ngFor="let user of selectedPeople" class="contact-row" (click)="toggleSelect(user)" [class.selected]="isSelected(user)">
+          <label class="contact-inner" (click)="$event.stopPropagation()">
+            <input type="checkbox" (click)="toggleSelect(user); $event.stopPropagation()" [checked]="isSelected(user)"/>
+            <div class="avatar">
+              <img src="assets/avatar.png" alt="{{user.username}}" />
+            </div>
+            <div class="meta">
+              <div class="name">{{ user.username }}</div>
+              <div class="subtitle" *ngIf="user.email">{{ user.email }}</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- search results -->
+      <div class="list-header">
+        <div class="selected-count">Search Results</div>
+      </div>
+
       <!-- contact list -->
       <div class="contact-list" role="list">
-        <div *ngFor="let user of filteredPeople" class="contact-row" (click)="toggleSelect(user)" [class.selected]="isSelected(user)">
+        <div *ngFor="let user of searchResult" class="contact-row" (click)="toggleSelect(user)" [class.selected]="isSelected(user)">
           <label class="contact-inner" (click)="$event.stopPropagation()">
             <input type="checkbox" (click)="toggleSelect(user); $event.stopPropagation()" [checked]="isSelected(user)"/>
             <div class="avatar">
@@ -36,7 +58,7 @@
         </div>
 
         <!-- no results -->
-        <div class="no-result" *ngIf="filteredPeople.length === 0">No matching results</div>
+        <div class="no-result" *ngIf="searchResult.length === 0">No matching results</div>
       </div>
     </div>
 

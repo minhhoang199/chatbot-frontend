@@ -16,9 +16,7 @@ export class AddPeopleDialogComponent implements OnInit {
   @Input() roomId!: number;
 
   @Output() close = new EventEmitter<void>();
-  People: User[] = [];
-
-  filteredPeople!: User[];
+  searchResult: User[] = [];
 
   selectedPeople: User[] = [];
 
@@ -30,27 +28,36 @@ export class AddPeopleDialogComponent implements OnInit {
   
   ngOnInit(): void {
     this.currentEmail = this.authService.getEmail();
-    this.filteredPeople = [];
-    this.userService.getRecentUserChat().subscribe((users) => {
-      this.People = users;
-      this.filteredPeople = users;
+  }
+
+  loading = false;
+  onSearch() {
+    if (!this.searchEmail.trim()) return;
+    this.loading = true;
+    this.userService.searchUsers(this.searchEmail).subscribe({
+      next: (res) => {
+        this.searchResult = res;
+        this.loading = false;
+      },
+      error: () => (this.loading = false),
     });
   }
 
-  onSearchChange() {
-    console.log('Search changed:', this.searchEmail);
-    this.filteredPeople = this.filterPeople();
+  onKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.onSearch();
+    }
   }
 
   filterPeople() {
-    if (!this.searchEmail) return this.People;
-    return this.People.filter((f) =>
+    if (!this.searchEmail) return this.searchResult;
+    return this.searchResult.filter((f) =>
       f.email.toLowerCase().includes(this.searchEmail.toLowerCase())
     );
   }
 
   updateSelected() {
-    this.selectedPeople = this.People.filter((f) => f.selected);
+    this.selectedPeople = this.searchResult.filter((f) => f.selected);
   }
 
   removeSelected(people: User) {
@@ -73,14 +80,14 @@ export class AddPeopleDialogComponent implements OnInit {
   }
 
   toggleSelect(user: User) {
-    if (this.selectedPeople.includes(user)) {
-      this.selectedPeople = this.selectedPeople.filter((f) => f !== user);
+    if (this.isSelected(user)) {
+      this.selectedPeople = this.selectedPeople.filter((u) => u.id !== user.id);
     } else {
       this.selectedPeople.push(user);
     }
   }
 
   isSelected(user: User) {
-    return this.selectedPeople.includes(user);
+    return this.selectedPeople.filter((u) => u.id === user.id).length > 0;
   }
 }

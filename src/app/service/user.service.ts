@@ -24,4 +24,12 @@ export class UserService {
   public searchUsers(email: string): Observable<User[]> {
     return this.httpClient.get<GetUsersResponse>(userAPIUrl + 'search-by-email?email=' + email).pipe(map(response => response.data));
   }
+
+  public editUserInfo(id: string, username:string, email: string): Observable<string> {
+    return this.httpClient.put<GetUsersResponse>(userAPIUrl + id, { id, username, email }).pipe(map(response => response.code));
+  }
+
+  public changePassword(email: string, oldPassword: string, newPassword: string): Observable<string> {
+    return this.httpClient.put<GetUsersResponse>(userAPIUrl + 'change-password', { email, oldPassword, newPassword }).pipe(map(response => response.code));
+  }
 }
