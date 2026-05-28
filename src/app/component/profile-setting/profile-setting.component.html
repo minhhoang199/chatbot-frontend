@@ -43,7 +43,7 @@
         </div>
         <button class="avatar-edit">✏️</button>
       </div>
-      <h2 class="profile-name">James Dawson</h2>
+      <h2 class="profile-name">{{ userName }}</h2>
 
       <!-- Sidebar menu -->
       <ul class="side-menu">
@@ -72,50 +72,57 @@
       <div class="section-label" *ngIf="selectedTab === 'privacy'">Privacy & Security</div>
 
       <div *ngIf="selectedTab === 'personal'">
-        <div class="form-grid">
+        <form class="form-grid" [formGroup]="profileForm" (ngSubmit)="saveChanges()">
           <div class="form-group">
             <label>Username</label>
             <div class="input-wrap">
               <span class="input-icon">👤</span>
-              <input type="text" value="James" />
+              <input type="text" formControlName="username" [value]="this.userName" />
             </div>
           </div>
-          <div class="form-group">
+          <div>
             <label>Email Address</label>
             <div class="input-wrap">
               <span class="input-icon">✉️</span>
-              <input type="email" value="james.dawson@email.com" />
+              <input type="email" [value]="this.email" readonly/>
             </div>
           </div>
-        </div>
+        </form>
 
         <div class="form-actions">
-          <button class="btn-cancel">Cancel</button>
-          <button class="btn-cta">Save Changes <span class="arrow">→</span></button>
+          <button class="btn-cancel" (click)="cancel()">Cancel</button>
+          <button class="btn-cta" (click)="saveChanges()">Save Changes <span class="arrow">→</span></button>
         </div>
       </div>
 
       <div *ngIf="selectedTab === 'privacy'">
-        <div class="form-grid">
+        <form [formGroup]="changePasswordForm" class="form-grid" (ngSubmit)="changePassword()">
           <div class="form-group">
             <label>Current Password</label>
             <div class="input-wrap">
               <span class="input-icon">🔒</span>
-              <input type="password" value="••••••••" />
+              <input formControlName="currentPassword" type="password" placeholder="Enter current password" />
             </div>
           </div>
           <div class="form-group">
             <label>New Password</label>
             <div class="input-wrap">
               <span class="input-icon">🔑</span>
-              <input type="password" placeholder="Enter new password" />
+              <input formControlName="newPassword" type="password" placeholder="Enter new password" />
             </div>
           </div>
-        </div>
+          <div class="form-group">
+            <label>Confirm New Password</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔑</span>
+              <input formControlName="confirmPassword" type="password" placeholder="Confirm new password" />
+            </div>
+          </div>
+        </form>
 
         <div class="form-actions">
-          <button class="btn-cancel">Cancel</button>
-          <button class="btn-cta">Save Password <span class="arrow">→</span></button>
+          <button class="btn-cancel" (click)="cancel()">Cancel</button>
+          <button class="btn-cta" (click)="changePassword()">Save Password <span class="arrow">→</span></button>
         </div>
       </div>
     </div>

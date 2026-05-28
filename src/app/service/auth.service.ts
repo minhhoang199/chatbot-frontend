@@ -18,6 +18,10 @@ export class AuthService {
     return this.httpClient.post<SignInResponse>(authUrl + '/login', { email: email, password: password});
   }
 
+  logout(): void {
+    this.localStorageService.clear(); // Clear all data
+  }
+
   getToken(): string{
     return this.localStorageService.getString('token');
   }
@@ -45,6 +49,7 @@ export class AuthService {
     this.localStorageService.set('id', userInfo.data.id);
     this.localStorageService.set("email", userInfo.data.email)
   }
+  
   signUp(username:string, email:string, password: string, roleId: number):Observable<BaseResponse>{
     return this.httpClient.post<BaseResponse>(authUrl + '/signup', { username: username, email: email, password: password, roleId: roleId});
   }

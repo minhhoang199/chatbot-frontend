@@ -25,8 +25,8 @@ export class UserService {
     return this.httpClient.get<GetUsersResponse>(userAPIUrl + 'search-by-email?email=' + email).pipe(map(response => response.data));
   }
 
-  public editUserInfo(id: string, username:string, email: string): Observable<string> {
-    return this.httpClient.put<GetUsersResponse>(userAPIUrl + id, { id, username, email }).pipe(map(response => response.code));
+  public editUserInfo(id: number, username:string): Observable<string> {
+    return this.httpClient.patch<GetUsersResponse>(userAPIUrl + id, { id, username }).pipe(map(response => response.code));
   }
 
   public changePassword(email: string, oldPassword: string, newPassword: string): Observable<string> {
