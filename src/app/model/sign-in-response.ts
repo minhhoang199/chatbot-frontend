@@ -6,6 +6,7 @@ export interface SignInResponse {
         username: string;
         role: string;
         email: string;
+        linkAvatar: string;
     };
     code: string;
     message: string;

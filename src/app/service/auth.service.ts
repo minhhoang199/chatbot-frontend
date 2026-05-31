@@ -42,12 +42,17 @@ export class AuthService {
     return this.localStorageService.getNumber('id');
   }
 
+  getLinkAvatar(): string{
+    return this.localStorageService.getString('linkAvatar');
+  }
+
   setToken(userInfo: SignInResponse): void{
     this.localStorageService.set('token', userInfo.data.token);
     this.localStorageService.set('role', userInfo.data.role);
     this.localStorageService.set('username', userInfo.data.username);
     this.localStorageService.set('id', userInfo.data.id);
-    this.localStorageService.set("email", userInfo.data.email)
+    this.localStorageService.set("email", userInfo.data.email);
+    this.localStorageService.set("linkAvatar", userInfo.data.linkAvatar);
   }
   
   signUp(username:string, email:string, password: string, roleId: number):Observable<BaseResponse>{
