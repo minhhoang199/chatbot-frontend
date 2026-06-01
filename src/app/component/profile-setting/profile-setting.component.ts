@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalStorageService } from '../../service/local-storage.service';
 import { NgbAccordionItem } from '@ng-bootstrap/ng-bootstrap';
@@ -19,6 +19,9 @@ export class ProfileSettingComponent implements OnInit {
   email: string = '';
   changePasswordForm!: FormGroup;
   profileForm!: FormGroup;
+  linkAvatar: string = '';
+
+  @ViewChild('avatarInput') avatarInput!: ElementRef<HTMLInputElement>;
 
   constructor(
     private authService: AuthService,
@@ -32,16 +35,17 @@ export class ProfileSettingComponent implements OnInit {
     // Initialize user data
     this.userName = this.authService.getUserName() || '';
     this.email = this.authService.getEmail() || '';
+    this.linkAvatar = this.authService.getLinkAvatar() || 'assets/avatar.png';
 
     // Initialize forms
     this.profileForm = this.formBuilder.group({
-      username: [this.userName, Validators.required]
+      username: [this.userName, Validators.required],
     });
 
     this.changePasswordForm = this.formBuilder.group({
       currentPassword: ['', Validators.required],
       newPassword: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required]
+      confirmPassword: ['', Validators.required],
     });
   }
 
@@ -59,52 +63,100 @@ export class ProfileSettingComponent implements OnInit {
   }
 
   changePassword() {
-    if (this.changePasswordForm.get('newPassword')?.value !== this.changePasswordForm.get('confirmPassword')?.value) {
+    if (
+      this.changePasswordForm.get('newPassword')?.value !==
+      this.changePasswordForm.get('confirmPassword')?.value
+    ) {
       console.error('Passwords do not match');
       return;
     }
-    this.userService.changePassword(this.email, this.changePasswordForm.get('currentPassword')?.value, this.changePasswordForm.get('newPassword')?.value)
-      .subscribe({
-          next: (res) => {
-            if(res === 'TD-000') {
-              this.reLogin(this.email, this.changePasswordForm.get('newPassword')?.value);
-            }
-          }
-        });
-  }
-  
-  saveChanges() {
-    this.userService.editUserInfo(this.authService.getId(), this.profileForm.get('username')?.value)
+    this.userService
+      .changePassword(
+        this.email,
+        this.changePasswordForm.get('currentPassword')?.value,
+        this.changePasswordForm.get('newPassword')?.value,
+      )
       .subscribe({
         next: (res) => {
-          if(res === 'TD-000') {
-            this.localStorageService.set('username', this.profileForm.get('username')?.value);
-            this.userName = this.profileForm.get('username')?.value || '';
+          if (res === 'TD-000') {
+            this.reLogin(
+              this.email,
+              this.changePasswordForm.get('newPassword')?.value,
+            );
           }
-        }
+        },
       });
   }
 
+  saveChanges() {
+    this.userService
+      .editUserInfo(
+        this.authService.getId(),
+        this.profileForm.get('username')?.value,
+      )
+      .subscribe({
+        next: (res) => {
+          if (res === 'TD-000') {
+            this.localStorageService.set(
+              'username',
+              this.profileForm.get('username')?.value,
+            );
+            this.userName = this.profileForm.get('username')?.value || '';
+          }
+        },
+      });
+  }
 
   reLogin(email: string, password: string) {
     if (this.changePasswordForm.invalid) {
       return;
     }
-    this.authService.signIn(email, password)
-  .subscribe(response => {
-    // If login successful, navigate to page2
-    if (response && response.data && response.code && response.code === "TD-000") {
-      console.log(response.data);
-      this.authService.setToken(response);
-    } else {
-    }
-  }, error => {
-    console.error('Error occurred:', error);
-  });
+    this.authService.signIn(email, password).subscribe(
+      (response) => {
+        // If login successful, navigate to page2
+        if (
+          response &&
+          response.data &&
+          response.code &&
+          response.code === 'TD-000'
+        ) {
+          console.log(response.data);
+          this.authService.setToken(response);
+        } else {
+        }
+      },
+      (error) => {
+        console.error('Error occurred:', error);
+      },
+    );
   }
 
   cancel() {
     this.profileForm.patchValue({ username: this.userName });
     this.changePasswordForm.reset();
+  }
+
+  editAvatar(event?: Event) {
+    if (!event) {
+      this.avatarInput.nativeElement.click();
+      return;
+    }
+
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    this.userService.uploadAvatar(file).subscribe({
+      next: (avatarFile) => {
+        this.linkAvatar = avatarFile.linkFile;
+        this.localStorageService.set('linkAvatar', avatarFile.linkFile);
+        input.value = '';
+      },
+      error: (error) => {
+        console.error('Avatar upload failed', error);
+      },
+    });
   }
 }

@@ -12,7 +12,7 @@ import {
   OnInit,
   Output,
   ViewChild,
-  EventEmitter, 
+  EventEmitter,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -34,6 +34,7 @@ export class ChatWindowComponent
   room!: Room | null;
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
   @ViewChild('chatInput') chatInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('avatarInput') avatarInput!: ElementRef<HTMLInputElement>;
   messages!: Message[];
   chatForm!: FormGroup;
   roomId!: number;
@@ -46,6 +47,7 @@ export class ChatWindowComponent
   showMembersPanel = false;
   showAddPeopleDialog = false;
   activeLeaveId: number = 0;
+  linkAvatar: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -69,23 +71,52 @@ export class ChatWindowComponent
     this.routeSub = this.route.params.subscribe((params) => {
       this.roomId = Number(this.route.snapshot.paramMap.get('roomId'));
       if (this.roomId != null) {
-        this.roomService.getRoomDetail(this.roomId).subscribe((room) => {
-          if (room) {
-            this.room = room;
-            if (this.room.roomType === 'PRIVATE_CHAT') {
-              const objName = JSON.parse(this.room.name);
-              const mapName = new Map<string, string>(Object.entries(objName));
-              const otherUserEmail = this.room.privateKey
-                ? this.room.privateKey.split('-').find((e) => e !== email)
-                : '';
-              if (otherUserEmail)
-                this.roomName = mapName.get(otherUserEmail) || this.room.name;
-              else this.roomName = this.room.name;
-            } else {
-              this.roomName = this.room.name;
-            }
+        // If navigation passed the room object in state, use it to avoid an extra fetch
+        const navRoom =
+          history && (history as any).state
+            ? (history as any).state.room
+            : null;
+        if (navRoom && navRoom.id === this.roomId) {
+          this.room = navRoom as Room;
+          if (this.room.roomType === 'PRIVATE_CHAT') {
+            const objName = JSON.parse(this.room.name);
+            const mapName = new Map<string, string>(Object.entries(objName));
+            const otherUserEmail = this.room.privateKey
+              ? this.room.privateKey.split('-').find((e) => e !== email)
+              : '';
+            if (otherUserEmail)
+              this.roomName = mapName.get(otherUserEmail) || this.room.name;
+            else this.roomName = this.room.name;
+          } else {
+            this.roomName = this.room.name;
           }
-        });
+          this.linkAvatar = this.room.linkAvatar
+            ? this.room.linkAvatar
+            : 'assets/avatar.png';
+        } else {
+          this.roomService.getRoomDetail(this.roomId).subscribe((room) => {
+            if (room) {
+              this.room = room;
+              if (this.room.roomType === 'PRIVATE_CHAT') {
+                const objName = JSON.parse(this.room.name);
+                const mapName = new Map<string, string>(
+                  Object.entries(objName),
+                );
+                const otherUserEmail = this.room.privateKey
+                  ? this.room.privateKey.split('-').find((e) => e !== email)
+                  : '';
+                if (otherUserEmail)
+                  this.roomName = mapName.get(otherUserEmail) || this.room.name;
+                else this.roomName = this.room.name;
+              } else {
+                this.roomName = this.room.name;
+              }
+              this.linkAvatar = this.room.linkAvatar
+                ? this.room.linkAvatar
+                : 'assets/avatar.png';
+            }
+          });
+        }
       }
       if (this.roomId != null) {
         this.websocketService.disconnect();
@@ -248,6 +279,9 @@ export class ChatWindowComponent
   }
 
   openAddPeopleDialog(): void {
+    if (this.room?.roomType === 'PRIVATE_CHAT') {
+      return; // Không cho phép thêm người vào phòng chat riêng
+    }
     this.showAddPeopleDialog = true;
   }
 
@@ -402,22 +436,59 @@ export class ChatWindowComponent
   }
 
   openLeavePopup() {
+    if (this.room?.roomType === 'PRIVATE_CHAT') {
+      return; // Không cho phép rời phòng chat riêng
+    }
     this.activeLeaveId = this.room?.id || 0;
   }
 
   closePopupConfirm() {
     this.activeLeaveId = 0;
   }
-  
+
   @Output() leave = new EventEmitter<void>();
   leaveGroup() {
+    if (this.room?.roomType === 'PRIVATE_CHAT') {
+      return; // Không cho phép rời phòng chat riêng
+    }
     this.roomService.leaveRoom(this.roomId).subscribe({
-          next: (res) => {
-            if(res === 'TD-000') {
-              this.closePopupConfirm();
-              this.leave.emit();
-            }
+      next: (res) => {
+        if (res === 'TD-000') {
+          this.closePopupConfirm();
+          this.leave.emit();
+        }
+      },
+    });
+  }
+
+  editAvatar(event?: Event) {
+    if (this.room?.roomType === 'PRIVATE_CHAT') {
+      return; // Không cho phép đổi avatar phòng chat riêng
+    }
+    if (!event) {
+      this.avatarInput.nativeElement.click();
+      return;
+    }
+
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file || !this.roomId) {
+      return;
+    }
+
+    this.roomService.uploadFile(file, this.roomId).subscribe({
+      next: (avatarFile) => {
+        if (avatarFile && avatarFile.linkFile) {
+          this.linkAvatar = avatarFile.linkFile;
+          if (this.room) {
+            this.room.linkAvatar = avatarFile.linkFile;
           }
-        });
+        }
+        input.value = '';
+      },
+      error: (error) => {
+        console.error('Room avatar upload failed', error);
+      },
+    });
   }
 }

@@ -2,7 +2,7 @@
   <div class="chat-main">
     <div class="chat-header">
       <div class="chat-header-info" (click)="toggleMembersPanel()">
-        <img src="assets/avatar.png" class="header-avatar">
+        <img src="{{linkAvatar}}" class="header-avatar">
         <div class="header-text">
           <div class="header-name">{{ roomName }}</div>
           <div class="header-status">
@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <app-members-list *ngIf="showMembersPanel" [roomId]="roomId" (close)="closeMembersPanel()"
+    <app-members-list *ngIf="showMembersPanel && room?.roomType === 'GROUP_CHAT'" [roomId]="roomId" (close)="closeMembersPanel()"
       class="members-overlay"></app-members-list>
 
     <div #messageContainer class="chat-messages" (scroll)="onScroll($event)">
@@ -155,9 +155,10 @@
 
   <div class="messenger-profile-sidebar">
     <div class="profile-header">
-      <div class="profile-avatar">
-        <img src="assets/avatar.png" alt="Avatar" class="profile-avatar">
+      <div class="profile-avatar" (click)="editAvatar()">
+        <img src="{{linkAvatar}}" alt="Avatar" class="profile-avatar">
       </div>
+      <input type="file" #avatarInput accept="image/*" (change)="editAvatar($event)" hidden />
       <div class="profile-name">{{ roomName }}</div>
       <div class="profile-encryption">
         <div class="profile-encryption">

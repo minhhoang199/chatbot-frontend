@@ -49,7 +49,7 @@ export class ChatListComponent implements OnInit {
             );
           });
 
-        this.navigateToRoom(this.rooms[0].id); // Mở phòng đầu tiên khi vào trang chat
+        this.navigateToRoom(this.rooms[0]); // Mở phòng đầu tiên khi vào trang chat
       }
     });
 
@@ -88,9 +88,9 @@ export class ChatListComponent implements OnInit {
     // });
   }
 
-  navigateToRoom(roomId: number): void {
-    this.selectedRoomId = roomId;
-    this.router.navigate(['/chat', roomId]);
+  navigateToRoom(room: Room): void {
+    this.selectedRoomId = room.id;
+    this.router.navigate(['/chat', room.id], { state: { room } });
   }
 
   setActiveTab(emojiKey: string): void {

@@ -87,12 +87,12 @@
     </div>
     <div class="profile-container" (click)="toggleProfileMenu($event)">
       <button class="profile-icon" type="button" aria-haspopup="true" [attr.aria-expanded]="profileMenuOpen">
-        <img src="assets/avatar.png" alt="Profile">
+        <img src="{{avatarURL}}" alt="Profile">
       </button>
       <div class="profile-menu" *ngIf="profileMenuOpen" (click)="$event.stopPropagation()">
         <div class="profile-menu-inner">
           <div class="profile-menu-header">
-            <img src="assets/avatar.png" class="profile-menu-avatar" alt="Profile">
+            <img src="{{avatarURL}}" class="profile-menu-avatar" alt="Profile">
             <div class="profile-menu-info">
               <div class="profile-menu-name">{{username}}</div>
               <button class="profile-menu-see" type="button">See all profiles</button>

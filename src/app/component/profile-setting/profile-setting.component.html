@@ -39,9 +39,16 @@
     <div class="profile-card">
       <div class="avatar-ring">
         <div class="avatar">
-          <span>JD</span>
+          <img src="{{linkAvatar}}" alt="{{userName}}" />
         </div>
-        <button class="avatar-edit">✏️</button>
+        <button class="avatar-edit" (click)="editAvatar()">✏️</button>
+        <input
+          #avatarInput
+          type="file"
+          accept="image/*"
+          hidden
+          (change)="editAvatar($event)"
+        />
       </div>
       <h2 class="profile-name">{{ userName }}</h2>
 

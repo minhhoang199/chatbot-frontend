@@ -7,6 +7,7 @@ export class Room {
       public lastMessageContent: string,
       public lastMessageTime: string,
       public status: string | null = null,
-      public privateKey: string | null = null
+      public privateKey: string | null = null,
+      public linkAvatar: string | null = null
     ) {}
   }

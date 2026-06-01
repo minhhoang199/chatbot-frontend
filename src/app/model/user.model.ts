@@ -6,6 +6,7 @@ export class User {
         public role: string,
         public email:string,
         public avatar: string | null,
-        public selected: boolean = false
+        public selected: boolean = false,
+        public linkAvatar: string | null = null
     ) {}
 }

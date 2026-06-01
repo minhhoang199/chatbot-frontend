@@ -21,7 +21,7 @@
           <div class="friend-item">
             <label class="contact-inner" (click)="$event.stopPropagation()">
               <div class="avatar">
-                <img src="assets/avatar.png" alt="{{user.username}}" />
+                <img src="{{user.linkAvatar || 'assets/avatar.png'}}" alt="{{user.username}}" />
               </div>
               <div class="meta">
                 <div class="name">{{ user.username }}</div>

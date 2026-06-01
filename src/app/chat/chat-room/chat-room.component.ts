@@ -12,6 +12,7 @@ export class ChatRoomComponent implements OnInit{
   @Input() room!: Room;
   lastMessageTime!: string;
   roomName!: string;
+  linkAvatar: string = 'assets/avatar.png';
 
   constructor(
     private roomService: RoomService,
@@ -30,6 +31,8 @@ export class ChatRoomComponent implements OnInit{
     } else {
       this.roomName = this.room.name;
     }
+    console.log("Room linkAvatar: " + this.room.linkAvatar);
+    this.linkAvatar = this.room.linkAvatar ? this.room.linkAvatar : 'assets/avatar.png';
   }
 
   //TODO: set lại lastMessageTime mỗi khi thêm mới message

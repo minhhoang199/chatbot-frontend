@@ -27,7 +27,7 @@
           <label class="contact-inner" (click)="$event.stopPropagation()">
             <input type="checkbox" (click)="toggleSelect(user); $event.stopPropagation()" [checked]="isSelected(user)"/>
             <div class="avatar">
-              <img src="assets/avatar.png" alt="{{user.username}}" />
+              <img src="{{user.linkAvatar || 'assets/avatar.png'}}" alt="{{user.username}}" />
             </div>
             <div class="meta">
               <div class="name">{{ user.username }}</div>
@@ -48,7 +48,7 @@
           <label class="contact-inner" (click)="$event.stopPropagation()">
             <input type="checkbox" (click)="toggleSelect(user); $event.stopPropagation()" [checked]="isSelected(user)"/>
             <div class="avatar">
-              <img src="assets/avatar.png" alt="{{user.username}}" />
+              <img src="{{user.linkAvatar || 'assets/avatar.png'}}" alt="{{user.username}}" />
             </div>
             <div class="meta">
               <div class="name">{{ user.username }}</div>

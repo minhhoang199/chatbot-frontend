@@ -9,10 +9,12 @@ import { LocalStorageService } from '../service/local-storage.service';
 })
 export class ChatComponent implements OnInit {
   username: string = '';
+  avatarURL: string = 'assets/avatar.png';
 
   constructor(private localStorageService: LocalStorageService, private router: Router){}
   ngOnInit(): void {
     this.username = this.localStorageService.getString('username') || '';
+    this.avatarURL = this.localStorageService.getString('linkAvatar') || 'assets/avatar.png';
   }
   logout(): void {
     this.localStorageService.clear(); // Clear all data

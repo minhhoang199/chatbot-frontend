@@ -7,6 +7,8 @@ import { GetRoomDetailResponse } from '../model/get-room-detail-response';
 import { RoomRequest } from '../model/room-request.model';
 import { environment } from '../../environments/environment';
 import { BaseResponse } from '../model/base-response';
+import { AvatarFile } from '../model/avatar-file.model';
+import { UploadAvatarResponse } from '../model/upload-avatar-response';
 
 const roomAPIUrl = environment.apiBaseUrl + '/v1/rooms/';
 @Injectable({
@@ -14,7 +16,10 @@ const roomAPIUrl = environment.apiBaseUrl + '/v1/rooms/';
 })
 export class RoomService {
   private roomsUpdated = new BehaviorSubject<Room | null>(null);
-  private roomUpdated = new BehaviorSubject<{ roomId: number; name: string } | null>(null);
+  private roomUpdated = new BehaviorSubject<{
+    roomId: number;
+    name: string;
+  } | null>(null);
   constructor(private httpClient: HttpClient) {}
 
   public getAllRooms(userId: number): Observable<Room[]> {
@@ -29,8 +34,17 @@ export class RoomService {
       .pipe(map((response) => response.data || null));
   }
 
-  public createRoom(name: string, roomType: string, emails: string[]): Observable<Room> {
-    return this.httpClient.post<GetRoomDetailResponse>(roomAPIUrl, new RoomRequest(name, roomType, emails)).pipe(map((response) => response.data));
+  public createRoom(
+    name: string,
+    roomType: string,
+    emails: string[],
+  ): Observable<Room> {
+    return this.httpClient
+      .post<GetRoomDetailResponse>(
+        roomAPIUrl,
+        new RoomRequest(name, roomType, emails),
+      )
+      .pipe(map((response) => response.data));
   }
 
   public notifyRoomCreated(room: Room) {
@@ -51,12 +65,18 @@ export class RoomService {
 
   getRoomByEmail(selectedEmail: string): Observable<Room | null> {
     return this.httpClient
-      .get<GetRoomDetailResponse>(roomAPIUrl + 'get-by-email?email=' + selectedEmail)
+      .get<GetRoomDetailResponse>(
+        roomAPIUrl + 'get-by-email?email=' + selectedEmail,
+      )
       .pipe(map((response) => response.data || null));
   }
 
   public updateRoomName(roomId: number, newName: string): Observable<String> {
-    return this.httpClient.put<BaseResponse>(roomAPIUrl + roomId + '/change-name', { name: newName }).pipe(map((response) => response.code));
+    return this.httpClient
+      .put<BaseResponse>(roomAPIUrl + roomId + '/change-name', {
+        name: newName,
+      })
+      .pipe(map((response) => response.code));
   }
 
   // Members management
@@ -68,19 +88,37 @@ export class RoomService {
 
   public addMembers(roomId: number, emails: string[]): Observable<string> {
     return this.httpClient
-      .put<BaseResponse>(roomAPIUrl + 'add-users', { roomId: roomId, emails: emails })
+      .put<BaseResponse>(roomAPIUrl + 'add-users', {
+        roomId: roomId,
+        emails: emails,
+      })
       .pipe(map((response) => response.code));
   }
 
   public removeMembers(roomId: number, emails: string[]): Observable<string> {
     return this.httpClient
-      .put<BaseResponse>(roomAPIUrl + 'remove-users', { roomId: roomId, emails: emails })
+      .put<BaseResponse>(roomAPIUrl + 'remove-users', {
+        roomId: roomId,
+        emails: emails,
+      })
       .pipe(map((response) => response.code));
   }
 
   public leaveRoom(roomId: number): Observable<string> {
     return this.httpClient
-      .put<BaseResponse>(roomAPIUrl+ roomId + '/outRoom', {})
+      .put<BaseResponse>(roomAPIUrl + roomId + '/outRoom', {})
       .pipe(map((response) => response.code));
+  }
+
+  public uploadFile(file: File | null, roomId: number): Observable<AvatarFile> {
+    let formData = new FormData();
+    formData.append('roomId', roomId.toString());
+    if (file) {
+      formData.append('file', file);
+    }
+
+    return this.httpClient
+      .post<UploadAvatarResponse>(roomAPIUrl + 'upload-avatar', formData)
+      .pipe(map((response) => response.data));
   }
 }
