@@ -2,8 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { GetFriendshipDetailResponse } from '../model/get-friendship-detail-response';
-import { GetNotificationResponse, GetNumberNotificationResponse } from '../model/get-friendships-response';
+import { GetNotificationResponse, GetNumberNotificationResponse } from '../model/get-notification-response';
 import { BaseResponse } from '../model/base-response';
 
 const friendshipAPIUrl = environment.apiBaseUrl + '/v1/notifications';
