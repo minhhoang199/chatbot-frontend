@@ -1,7 +1,11 @@
-import { Friendship } from "./friendship.model";
-
-export interface GetFriendshipsResponse {
+export interface GetNotificationResponse {
     code: string;
     message: string;
-    data: Friendship[];
+    data: Notification[];
+}
+
+export interface GetNumberNotificationResponse {
+    code: string;
+    message: string;
+    data: number;
 }
