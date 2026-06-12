@@ -6,13 +6,11 @@ import { LocalStorageService } from '../../service/local-storage.service';
 import { NotificationService } from '../../service/notification.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
 })
-export class HomeComponent implements OnInit, OnDestroy {
-  loading = true;
-  error: string | null = null;
+export class HeaderComponent implements OnInit, OnDestroy {
   unreadMessagesCount = 0;
   unreadNotificationsCount = 0;
   showNotificationsPopup = false;
@@ -48,6 +46,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  goTo(path: string): void {
+    this.router.navigate([path]);
+    this.showNotificationsPopup = false;
+  }
+
+  logout(): void {
+    this.localStorageService.clear();
+    this.router.navigate(['/sign-in']);
+  }
+
   toggleNotificationsPopup(event: MouseEvent): void {
     event.preventDefault();
     event.stopPropagation();
@@ -70,14 +78,5 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     this.showNotificationsPopup = false;
-  }
-
-  logout(): void {
-    this.localStorageService.clear(); // Clear all data
-    this.router.navigate(['/sign-in']); // Navigate to sign-in page
-  }
-
-  goToChat(): void {
-    this.router.navigate(['/chat']);
   }
 }

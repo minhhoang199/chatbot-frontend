@@ -20,6 +20,9 @@ import { ErrorPopupComponent } from './chat/error-popup/error-popup.component';
 import { OtpVerificationComponent } from './component/otp-verification/otp-verification.component';
 import { ForgotPasswordComponent } from './component/forgot-password/forgot-password.component';
 import { ProfileSettingComponent } from './component/profile-setting/profile-setting.component';
+import { NotificationsComponent } from './component/notifications/notifications.component';
+import { HomeComponent } from './component/home/home.component';
+import { HeaderComponent } from './component/header/header.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,9 @@ import { ProfileSettingComponent } from './component/profile-setting/profile-set
     OtpVerificationComponent,
     ForgotPasswordComponent,
     ProfileSettingComponent,
+    NotificationsComponent,
+    HeaderComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

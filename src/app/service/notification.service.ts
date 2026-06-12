@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, map } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { GetNotificationResponse, GetNumberNotificationResponse } from '../model/get-notification-response';
 import { BaseResponse } from '../model/base-response';
+import { Notification } from '../model/notification.model';
 
 const friendshipAPIUrl = environment.apiBaseUrl + '/v1/notifications';
 @Injectable({
@@ -12,9 +13,13 @@ const friendshipAPIUrl = environment.apiBaseUrl + '/v1/notifications';
 export class NotificationService {
   constructor(private httpClient: HttpClient) {}
 
-  public getLimitNotificationByUserId(): Observable<Notification[]> {
-    return this.httpClient.get<GetNotificationResponse>(friendshipAPIUrl)
-    .pipe(map((response) => response.data));
+  public getLimitNotificationByUserId(before?: Date): Observable<Notification[]> {
+    const options: { params?: { before: string } } = {};
+    if (before) {
+      options.params = { before: before.toISOString() };
+    }
+    return this.httpClient.get<GetNotificationResponse>(friendshipAPIUrl, options)
+      .pipe(map((response) => response.data));
   }
 
   public unreadCount(): Observable<number> {

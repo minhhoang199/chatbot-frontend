@@ -71,7 +71,8 @@ nav {
   margin-right: 42px;
 }
 
-.nav-links a {
+.nav-links a,
+.nav-button {
   text-decoration: none;
   font-size: 1.2rem;
   font-weight: 500;
@@ -79,12 +80,47 @@ nav {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   transition: color 0.2s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
 }
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-button:hover {
   color: var(--blue-deep);
 }
 .nav-links a.active {
   color: var(--blue-deep);
+}
+
+.notification-menu {
+  position: relative;
+}
+
+.notifications-popup-wrapper {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 420px;
+  z-index: 1000;
+}
+
+.nav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  margin-left: 10px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--red-deep);
+  color: var(--white);
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 .btn-outline {

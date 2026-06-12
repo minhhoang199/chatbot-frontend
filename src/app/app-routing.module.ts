@@ -7,6 +7,7 @@ import { ForgotPasswordComponent } from './component/forgot-password/forgot-pass
 import { HomeComponent } from './component/home/home.component';
 import { ProfileSettingComponent } from './component/profile-setting/profile-setting.component';
 import { FriendListComponent } from './component/friend-list/friend-list.component';
+import { NotificationsComponent } from './component/notifications/notifications.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,11 @@ const routes: Routes = [
   {
     path: "friends",
     component: FriendListComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "notifications",
+    component: NotificationsComponent,
     canActivate: [AuthGuard]
   },
   {

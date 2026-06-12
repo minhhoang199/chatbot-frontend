@@ -1,3 +1,5 @@
+import { Notification } from "./notification.model";
+
 export interface GetNotificationResponse {
     code: string;
     message: string;

@@ -1,0 +1,103 @@
+.logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.65rem;
+    color: var(--blue-deep);
+    margin-right: auto;
+    letter-spacing: 0.02em;
+}
+
+.app-logo {
+    margin-right: 9px;
+}
+
+.app-logo svg {
+    width: 80px;
+    height: 80px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 48px;
+    list-style: none;
+    margin-right: 42px;
+}
+
+.nav-links a,
+.nav-button {
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-gray);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0;
+}
+
+.nav-links a:hover,
+.nav-button:hover {
+    color: var(--blue-deep);
+}
+
+.nav-links a.active {
+    color: var(--blue-deep);
+}
+
+.nav-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    margin-left: 10px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: var(--red-deep);
+    color: var(--white);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.notification-menu {
+    position: relative;
+}
+
+.notifications-popup-wrapper {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 420px;
+    z-index: 1000;
+}
+
+.btn-solid {
+    background: var(--red-deep);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.23rem;
+    padding: 12px 33px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-solid:hover {
+    background: var(--red-mid);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    padding: 42px 66px 0;
+    gap: 12px;
+    position: relative;
+    z-index: 10;
+}

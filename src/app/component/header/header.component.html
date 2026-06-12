@@ -1,0 +1,29 @@
+<nav>
+  <div class="logo">
+    <div class="app-logo">
+      <!-- Reuse existing SVG logo -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="85" height="85" viewBox="0 0 85 85">
+        <path d="M42.5 2C20.3 2 2 18.5 2 38.2c0 8.5 3.8 16.3 10.2 22.4L8 82l17.8-8.1c5.3 2 10.8 3 16.7 3 22.2 0 40.5-16.5 40.5-36.7C83 18.5 64.7 2 42.5 2z" fill="#1877f2" />
+        <g transform="translate(0,85) scale(0.1,-0.1)" fill="#ffffff">
+          <path d="M203 681 c-17 -11 -37 -29 -42 -40 -7 -12 -11 -101 -11 -230 0 -227 0 -228 51 -201 18 10 19 23 19 213 1 170 3 199 14 185 7 -10 44 -76 82 -148 67 -125 70 -130 101 -130 37 0 39 2 142 180 l61 105 0 -188 0 -188 26 -24 c15 -14 31 -25 35 -25 5 0 9 103 9 230 l0 230 -39 26 c-22 14 -48 24 -57 22 -11 -2 -49 -56 -94 -131 -87 -148 -69 -150 -163 18 -68 120 -80 129 -134 96z"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <ul class="nav-links">
+    <li><a (click)="goTo('/home')">Home</a></li>
+    <li><a (click)="goTo('/chat')">Chat <span *ngIf="unreadMessagesCount > 0" class="nav-badge">{{ unreadMessagesCount }}</span></a></li>
+    <li class="notification-menu" #notificationsTrigger>
+      <button type="button" class="nav-button" (click)="toggleNotificationsPopup($event)">
+        Notifications <span *ngIf="unreadNotificationsCount > 0" class="nav-badge">{{ unreadNotificationsCount }}</span>
+      </button>
+      <div *ngIf="showNotificationsPopup" class="notifications-popup-wrapper">
+        <app-notifications (closePopup)="closeNotificationsPopup()"></app-notifications>
+      </div>
+    </li>
+    <li><a (click)="goTo('/settings')">Settings</a></li>
+  </ul>
+
+  <button class="btn-solid" (click)="logout()">Log out</button>
+</nav>

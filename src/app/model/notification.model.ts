@@ -4,6 +4,8 @@ export class Notification {
         public userId: number,
         public messageId: number,
         public content: string,
-        public type: string
+        public type: string,
+        public isRead?: boolean,
+        public createdAt?: string
     ) {}
 }

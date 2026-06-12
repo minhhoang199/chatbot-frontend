@@ -1,0 +1,44 @@
+<div class="notification-popup" (click)="$event.stopPropagation()">
+    <div class="popup-header">
+      <div>
+        <h2>Notifications</h2>
+        <p class="subtitle">Recent activity and alerts from your account.</p>
+      </div>
+      <div class="popup-actions">
+        <button type="button" class="btn-close" (click)="closePopup.emit()">×</button>
+      </div>
+    </div>
+
+    <div class="popup-tabs">
+      <button [class.active]="selectedTab === 'all'" (click)="selectTab('all')">All</button>
+      <button [class.active]="selectedTab === 'unread'" (click)="selectTab('unread')">Unread</button>
+    </div>
+
+    <div *ngIf="error" class="error">{{ error }}</div>
+    <div *ngIf="loading" class="loading">Loading notifications…</div>
+
+    <div class="notification-scroll" (scroll)="onScroll($event)">
+      <div *ngIf="!loading && filteredNotifications.length === 0" class="empty">No notifications available.</div>
+
+      <div class="notification-list">
+        <div
+          *ngFor="let notification of filteredNotifications; trackBy: trackByNotification"
+          class="notification-card"
+          [class.unread]="!isNotificationRead(notification)"
+          (click)="markAsRead(notification)">
+          <div class="notification-avatar"></div>
+          <div class="notification-content">
+            <div class="notification-title">{{ notification.content }}</div>
+            <div class="notification-meta">
+              <span>{{ notification.type || 'General' }}</span>
+              <span class="notification-time">{{ notification.createdAt ? (notification.createdAt | date:'shortTime') : '' }}</span>
+            </div>
+          </div>
+          <span *ngIf="!isNotificationRead(notification)" class="notification-dot"></span>
+        </div>
+      </div>
+
+      <div *ngIf="loadingMore" class="loading-more">Loading more…</div>
+      <div *ngIf="finished && !loading && !loadingMore" class="end-list">You're all caught up.</div>
+    </div>
+  </div>
