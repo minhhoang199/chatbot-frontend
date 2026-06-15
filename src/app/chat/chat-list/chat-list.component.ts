@@ -1,10 +1,11 @@
 import { AuthService } from './../../service/auth.service';
 import { RoomService } from './../../service/room.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Room } from '../../model/room.model';
 import { Router } from '@angular/router';
 import { Message } from '../../model/message.model';
 import { WebsocketService } from '../../service/websocket.service';
+import { NotificationService } from '../../service/notification.service';
 
 @Component({
   selector: 'app-chat-list',
@@ -17,11 +18,14 @@ export class ChatListComponent implements OnInit {
   roomSubscriptions: any[] = [];
   selectedRoomId!: number | null;
   activeTab: string = 'All';
+
+  @Input() unreadMessagesByRoom: Record<number, number> = {};
   constructor(
     private roomService: RoomService,
     private authService: AuthService,
     private router: Router,
     private websocketService: WebsocketService,
+    private notificationService: NotificationService
   ) {}
   ngOnInit(): void {
     const id = this.authService.getId();
@@ -90,6 +94,14 @@ export class ChatListComponent implements OnInit {
 
   navigateToRoom(room: Room): void {
     this.selectedRoomId = room.id;
+    this.notificationService.readRoomMessages(room.id).subscribe({
+      next: (code) => {
+        if (code === 'TD-000') {
+          this.unreadMessagesByRoom[room.id] = 0;
+        }
+      },
+      error: () => {}
+    });
     this.router.navigate(['/chat', room.id], { state: { room } });
   }
 

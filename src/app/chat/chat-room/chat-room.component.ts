@@ -10,6 +10,8 @@ import { AuthService } from '../../service/auth.service';
 })
 export class ChatRoomComponent implements OnInit{
   @Input() room!: Room;
+  @Input() unreadCount: number = 0;
+  @Input() active: boolean = false;
   lastMessageTime!: string;
   roomName!: string;
   linkAvatar: string = 'assets/avatar.png';

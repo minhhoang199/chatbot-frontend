@@ -61,8 +61,6 @@
     justify-content: center;
     align-items: center;
     max-width: 100%;
-    padding-left: 10px;
-    padding-right: 220px;
     flex: 1;
 }
 
@@ -102,6 +100,14 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    position: relative;
+}
+
+.notifications-popup-wrapper {
+    position: absolute;
+    right: 0;
+    top: 56px;
+    z-index: 1200;
 }
 
 .nav-right-icon svg {

@@ -23,6 +23,7 @@ import { MatDialogActions, MatDialogContent } from "@angular/material/dialog";
 import { VideoCallComponent } from "./video-call/video-call.component";
 import { FindUserDialogComponent } from './find-user-dialog/find-user-dialog.component';
 import { AddPeopleDialogComponent } from "./add-people-dialog/add-people-dialog.component";
+import { NotificationsComponent } from "../component/notifications/notifications.component";
 
 @NgModule({
     declarations: [
@@ -39,7 +40,11 @@ import { AddPeopleDialogComponent } from "./add-people-dialog/add-people-dialog.
       MembersListComponent,
       VideoCallComponent,
       FindUserDialogComponent,
-      AddPeopleDialogComponent
+      AddPeopleDialogComponent,
+      NotificationsComponent
+    ],
+    exports: [
+      NotificationsComponent
     ],
     imports: [
     CommonModule,

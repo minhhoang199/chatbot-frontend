@@ -17,10 +17,10 @@
         </g>
       </svg>
     </div>
-    <div class="search-box">
+    <!-- <div class="search-box">
       <i class="fas fa-search"></i>
       <input type="text" placeholder="Search Facebook">
-    </div>
+    </div> -->
   </div>
   <div class="nav-center">
     <div class="nav-center-icon nav-icon" (click)="navigateTo('home')">
@@ -41,13 +41,6 @@
         </path>
       </svg>
     </div>
-    <div class="nav-center-icon nav-icon" (click)="navigateTo('friends')">
-      <svg viewBox="0 0 24 24" width="24" height="24">
-        <path
-          d="M13.762 1a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5zM6.25 5a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5zm-1.667 7.5A4.083 4.083 0 0 0 .5 16.583 2.417 2.417 0 0 0 2.917 19h6.666A2.417 2.417 0 0 0 12 16.583 4.083 4.083 0 0 0 7.917 12.5H4.583zm7.512-4-.098.001c-.625.015-1.03.487-1.148.943a4.712 4.712 0 0 1-.299.827 1.326 1.326 0 0 0 .46 1.664 5.61 5.61 0 0 1 1.982 2.316c.198.431.634.749 1.154.749h2.949a2.417 2.417 0 0 0 2.417-2.417A4.083 4.083 0 0 0 15.428 8.5h-3.333z">
-        </path>
-      </svg>
-    </div>
     <div class="nav-center-icon nav-icon" (click)="navigateTo('settings')">
       <svg viewBox="0 0 24 24" width="24" height="24">
         <path
@@ -58,17 +51,6 @@
         </path>
       </svg>
     </div>
-    <!-- <div class="nav-center-icon nav-icon">
-      <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"
-        class="x14rh7hd x1lliihq x1tzjh5l x1k90msu x2h7rmj x1qfuztq" style="--x-color: var(--secondary-icon);">
-        <path
-          d="M8 8a1 1 0 0 1 1 1v2h2a1 1 0 1 1 0 2H9v2a1 1 0 1 1-2 0v-2H5a1 1 0 1 1 0-2h2V9a1 1 0 0 1 1-1zm8 2a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0zm-2 4a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0z">
-        </path>
-        <path
-          d="M.5 11a7 7 0 0 1 7-7h9a7 7 0 0 1 7 7v2a7 7 0 0 1-7 7h-9a7 7 0 0 1-7-7v-2zm7-5a5 5 0 0 0-5 5v2a5 5 0 0 0 5 5h9a5 5 0 0 0 5-5v-2a5 5 0 0 0-5-5h-9z">
-        </path>
-      </svg>
-    </div> -->
   </div>
   <div class="nav-right">
     <div class="nav-icon nav-right-icon">
@@ -78,12 +60,15 @@
         </path>
       </svg>
     </div>
-    <div class="nav-icon nav-right-icon">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+    <div class="nav-icon nav-right-icon" #notificationsTrigger>
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" (click)="toggleNotificationsPopup($event)">
         <path
           d="M3 9.5a9 9 0 1 1 18 0v2.927c0 1.69.475 3.345 1.37 4.778a1.5 1.5 0 0 1-1.272 2.295h-4.625a4.5 4.5 0 0 1-8.946 0H2.902a1.5 1.5 0 0 1-1.272-2.295A9.01 9.01 0 0 0 3 12.43V9.5zm6.55 10a2.5 2.5 0 0 0 4.9 0h-4.9z">
         </path>
       </svg>
+      <div *ngIf="showNotificationsPopup" class="notifications-popup-wrapper">
+        <app-notifications (closePopup)="closeNotificationsPopup()"></app-notifications>
+      </div>
     </div>
     <div class="profile-container" (click)="toggleProfileMenu($event)">
       <button class="profile-icon" type="button" aria-haspopup="true" [attr.aria-expanded]="profileMenuOpen">
@@ -176,7 +161,7 @@
       </svg>
       <input type="text" placeholder="Search Messenger">
     </div>
-    <app-chat-list></app-chat-list>
+    <app-chat-list [unreadMessagesByRoom]="unreadMessagesByRoom"></app-chat-list>
   </div>
   <div class="chat-window-side">
     <router-outlet></router-outlet>

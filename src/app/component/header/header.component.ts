@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private loadNotificationCounts(): void {
     this.notificationService.unreadMessagesCount().subscribe({
-      next: (count) => (this.unreadMessagesCount = count ?? 0),
+      next: (countMap) => (this.unreadMessagesCount =  Object.keys(countMap || {}).length ?? 0),
       error: () => (this.unreadMessagesCount = 0)
     });
 

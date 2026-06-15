@@ -11,3 +11,9 @@ export interface GetNumberNotificationResponse {
     message: string;
     data: number;
 }
+
+export interface GetMessageNotificationResponse {
+    code: string;
+    message: string;
+    data: Record<string, number> | null;
+}

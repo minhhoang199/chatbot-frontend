@@ -23,6 +23,7 @@ import { ProfileSettingComponent } from './component/profile-setting/profile-set
 import { NotificationsComponent } from './component/notifications/notifications.component';
 import { HomeComponent } from './component/home/home.component';
 import { HeaderComponent } from './component/header/header.component';
+import { ChatModule } from './chat/chat.module';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,6 @@ import { HeaderComponent } from './component/header/header.component';
     OtpVerificationComponent,
     ForgotPasswordComponent,
     ProfileSettingComponent,
-    NotificationsComponent,
     HeaderComponent,
     HomeComponent
   ],
@@ -50,7 +50,8 @@ import { HeaderComponent } from './component/header/header.component';
     MatRadioModule,
     MatIcon,
     MatDialogActions,
-    MatDialogContent
+    MatDialogContent,
+    ChatModule
 ],
   providers: [
     provideClientHydration(), provideHttpClient(withFetch()), 

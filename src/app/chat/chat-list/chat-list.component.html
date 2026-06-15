@@ -6,7 +6,12 @@
 </div>
 <div class="chat-list">
     <div *ngFor="let room of filteredRooms">
-        <app-chat-room [room]="room" [class.active]="room.id === selectedRoomId"
-            (click)="navigateToRoom(room)" (leave)="onRoomLeave(room.id)"></app-chat-room>
+        <app-chat-room
+            [room]="room"
+            [active]="room.id === selectedRoomId"
+            [unreadCount]="unreadMessagesByRoom[room.id] || 0"
+            (click)="navigateToRoom(room)"
+            (leave)="onRoomLeave(room.id)">
+        </app-chat-room>
     </div>
 </div>

@@ -94,6 +94,10 @@
     background-color: #e7f3ff;
 }
 
+.chat-item.has-unread {
+    background-color: #eef6ff;
+}
+
 .chat-avatar {
     width: 68px;
     height: 68px;
@@ -143,7 +147,7 @@
 
 .online-indicator {
     position: absolute;
-    right: 16px;
+    right: 52px;
     top: 50%;
     transform: translateY(-50%);
     width: 12px;

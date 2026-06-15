@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { GetNotificationResponse, GetNumberNotificationResponse } from '../model/get-notification-response';
+import { GetMessageNotificationResponse, GetNotificationResponse, GetNumberNotificationResponse } from '../model/get-notification-response';
 import { BaseResponse } from '../model/base-response';
 import { Notification } from '../model/notification.model';
 
-const friendshipAPIUrl = environment.apiBaseUrl + '/v1/notifications';
+const notificationAPIUrl = environment.apiBaseUrl + '/v1/notifications';
 @Injectable({
   providedIn: 'root',
 })
@@ -18,23 +18,29 @@ export class NotificationService {
     if (before) {
       options.params = { before: before.toISOString() };
     }
-    return this.httpClient.get<GetNotificationResponse>(friendshipAPIUrl, options)
+    return this.httpClient.get<GetNotificationResponse>(notificationAPIUrl, options)
       .pipe(map((response) => response.data));
   }
 
   public unreadCount(): Observable<number> {
-    return this.httpClient.get<GetNumberNotificationResponse>(friendshipAPIUrl + "/unread-count")
+    return this.httpClient.get<GetNumberNotificationResponse>(notificationAPIUrl + "/unread-count")
     .pipe(map((response) => response.data));
   }
 
-  public unreadMessagesCount(): Observable<number> {
-    return this.httpClient.get<GetNumberNotificationResponse>(friendshipAPIUrl + "/messages/unread-count")
+  public unreadMessagesCount(): Observable<Record<string, number> | null> {
+    return this.httpClient.get<GetMessageNotificationResponse>(notificationAPIUrl + "/messages/unread-count")
     .pipe(map((response) => response.data));
   }
 
   public readNotification(id: number): Observable<string> {
     return this.httpClient
-    .put<BaseResponse>(friendshipAPIUrl + "/" + id + "/read", {})
+    .put<BaseResponse>(notificationAPIUrl + "/" + id + "/read", {})
+    .pipe(map((response) => response.code));
+  }
+
+  public readRoomMessages(roomId: number): Observable<string> {
+    return this.httpClient
+    .put<BaseResponse>(notificationAPIUrl + "/room-message/" + roomId + "/read", {})
     .pipe(map((response) => response.code));
   }
 }
