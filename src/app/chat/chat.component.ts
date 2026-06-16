@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Router } from '@angular/router';
 import { LocalStorageService } from '../service/local-storage.service';
 import { NotificationService } from '../service/notification.service';
-import { Subject, interval } from 'rxjs';
+import { forkJoin, Subject, interval } from 'rxjs';
 import { startWith, takeUntil, switchMap } from 'rxjs/operators';
 
 @Component({
@@ -14,6 +14,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   username: string = '';
   avatarURL: string = 'assets/avatar.png';
   unreadMessagesByRoom: Record<number, number> = {};
+  unreadMessagesCount = 0;
+  unreadNotificationsCount = 0;
   showNotificationsPopup = false;
   @ViewChild('notificationsTrigger', { read: ElementRef }) notificationsTrigger?: ElementRef<HTMLElement>;
   private destroy$ = new Subject<void>();
@@ -30,12 +32,19 @@ export class ChatComponent implements OnInit, OnDestroy {
     interval(5000)
       .pipe(
         startWith(0),
-        switchMap(() => this.notificationService.unreadMessagesCount()),
+        switchMap(() =>
+          forkJoin({
+            unreadMessages: this.notificationService.unreadMessagesCount(),
+            unreadNotifications: this.notificationService.unreadCount(),
+          }),
+        ),
         takeUntil(this.destroy$),
       )
       .subscribe({
-        next: (countMap) => {
-          this.unreadMessagesByRoom = Object.entries(countMap || {}).reduce(
+        next: ({ unreadMessages, unreadNotifications }) => {
+          this.unreadNotificationsCount = unreadNotifications ?? 0;
+          this.unreadMessagesCount = Object.keys(unreadMessages || {}).length ?? 0;
+          this.unreadMessagesByRoom = Object.entries(unreadMessages || {}).reduce(
             (acc, [roomId, count]) => {
               acc[Number(roomId)] = count;
               return acc;
@@ -44,6 +53,8 @@ export class ChatComponent implements OnInit, OnDestroy {
           );
         },
         error: () => {
+          this.unreadNotificationsCount = 0;
+          this.unreadMessagesCount = 0;
           this.unreadMessagesByRoom = {};
         },
       });

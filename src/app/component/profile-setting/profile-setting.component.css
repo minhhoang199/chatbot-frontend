@@ -22,8 +22,8 @@
   background: var(--white);
   border-radius: 28px;
   width: 100%;
-  max-width: 1100px;
-  min-height: 620px;
+  max-width: 1650px;
+  min-height: 870px;
   overflow: hidden;
   position: relative;
   display: flex;
@@ -36,22 +36,22 @@
 /* ── BG CORNER BLOBS ── */
 .bg-corner {
   position: absolute;
-  width: 160px;
-  height: 160px;
+  width: 240px;
+  height: 240px;
   background: var(--blue-bg);
   border-radius: 50%;
   z-index: 0;
   opacity: 0.55;
 }
-.bg-corner.tl { top: -60px;    left: -40px; }
-.bg-corner.br { bottom: -60px; right: -40px; }
+.bg-corner.tl { top: -90px;    left: -60px;  }
+.bg-corner.br { bottom: -90px; right: -60px; }
 
 /* ── NAV ── */
 nav {
   display: flex;
   align-items: center;
-  padding: 42px 66px 0;
-  gap: 12px;
+  padding: 63px 99px 0;
+  gap: 18px;
   position: relative;
   z-index: 10;
 }
@@ -59,7 +59,7 @@ nav {
 .logo {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
-  font-size: 1.65rem;
+  font-size: 2.475rem;
   color: var(--blue-deep);
   margin-right: auto;
   letter-spacing: 0.02em;
@@ -70,20 +70,20 @@ nav {
 }
 
 .app-logo svg {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
 }
 
 .nav-links {
   display: flex;
-  gap: 48px;
+  gap: 72px;
   list-style: none;
-  margin-right: 42px;
+  margin-right: 63px;
 }
 
 .nav-links a {
   text-decoration: none;
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   font-weight: 500;
   color: var(--text-gray);
   letter-spacing: 0.06em;
@@ -97,16 +97,16 @@ nav {
   color: var(--blue-deep);
 }
 .btn-outline {
-  border: 2.25px solid var(--text-dark);
+  border: 3.375px solid var(--text-dark);
   background: transparent;
   color: var(--text-dark);
   font-family: 'DM Sans', sans-serif;
-  font-size: 1.23rem;
-  padding: 10.5px 30px;
-  border-radius: 50px;
+  font-size: 1.845rem;
+  padding: 15.75px 45px;
+  border-radius: 75px;
   cursor: pointer;
   transition: all 0.2s;
-  margin-right: 15px;
+  margin-right: 22.5px;
 }
 .btn-outline:hover {
   border-color: var(--blue-deep);
@@ -117,9 +117,9 @@ nav {
   background: var(--red-deep);
   color: var(--white);
   font-family: 'DM Sans', sans-serif;
-  font-size: 1.23rem;
-  padding: 12px 33px;
-  border-radius: 50px;
+  font-size: 1.845rem;
+  padding: 18px 49.5px;
+  border-radius: 75px;
   border: none;
   cursor: pointer;
   transition: background 0.2s;
@@ -132,21 +132,21 @@ nav {
   display: flex;
   flex: 1;
   align-items: stretch;
-  padding: 32px 44px 44px;
-  gap: 28px;
+  padding: 48px 66px 66px;
+  gap: 42px;
   position: relative;
 }
 
 /* ── LEFT: PROFILE CARD ── */
 .profile-card {
-  flex: 0 0 220px;
+  flex: 0 0 330px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 28px 20px;
+  padding: 42px 30px;
   background: linear-gradient(160deg, var(--blue-pale) 0%, #f0f6ff 100%);
-  border-radius: 20px;
-  border: 1.5px solid var(--blue-light);
+  border-radius: 30px;
+  border: 2.25px solid var(--blue-light);
   z-index: 5;
   animation: fadeUp 0.7s ease both;
   position: relative;
@@ -156,8 +156,8 @@ nav {
 .profile-card::before {
   content: '';
   position: absolute;
-  top: -50px; right: -50px;
-  width: 140px; height: 140px;
+  top: -75px; right: -75px;
+  width: 210px; height: 210px;
   background: var(--blue-light);
   border-radius: 50%;
   opacity: 0.3;
@@ -172,19 +172,19 @@ nav {
 /* Avatar */
 .avatar-ring {
   position: relative;
-  margin-bottom: 14px;
+  margin-bottom: 21px;
 }
 
 .avatar {
-  width: 76px;
-  height: 76px;
+  width: 114px;
+  height: 114px;
   border-radius: 50%;
   background: linear-gradient(135deg, #60a5fa, var(--blue-deep));
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px solid var(--white);
-  box-shadow: 0 4px 18px rgba(24, 119, 242, 0.28);
+  border: 4.5px solid var(--white);
+  box-shadow: 0 6px 27px rgba(24, 119, 242, 0.28);
 }
 
 .avatar img {
@@ -196,17 +196,17 @@ nav {
 
 .avatar-edit {
   position: absolute;
-  bottom: 0; right: -2px;
-  width: 26px; height: 26px;
+  bottom: 0; right: -3px;
+  width: 39px; height: 39px;
   border-radius: 50%;
   background: var(--white);
-  border: 1.5px solid var(--blue-light);
+  border: 2.25px solid var(--blue-light);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.65rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  font-size: 0.975rem;
+  box-shadow: 0 3px 9px rgba(0,0,0,0.1);
   transition: background 0.15s;
 }
 .avatar-edit:hover { background: var(--blue-pale); }
@@ -214,31 +214,31 @@ nav {
 .profile-name {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
-  font-size: 1rem;
+  font-size: 1.5rem;
   color: var(--text-dark);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   text-align: center;
 }
 
 .profile-role {
-  font-size: 0.75rem;
+  font-size: 1.125rem;
   color: var(--text-gray);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 /* Profile stats */
 .profile-stats {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 24px;
-  padding: 14px 16px;
+  gap: 21px;
+  margin-bottom: 36px;
+  padding: 21px 24px;
   background: var(--white);
-  border-radius: 14px;
+  border-radius: 21px;
   width: 100%;
-  box-shadow: 0 2px 10px rgba(24, 119, 242, 0.08);
+  box-shadow: 0 3px 15px rgba(24, 119, 242, 0.08);
 }
 
 .pstat {
@@ -251,22 +251,22 @@ nav {
 .pstat-num {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
-  font-size: 1.1rem;
+  font-size: 1.65rem;
   color: var(--blue-deep);
   line-height: 1;
 }
 
 .pstat-label {
-  font-size: 0.65rem;
+  font-size: 0.975rem;
   color: var(--text-gray);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 
 .pstat-divider {
-  width: 1px;
-  height: 28px;
+  width: 1.5px;
+  height: 42px;
   background: var(--blue-light);
 }
 
@@ -276,17 +276,17 @@ nav {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   padding-left: 0;
 }
 
 .side-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-size: 0.82rem;
+  gap: 15px;
+  padding: 15px 21px;
+  border-radius: 18px;
+  font-size: 1.23rem;
   font-weight: 500;
   color: var(--text-gray);
   cursor: pointer;
@@ -297,10 +297,10 @@ nav {
   background: var(--blue-deep);
   color: var(--white);
 }
-.side-item.danger { color: var(--danger); margin-top: 8px; }
+.side-item.danger { color: var(--danger); margin-top: 12px; }
 .side-item.danger:hover { background: #fef2f2; }
 
-.side-icon { font-size: 0.95rem; }
+.side-icon { font-size: 1.425rem; }
 
 /* ── RIGHT: SETTINGS PANEL ── */
 .settings-panel {
@@ -323,54 +323,51 @@ nav {
 .panel-header h1 {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
-  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+  font-size: clamp(3rem, 5.25vw, 4.35rem);
   line-height: 1.05;
   color: var(--text-dark);
   margin-bottom: 6px;
 }
-.panel-header h1 span {
-  color: var(--blue-deep);
-  display: block;
-}
+
 .panel-header p {
   color: var(--text-gray);
-  font-size: 0.88rem;
+  font-size: 1.395rem;
 }
 
 /* Section labels */
 .section-label {
   font-family: 'Syne', sans-serif;
   font-weight: 700;
-  font-size: 0.72rem;
+  font-size: 1.62rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--blue-deep);
-  margin-bottom: 12px;
+  margin-bottom: 27px;
   padding-left: 4px;
-  border-left: 3px solid var(--blue-deep);
-  padding-left: 10px;
+  border-left: 6.75px solid var(--blue-deep);
+  padding-left: 22.5px;
 }
 
 /* Form grid */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-bottom: 22px;
+  gap: 31.5px;
+  margin-bottom: 49.5px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 13.5px;
 }
 
 .form-group.full-width {
-  margin-bottom: 22px;
+  margin-bottom: 49.5px;
 }
 
 .form-group label {
-  font-size: 0.75rem;
+  font-size: 1.6875rem;
   font-weight: 500;
   color: var(--text-gray);
   text-transform: uppercase;
@@ -381,20 +378,20 @@ nav {
 .input-wrap {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 22.5px;
   background: var(--blue-pale);
-  border-radius: 12px;
-  padding: 10px 16px;
-  border: 1.5px solid transparent;
+  border-radius: 27px;
+  padding: 22.5px 36px;
+  border: 3.375px solid transparent;
   transition: border-color 0.2s, background 0.2s;
 }
 .input-wrap:focus-within {
   border-color: var(--blue-deep);
   background: var(--white);
-  box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
+  box-shadow: 0 0 0 6.75px rgba(24, 119, 242, 0.1);
 }
 
-.input-icon { font-size: 0.9rem; opacity: 0.55; flex-shrink: 0; }
+.input-icon { font-size: 2.025rem; opacity: 0.55; flex-shrink: 0; }
 
 .input-wrap input,
 .input-wrap textarea {
@@ -402,7 +399,7 @@ nav {
   background: transparent;
   outline: none;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.88rem;
+  font-size: 1.98rem;
   color: var(--text-dark);
   width: 100%;
   resize: none;
@@ -410,24 +407,24 @@ nav {
 .input-wrap input::placeholder,
 .input-wrap textarea::placeholder { color: var(--text-gray); }
 
-.textarea-wrap { align-items: flex-start; padding-top: 12px; }
+.textarea-wrap { align-items: flex-start; padding-top: 27px; }
 
 /* Actions */
 .form-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-top: 8px;
-  margin-bottom: 20px;
+  gap: 18px;
+  margin-top: 12px;
+  margin-bottom: 30px;
 }
 
 .btn-cancel {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.82rem;
+  font-size: 1.23rem;
   font-weight: 500;
-  padding: 12px 26px;
-  border-radius: 50px;
-  border: 1.5px solid var(--blue-light);
+  padding: 18px 39px;
+  border-radius: 75px;
+  border: 2.25px solid var(--blue-light);
   background: transparent;
   color: var(--text-gray);
   cursor: pointer;
@@ -440,17 +437,17 @@ nav {
   color: var(--white);
   font-family: 'DM Sans', sans-serif;
   font-weight: 700;
-  font-size: 0.82rem;
+  font-size: 1.23rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  padding: 13px 28px;
-  border-radius: 50px;
+  padding: 19.5px 42px;
+  border-radius: 75px;
   border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   transition: background 0.2s, transform 0.15s;
 }
-.btn-cta:hover { background: var(--blue-mid); transform: translateX(3px); }
-.btn-cta .arrow { font-size: 1rem; }
+.btn-cta:hover { background: var(--blue-mid); transform: translateX(4.5px); }
+.btn-cta .arrow { font-size: 1.5rem; }
