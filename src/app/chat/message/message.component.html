@@ -62,6 +62,10 @@
           <button class="menu-btn" (click)="replyMessage(); $event.stopPropagation()">
             <i class="fas fa-reply"></i>
           </button>
+          <button class="menu-btn" (click)="toggleTranslatePopup(_message.id, $event); $event.stopPropagation()"
+            *ngIf="_message.attachedFile === null" title="Translate message">
+            <i class="fas fa-globe"></i>
+          </button>
           <!-- <button class="menu-btn" (click)="toggleEditPopup(_message.id, $event); $event.stopPropagation()" *ngIf="_message.attachedFile === null">
           <i class="fas fa-pencil-alt"></i>
         </button>
@@ -100,6 +104,83 @@
             <ng-template #noEdits>
               <div class="no-edits">Not found edit history</div>
             </ng-template>
+          </div>
+        </div>
+
+        <!-- Translate popup -->
+        <div class="translate-popup-overlay" *ngIf="activeTranslatePopupId === _message.id">
+          <div class="translate-popup-container">
+            <!-- Header -->
+            <div class="translate-popup-header">
+              <h2>{{ isShowingTranslation ? 'Translated Message' : 'Translate Message' }}</h2>
+              <button class="close-btn" (click)="closeTranslatePopup()">✖</button>
+            </div>
+
+            <!-- Translation UI - Show when not translated yet -->
+            <div class="translate-popup-content" *ngIf="!isShowingTranslation">
+              <div class="language-selectors">
+                <!-- From Language -->
+                <div class="language-group">
+                  <label>From:</label>
+                  <select [(ngModel)]="sourceLanguage" class="language-select">
+                    <option *ngFor="let lang of languages" [value]="lang.code">
+                      {{ lang.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <!-- Swap button -->
+                <button class="swap-btn" title="Swap languages" (click)="swapLanguages(); $event.stopPropagation()">
+                  <i class="fas fa-arrows-alt-h"></i>
+                </button>
+
+                <!-- To Language -->
+                <div class="language-group">
+                  <label>To:</label>
+                  <select [(ngModel)]="targetLanguage" class="language-select">
+                    <option *ngFor="let lang of languages" [value]="lang.code">
+                      {{ lang.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Original Text -->
+              <div class="original-text-container">
+                <div class="text-label">Original:</div>
+                <div class="original-text">{{ _message.content }}</div>
+              </div>
+
+              <!-- Error message -->
+              <div class="translate-error" *ngIf="translateError">
+                {{ translateError }}
+              </div>
+
+              <!-- Translate button -->
+              <div class="translate-popup-footer">
+                <button class="btn btn-primary" (click)="translateMessage(); $event.stopPropagation()"
+                  [disabled]="isTranslating" >
+                  <span *ngIf="!isTranslating">Translate</span>
+                  <span *ngIf="isTranslating"><i class="fas fa-spinner fa-spin"></i> Translating...</span>
+                </button>
+                <button class="btn btn-secondary" (click)="closeTranslatePopup()">Cancel</button>
+              </div>
+            </div>
+
+            <!-- Show Translated Content -->
+            <div class="translate-result-content" *ngIf="isShowingTranslation">
+              <div class="translated-text-container">
+                <div class="text-label">Translated to {{ getLanguageName(targetLanguage) }}:</div>
+                <div class="translated-text">{{ translatedContent }}</div>
+              </div>
+
+              <div class="translate-result-footer">
+                <button class="btn btn-secondary" (click)="showOriginalContent()">
+                  <i class="fas fa-arrow-left"></i> Back to Original
+                </button>
+                <button class="btn btn-secondary" (click)="closeTranslatePopup()">Done</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -237,6 +318,10 @@
         <button class="menu-btn" (click)="replyMessage(); $event.stopPropagation()">
           <i class="fas fa-reply"></i>
         </button>
+        <button class="menu-btn" (click)="toggleTranslatePopup(_message.id, $event); $event.stopPropagation()"
+          *ngIf="_message.attachedFile === null" title="Translate message">
+          <i class="fas fa-globe"></i>
+        </button>
         <button class="menu-btn" (click)="toggleEditPopup(_message.id, $event); $event.stopPropagation()"
           *ngIf="_message.attachedFile === null">
           <i class="fas fa-pencil-alt"></i>
@@ -276,6 +361,83 @@
           <ng-template #noEdits2>
             <div class="no-edits">Not found edit history</div>
           </ng-template>
+        </div>
+      </div>
+
+      <!-- Translate popup -->
+      <div class="translate-popup-overlay" *ngIf="activeTranslatePopupId === _message.id">
+        <div class="translate-popup-container">
+          <!-- Header -->
+          <div class="translate-popup-header">
+            <h2>{{ isShowingTranslation ? 'Translated Message' : 'Translate Message' }}</h2>
+            <button class="close-btn" (click)="closeTranslatePopup()">✖</button>
+          </div>
+
+          <!-- Translation UI - Show when not translated yet -->
+          <div class="translate-popup-content" *ngIf="!isShowingTranslation">
+            <div class="language-selectors">
+              <!-- From Language -->
+              <div class="language-group">
+                <label>From:</label>
+                <select [(ngModel)]="sourceLanguage" class="language-select">
+                  <option *ngFor="let lang of languages" [value]="lang.code">
+                    {{ lang.name }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Swap button -->
+              <button class="swap-btn" title="Swap languages" (click)="swapLanguages(); $event.stopPropagation()">
+                <i class="fas fa-arrows-alt-h"></i>
+              </button>
+
+              <!-- To Language -->
+              <div class="language-group">
+                <label>To:</label>
+                <select [(ngModel)]="targetLanguage" class="language-select">
+                  <option *ngFor="let lang of languages" [value]="lang.code">
+                    {{ lang.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Original Text -->
+            <div class="original-text-container">
+              <div class="text-label">Original:</div>
+              <div class="original-text">{{ _message.content }}</div>
+            </div>
+
+            <!-- Error message -->
+            <div class="translate-error" *ngIf="translateError">
+              {{ translateError }}
+            </div>
+
+            <!-- Translate button -->
+            <div class="translate-popup-footer">
+              <button class="btn btn-primary" (click)="translateMessage(); $event.stopPropagation()"
+                [disabled]="isTranslating">
+                <span *ngIf="!isTranslating">Translate</span>
+                <span *ngIf="isTranslating"><i class="fas fa-spinner fa-spin"></i> Translating...</span>
+              </button>
+              <button class="btn btn-secondary" (click)="closeTranslatePopup()">Cancel</button>
+            </div>
+          </div>
+
+          <!-- Show Translated Content -->
+          <div class="translate-result-content" *ngIf="isShowingTranslation">
+            <div class="translated-text-container">
+              <div class="text-label">Translated to {{ getLanguageName(targetLanguage) }}:</div>
+              <div class="translated-text">{{ translatedContent }}</div>
+            </div>
+
+            <div class="translate-result-footer">
+              <button class="btn btn-secondary" (click)="showOriginalContent()">
+                <i class="fas fa-arrow-left"></i> Back to Original
+              </button>
+              <button class="btn btn-secondary" (click)="closeTranslatePopup()">Done</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

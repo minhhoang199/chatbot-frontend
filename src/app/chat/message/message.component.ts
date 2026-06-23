@@ -48,6 +48,38 @@ export class MessageComponent implements OnInit, OnDestroy {
   // Edit history UI state
   activeEditHistoryId: number | null = null;
 
+  // Translation state
+  activeTranslatePopupId: number | null = null;
+  sourceLanguage: string = 'en';
+  targetLanguage: string = 'en';
+  translatedContent: string | null = null;
+  isShowingTranslation: boolean = false;
+  isTranslating: boolean = false;
+  translateError: string | null = null;
+
+  // Supported languages
+  languages = [
+    { code: 'en', name: 'English' },
+    { code: 'es', name: 'Spanish' },
+    { code: 'fr', name: 'French' },
+    { code: 'de', name: 'German' },
+    { code: 'it', name: 'Italian' },
+    { code: 'pt', name: 'Portuguese' },
+    { code: 'ru', name: 'Russian' },
+    { code: 'ja', name: 'Japanese' },
+    { code: 'ko', name: 'Korean' },
+    { code: 'zh', name: 'Chinese' },
+    { code: 'vi', name: 'Vietnamese' },
+    { code: 'th', name: 'Thai' },
+    { code: 'ar', name: 'Arabic' },
+    { code: 'hi', name: 'Hindi' }
+  ];
+
+  getLanguageName(code: string): string {
+    const lang = this.languages.find((item) => item.code === code);
+    return lang ? lang.name : code;
+  }
+
   constructor(
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
@@ -444,5 +476,62 @@ export class MessageComponent implements OnInit, OnDestroy {
           // console.error('Error occurred:', error);
         }
       );
+  }
+
+  // Translation methods
+  toggleTranslatePopup(id: number, event: MouseEvent) {
+    event.stopPropagation();
+    this.activeTranslatePopupId = this.activeTranslatePopupId === id ? null : id;
+    this.translateError = null;
+  }
+
+  swapLanguages() {
+    const temp = this.sourceLanguage;
+    this.sourceLanguage = this.targetLanguage;
+    this.targetLanguage = temp;
+  }
+
+  translateMessage() {
+    if (this.isTranslating) return;
+
+    this.isTranslating = true;
+    this.translateError = null;
+
+    this.messageService.translate(
+      this._message.id,
+      this.sourceLanguage,
+      this.targetLanguage
+    ).subscribe(
+      (response) => {
+        this.isTranslating = false;
+        if (
+          response &&
+          response.data &&
+          response.code &&
+          response.code === 'TD-000'
+        ) {
+          this.translatedContent = response.data;
+          this.isShowingTranslation = true;
+        } else {
+          this.translateError = 'Failed to translate message';
+        }
+      },
+      (error) => {
+        this.isTranslating = false;
+        this.translateError = error?.error?.message || 'Translation failed. Please try again.';
+        console.error('Translation error:', error);
+      }
+    );
+  }
+
+  showOriginalContent() {
+    this.isShowingTranslation = false;
+  }
+
+  closeTranslatePopup() {
+    this.activeTranslatePopupId = null;
+    this.isShowingTranslation = false;
+    this.translatedContent = null;
+    this.translateError = null;
   }
 }

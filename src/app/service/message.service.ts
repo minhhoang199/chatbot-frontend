@@ -11,6 +11,7 @@ import { MessageRequest } from '../model/message-request.model';
 import { BaseResponse } from '../model/base-response';
 import { environment } from '../../environments/environment';
 import { MessageEditHistoryResponse } from '../model/message-edit-history-response';
+import { MessageTranslateRequest } from '../model/message-translate-request';
 
 const messageAPIUrl = environment.apiBaseUrl + '/v1/messages/';
 @Injectable({
@@ -105,5 +106,9 @@ roomId: roomId.toString(),
   public getEditHistory(messageId: number): Observable<MessageEditHistoryResponse> {
     return this.httpClient
       .get<MessageEditHistoryResponse>(environment.apiBaseUrl + '/v1/message-edit-history/' + messageId);
+  }
+
+  public translate(messageId: number, sourceLanguage: string, targetLanguage: string): Observable<BaseResponse> {
+    return this.httpClient.post<BaseResponse>(messageAPIUrl + messageId + '/translate', new MessageTranslateRequest(sourceLanguage, targetLanguage));
   }
 }
