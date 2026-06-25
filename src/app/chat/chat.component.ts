@@ -17,6 +17,28 @@ export class ChatComponent implements OnInit, OnDestroy {
   unreadMessagesCount = 0;
   unreadNotificationsCount = 0;
   showNotificationsPopup = false;
+  showTranslateSettings = false;
+  sourceLanguage: string = 'en';
+  targetLanguage: string = 'vi';
+  languages = [
+    { code: 'en', name: 'English' },
+    { code: 'es', name: 'Spanish' },
+    { code: 'fr', name: 'French' },
+    { code: 'de', name: 'German' },
+    { code: 'it', name: 'Italian' },
+    { code: 'pt', name: 'Portuguese' },
+    { code: 'ru', name: 'Russian' },
+    { code: 'ja', name: 'Japanese' },
+    { code: 'ko', name: 'Korean' },
+    { code: 'zh', name: 'Chinese' },
+    { code: 'vi', name: 'Vietnamese' },
+    { code: 'th', name: 'Thai' },
+    { code: 'ar', name: 'Arabic' },
+    { code: 'hi', name: 'Hindi' }
+  ];
+  private readonly TRANSLATE_SOURCE_LANG_KEY = 'translateSourceLanguage';
+  private readonly TRANSLATE_TARGET_LANG_KEY = 'translateTargetLanguage';
+
   @ViewChild('notificationsTrigger', { read: ElementRef }) notificationsTrigger?: ElementRef<HTMLElement>;
   private destroy$ = new Subject<void>();
 
@@ -29,6 +51,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.username = this.localStorageService.getString('username') || '';
     this.avatarURL = this.localStorageService.getString('linkAvatar') || 'assets/avatar.png';
+    this.loadTranslateSettings();
     interval(5000)
       .pipe(
         startWith(0),
@@ -64,6 +87,28 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+  private loadTranslateSettings(): void {
+    this.sourceLanguage = this.localStorageService.getString(this.TRANSLATE_SOURCE_LANG_KEY) || 'en';
+    this.targetLanguage = this.localStorageService.getString(this.TRANSLATE_TARGET_LANG_KEY) || 'vi';
+  }
+
+  openTranslateSettings(): void {
+    this.loadTranslateSettings();
+    this.showTranslateSettings = true;
+    this.profileMenuOpen = false;
+  }
+
+  closeTranslateSettings(): void {
+    this.showTranslateSettings = false;
+  }
+
+  saveTranslateSettings(): void {
+    this.localStorageService.set(this.TRANSLATE_SOURCE_LANG_KEY, this.sourceLanguage);
+    this.localStorageService.set(this.TRANSLATE_TARGET_LANG_KEY, this.targetLanguage);
+    this.showTranslateSettings = false;
+  }
+
   logout(): void {
     this.localStorageService.clear(); // Clear all data
     this.router.navigate(['/sign-in']); // Navigate to sign-in page

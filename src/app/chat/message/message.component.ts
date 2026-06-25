@@ -1,5 +1,6 @@
 import { MessageService } from './../../service/message.service';
 import { AuthService } from './../../service/auth.service';
+import { LocalStorageService } from '../../service/local-storage.service';
 import { Emoji, Message } from '../../model/message.model';
 import {
   ChangeDetectorRef,
@@ -49,13 +50,15 @@ export class MessageComponent implements OnInit, OnDestroy {
   activeEditHistoryId: number | null = null;
 
   // Translation state
-  activeTranslatePopupId: number | null = null;
   sourceLanguage: string = 'en';
-  targetLanguage: string = 'en';
+  targetLanguage: string = 'vi';
   translatedContent: string | null = null;
   isShowingTranslation: boolean = false;
   isTranslating: boolean = false;
   translateError: string | null = null;
+
+  private readonly TRANSLATE_SOURCE_LANG_KEY = 'translateSourceLanguage';
+  private readonly TRANSLATE_TARGET_LANG_KEY = 'translateTargetLanguage';
 
   // Supported languages
   languages = [
@@ -85,10 +88,20 @@ export class MessageComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private messageService: MessageService,
     private attachedFileService: AttachedFileService,
+    private localStorageService: LocalStorageService,
   ) {}
 
   ngOnInit(): void {
+    const saved = this.getSavedTranslateLanguages();
+    this.sourceLanguage = saved.sourceLanguage;
+    this.targetLanguage = saved.targetLanguage;
     this.cdr.detectChanges();
+  }
+
+  private getSavedTranslateLanguages(): { sourceLanguage: string; targetLanguage: string } {
+    const sourceLanguage = this.localStorageService.getString(this.TRANSLATE_SOURCE_LANG_KEY) || 'en';
+    const targetLanguage = this.localStorageService.getString(this.TRANSLATE_TARGET_LANG_KEY) || 'vi';
+    return { sourceLanguage, targetLanguage };
   }
 
   processMessage() {
@@ -479,21 +492,17 @@ export class MessageComponent implements OnInit, OnDestroy {
   }
 
   // Translation methods
-  toggleTranslatePopup(id: number, event: MouseEvent) {
-    event.stopPropagation();
-    this.activeTranslatePopupId = this.activeTranslatePopupId === id ? null : id;
-    this.translateError = null;
-  }
-
-  swapLanguages() {
-    const temp = this.sourceLanguage;
-    this.sourceLanguage = this.targetLanguage;
-    this.targetLanguage = temp;
-  }
-
   translateMessage() {
     if (this.isTranslating) return;
 
+    if (this.isShowingTranslation) {
+      this.showOriginalContent();
+      return;
+    }
+
+    const saved = this.getSavedTranslateLanguages();
+    this.sourceLanguage = saved.sourceLanguage;
+    this.targetLanguage = saved.targetLanguage;
     this.isTranslating = true;
     this.translateError = null;
 
@@ -525,11 +534,6 @@ export class MessageComponent implements OnInit, OnDestroy {
   }
 
   showOriginalContent() {
-    this.isShowingTranslation = false;
-  }
-
-  closeTranslatePopup() {
-    this.activeTranslatePopupId = null;
     this.isShowingTranslation = false;
     this.translatedContent = null;
     this.translateError = null;

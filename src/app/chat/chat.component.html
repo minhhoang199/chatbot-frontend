@@ -86,11 +86,11 @@
             </div>
           </div>
           <ul class="profile-menu-list">
-            <li><button type="button" class="pm-btn">Settings &amp; privacy</button></li>
-            <li><button type="button" class="pm-btn">Help &amp; support</button></li>
-            <li><button type="button" class="pm-btn">Display &amp; accessibility</button></li>
-            <li><button type="button" class="pm-btn">Give feedback</button></li>
-            <li><button type="button" class="pm-btn" (click)="logout()">Log out</button></li>
+            <li><button type="button" class="pm-btn" (click)="openTranslateSettings(); $event.stopPropagation()">Translate Settings</button></li>
+            <li><button type="button" class="pm-btn" (click)="$event.stopPropagation()">Help &amp; support</button></li>
+            <li><button type="button" class="pm-btn" (click)="$event.stopPropagation()">Display &amp; accessibility</button></li>
+            <li><button type="button" class="pm-btn" (click)="$event.stopPropagation()">Give feedback</button></li>
+            <li><button type="button" class="pm-btn" (click)="logout(); $event.stopPropagation()">Log out</button></li>
           </ul>
         </div>
       </div>
@@ -175,3 +175,31 @@
     <app-find-user-dialog (close)="closeSearchingEmail()"></app-find-user-dialog>
   </div>
 </div>
+
+<ng-container *ngIf="showTranslateSettings">
+  <div class="translate-settings-overlay" (click)="closeTranslateSettings()"></div>
+  <div class="translate-settings-dialog">
+    <div class="translate-settings-header">
+      <h2>Translate Settings</h2>
+      <button class="close-btn" type="button" (click)="closeTranslateSettings()">✖</button>
+    </div>
+    <div class="translate-settings-body">
+      <div class="language-group">
+        <label for="source-language">Source language</label>
+        <select id="source-language" [(ngModel)]="sourceLanguage">
+          <option *ngFor="let lang of languages" [value]="lang.code">{{ lang.name }}</option>
+        </select>
+      </div>
+      <div class="language-group">
+        <label for="target-language">Target language</label>
+        <select id="target-language" [(ngModel)]="targetLanguage">
+          <option *ngFor="let lang of languages" [value]="lang.code">{{ lang.name }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="translate-settings-actions">
+      <button class="btn btn-secondary" type="button" (click)="closeTranslateSettings()">Cancel</button>
+      <button class="btn btn-primary" type="button" (click)="saveTranslateSettings()">Save</button>
+    </div>
+  </div>
+</ng-container>
