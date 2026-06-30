@@ -46,6 +46,10 @@ export class MessageComponent implements OnInit, OnDestroy {
   activeDeletePopupId: number | null = null;
   createdAtFormatted: string = '';
 
+  // parsed segments for message content rendering
+  messageContentSegments: Array<{ type: 'text' | 'code' | 'inline-code'; content: string }> = [];
+  translatedContentSegments: Array<{ type: 'text' | 'code' | 'inline-code'; content: string }> = [];
+
   // Edit history UI state
   activeEditHistoryId: number | null = null;
 
@@ -114,6 +118,8 @@ export class MessageComponent implements OnInit, OnDestroy {
       this.setEmojiString();
       this.setReactionMap();
       this.reactionList = this.reactionMap.get(this.activeTab) || [];
+      this.messageContentSegments = this.displayCodeBlock(this._message.content);
+      this.translatedContentSegments = this.displayCodeBlock(this.translatedContent);
   }
 
   ngOnDestroy() {
@@ -328,6 +334,43 @@ export class MessageComponent implements OnInit, OnDestroy {
     }
   }
 
+  displayCodeBlock(content: string | null): Array<{ type: 'text' | 'code' | 'inline-code'; content: string }> {
+    if (!content) {
+      return [{ type: 'text', content: '' }];
+    }
+
+    const segments: Array<{ type: 'text' | 'code' | 'inline-code'; content: string }> = [];
+    const regex = /```([\s\S]*?)```|`([^`]+)`/g;
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = regex.exec(content)) !== null) {
+      if (match.index > lastIndex) {
+        segments.push({
+          type: 'text',
+          content: content.slice(lastIndex, match.index),
+        });
+      }
+
+      if (match[1] !== undefined) {
+        segments.push({ type: 'code', content: match[1] });
+      } else if (match[2] !== undefined) {
+        segments.push({ type: 'inline-code', content: match[2] });
+      }
+
+      lastIndex = regex.lastIndex;
+    }
+
+    if (lastIndex < content.length) {
+      segments.push({
+        type: 'text',
+        content: content.slice(lastIndex),
+      });
+    }
+
+    return segments;
+  }
+
   // popup show emoji
   setReactionMap() {
     this.reactionMap.clear();
@@ -520,6 +563,7 @@ export class MessageComponent implements OnInit, OnDestroy {
           response.code === 'TD-000'
         ) {
           this.translatedContent = response.data;
+          this.translatedContentSegments = this.displayCodeBlock(this.translatedContent);
           this.isShowingTranslation = true;
         } else {
           this.translateError = 'Failed to translate message';
@@ -536,6 +580,7 @@ export class MessageComponent implements OnInit, OnDestroy {
   showOriginalContent() {
     this.isShowingTranslation = false;
     this.translatedContent = null;
+    this.translatedContentSegments = [{ type: 'text', content: '' }];
     this.translateError = null;
   }
 }

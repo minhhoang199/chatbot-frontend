@@ -250,6 +250,37 @@ export class ChatWindowComponent
     }, 0);
   }
 
+  insertCodeBlock(): void {
+    const control = this.chatForm.get('contentMessage');
+    if (!control) {
+      return;
+    }
+
+    const textarea = this.chatInput?.nativeElement;
+    const value = control.value || '';
+    const start = textarea?.selectionStart ?? value.length;
+    const end = textarea?.selectionEnd ?? value.length;
+    const before = value.slice(0, start);
+    const after = value.slice(end);
+    const selectedText = value.slice(start, end);
+
+    const insertion = selectedText
+      ? `\`\`\`\n${selectedText}\n\`\`\`\n`
+      : `\`\`\`\n\n\`\`\`\n`;
+
+    const newValue = before + insertion + after;
+    control.setValue(newValue);
+
+    setTimeout(() => {
+      if (!textarea) {
+        return;
+      }
+      textarea.focus();
+      const cursorPosition = before.length + (selectedText ? insertion.length : 4);
+      textarea.selectionStart = textarea.selectionEnd = cursorPosition;
+    }, 0);
+  }
+
   removeFile(index: number) {
     this.attachedFiles.splice(index, 1);
   }

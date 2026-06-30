@@ -41,6 +41,27 @@
   box-sizing: border-box;
 }
 
+.message-content pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 8px 0;
+  background: #e4e6ea;
+  border-radius: 12px;
+  padding: 12px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.95rem;
+  overflow-x: auto;
+  color: #1c1e21;
+}
+
+.message-content code {
+  background: #e4e6ea;
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-family: 'Courier New', Courier, monospace;
+  white-space: pre-wrap;
+}
+
 .message.sent .message-content {
     background-color: #1877f2;
     color: white;

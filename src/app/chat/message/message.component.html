@@ -13,7 +13,11 @@
         <div class="message-content-div">
           <img src="{{_message.linkAvatar || 'assets/avatar.png'}}" class="message-user-avatar">
           <div class="message-content" *ngIf="_message.attachedFile === null">
-            {{ isShowingTranslation ? translatedContent : _message.content }}
+            <ng-container *ngFor="let segment of isShowingTranslation ? translatedContentSegments : messageContentSegments">
+              <span *ngIf="segment.type === 'text'">{{ segment.content }}</span>
+              <code *ngIf="segment.type === 'inline-code'">{{ segment.content }}</code>
+              <pre *ngIf="segment.type === 'code'"><code>{{ segment.content }}</code></pre>
+            </ng-container>
           </div>
         </div>
         <div class="file-preview" [ngClass]="{
@@ -155,7 +159,11 @@
       </div>
       <div class="message-content-div">
         <div class="message-content" *ngIf="_message.attachedFile === null">
-          {{ isShowingTranslation ? translatedContent : _message.content }}
+          <ng-container *ngFor="let segment of isShowingTranslation ? translatedContentSegments : messageContentSegments">
+            <span *ngIf="segment.type === 'text'">{{ segment.content }}</span>
+            <code *ngIf="segment.type === 'inline-code'">{{ segment.content }}</code>
+            <pre *ngIf="segment.type === 'code'"><code>{{ segment.content }}</code></pre>
+          </ng-container>
         </div>
         <img src="{{_message.linkAvatar || 'assets/avatar.png'}}" class="message-user-avatar">
       </div>
